@@ -1,26 +1,25 @@
 """
-SRP Live Visualizer — 实时数据仪表盘
-=====================================
-监听 UDP 5005 端口，实时绘制 4 面板生理数据仪表盘。
+SRP Live Visualizer v0.3 — 6-Panel Multi-Signal Dashboard
+==========================================================
+UDP listener + real-time 6-panel matplotlib dashboard.
 
-用法:
-    # 终端 1: 启动数据管道
-    python main.py --weather storm --duration 120
+One chart per physiological signal domain, each with its independent score.
+Weather composite panel integrates all 8 scores.
 
-    # 终端 2: 启动可视化
+Usage:
+    # Terminal 1: start pipeline
+    python main.py --weather storm --duration 0
+
+    # Terminal 2: start dashboard
     python visualizer.py
 
-    # 可选参数
-    python visualizer.py --port 5005 --history 20 --fps 15
-
-依赖: pip install matplotlib
+    python visualizer.py --port 5005 --history 25 --fps 12
 """
 
 import argparse
 import json
 import queue
 import socket
-import sys
 import threading
 import time
 from collections import deque
@@ -29,32 +28,47 @@ import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from matplotlib.gridspec import GridSpec
+import numpy as np
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
 UDP_HOST = "127.0.0.1"
 UDP_PORT = 5005
-HISTORY_SECONDS = 20   # X 轴历史窗口（秒）
-TARGET_FPS = 15         # 绘图刷新率
-MAX_SAMPLES = 2000      # 缓冲区最大样本数
+HISTORY_SECONDS = 25
+TARGET_FPS = 12
+MAX_SAMPLES = 3000
 
 # ── Color palette ─────────────────────────────────────────────────────────────
 
-WEATHER_COLORS = {
-    "storm": "#4a6fa5",   # 蓝灰
-    "heat":  "#e07b4c",   # 暖橙
-    "snow":  "#b8d4e3",   # 淡蓝白
-    "fade":  "#8b7e9b",   # 淡紫
+C_DARK_BG = "#0f0f1a"
+C_PANEL_BG = "#161625"
+C_GRID = "#1e1e35"
+C_TEXT = "#b0b0c8"
+C_TEXT_DIM = "#686880"
+C_ACCENT = "#5b9bd5"
+
+WEATHER_COLORS = {"storm": "#6b8fce", "heat": "#e07b4c",
+                  "snow": "#a8c8e8", "fade": "#9b8ec4"}
+WEATHER_EMOJI = {"storm": "Storm", "heat": "Heat", "snow": "Snow", "fade": "Fade"}
+PHASE_COLORS = {"inhale": "#5da37c", "exhale": "#c47b5a", "hold": "#d4a843"}
+
+SCORE_COLORS = {
+    "breath_sync": "#5da37c", "hr_stability": "#e07050",
+    "hrv_recovery": "#6baed6", "rate_match": "#5da37c",
+    "depth_quality": "#8bcf8b", "regularity": "#f0c05a",
+    "eda_calm": "#c09cd8", "motion_stillness": "#6baed6",
 }
-PHASE_COLORS = {
-    "inhale": "#5da37c",
-    "exhale": "#c47b5a",
-    "hold":   "#d4a843",
+SCORE_LABELS = {
+    "breath_sync": "Breath Sync", "hr_stability": "HR Stability",
+    "hrv_recovery": "HRV Recovery", "rate_match": "Rate Match",
+    "depth_quality": "Depth Quality", "regularity": "Regularity",
+    "eda_calm": "EDA Calm", "motion_stillness": "Motion Stillness",
 }
 
 
 class UDPListener(threading.Thread):
-    """后台线程：持续监听 UDP 并推入队列"""
+    """Background thread: continuously receives UDP JSON frames."""
 
     def __init__(self, host=UDP_HOST, port=UDP_PORT, data_queue=None):
         super().__init__(daemon=True)
@@ -80,7 +94,6 @@ class UDPListener(threading.Thread):
                 continue
             except (json.JSONDecodeError, OSError):
                 continue
-
         sock.close()
 
     def stop(self):
@@ -88,204 +101,414 @@ class UDPListener(threading.Thread):
 
 
 class Dashboard:
-    """4 面板实时仪表盘"""
+    """6-panel real-time physiological monitoring dashboard."""
 
     def __init__(self, history_seconds=HISTORY_SECONDS):
         self.history = history_seconds
-        self.data = {
-            "ts": deque(maxlen=MAX_SAMPLES),
-            "respiration_raw": deque(maxlen=MAX_SAMPLES),
-            "breath_phase": deque(maxlen=MAX_SAMPLES),
-            "breath_score": deque(maxlen=MAX_SAMPLES),
-            "calm_index": deque(maxlen=MAX_SAMPLES),
-            "hr": deque(maxlen=MAX_SAMPLES),
-            "rmssd": deque(maxlen=MAX_SAMPLES),
-            "weather_intensity": deque(maxlen=MAX_SAMPLES),
-            "weather_type": None,
-            "guidance_prompt": "",
-        }
+
+        # Data buffers
+        self.ts: deque = deque(maxlen=MAX_SAMPLES)
+        self.respiration_raw: deque = deque(maxlen=MAX_SAMPLES)
+        self.breath_phase: deque = deque(maxlen=MAX_SAMPLES)
+        self.hr: deque = deque(maxlen=MAX_SAMPLES)
+        self.rmssd: deque = deque(maxlen=MAX_SAMPLES)
+        self.breath_rate: deque = deque(maxlen=MAX_SAMPLES)
+        self.breath_amplitude: deque = deque(maxlen=MAX_SAMPLES)
+        self.breath_regularity: deque = deque(maxlen=MAX_SAMPLES)
+        self.eda_tonic: deque = deque(maxlen=MAX_SAMPLES)
+        self.motion_index: deque = deque(maxlen=MAX_SAMPLES)
+
+        # Latest scores
+        self.scores: dict = {}
+        self.weather: dict = {}
+        self.guidance_prompt: str = ""
 
         self._setup_figure()
 
     def _setup_figure(self):
         plt.rcParams.update({
-            "figure.facecolor": "#1a1a2e",
-            "axes.facecolor": "#16213e",
-            "axes.edgecolor": "#333366",
-            "axes.labelcolor": "#c0c0d0",
-            "text.color": "#c0c0d0",
-            "xtick.color": "#808090",
-            "ytick.color": "#808090",
-            "grid.color": "#2a2a4a",
+            "figure.facecolor": C_DARK_BG,
+            "axes.facecolor": C_PANEL_BG,
+            "axes.edgecolor": C_GRID,
+            "axes.labelcolor": C_TEXT,
+            "text.color": C_TEXT,
+            "xtick.color": C_TEXT_DIM,
+            "ytick.color": C_TEXT_DIM,
+            "grid.color": C_GRID,
+            "font.size": 8,
         })
 
-        self.fig, ((self.ax_breath, self.ax_hr),
-                    (self.ax_score, self.ax_weather)) = plt.subplots(
-            2, 2, figsize=(14, 9), dpi=100
-        )
-        self.fig.suptitle("SRP 实时生理数据监控台", fontsize=14,
-                          color="#e0e0f0", fontweight="bold", y=0.97)
+        self.fig = plt.figure(figsize=(20, 11), dpi=100)
+        self.fig.suptitle("SRP  Multi-Signal Physiological Dashboard",
+                          fontsize=15, color="#d0d0e8", fontweight="bold", y=0.98)
 
-        # Panel 1: 呼吸波形
-        self.ax_breath.set_title("Respiration Waveform", fontsize=11, color="#a0b0d0")
-        self.ax_breath.set_ylabel("Amplitude")
-        self.ax_breath.set_ylim(-0.2, 1.2)
-        self.ax_breath.grid(True, alpha=0.3)
-        (self.line_breath,) = self.ax_breath.plot([], [], color="#5da37c",
-                                                   linewidth=1.2, alpha=0.9)
-        self.breath_fill = self.ax_breath.fill_between(
-            [], 0, [], alpha=0.15, color="#5da37c"
-        )
+        gs = GridSpec(2, 3, figure=self.fig, hspace=0.42, wspace=0.32,
+                      left=0.05, right=0.97, top=0.93, bottom=0.05)
 
-        # Panel 2: 心率 + HRV
-        self.ax_hr.set_title("Heart Rate & HRV", fontsize=11, color="#a0b0d0")
-        self.ax_hr.set_ylabel("HR (BPM)", color="#e07b4c")
+        self.ax_breath = self.fig.add_subplot(gs[0, 0])   # Panel 1
+        self.ax_hr = self.fig.add_subplot(gs[0, 1])       # Panel 2
+        self.ax_hrv = self.fig.add_subplot(gs[0, 2])      # Panel 3
+        self.ax_quality = self.fig.add_subplot(gs[1, 0])  # Panel 4
+        self.ax_eda = self.fig.add_subplot(gs[1, 1])      # Panel 5
+        self.ax_weather = self.fig.add_subplot(gs[1, 2])  # Panel 6
+
+        # ── Panel 1: Respiration Waveform ──────────────────────────────────
+        self.ax_breath.set_title("1  Respiration Waveform", fontsize=10,
+                                 color=C_ACCENT, fontweight="bold")
+        self.ax_breath.set_ylabel("Amplitude", fontsize=7)
+        self.ax_breath.set_ylim(-0.8, 0.8)
+        self.ax_breath.grid(True, alpha=0.25, linewidth=0.5)
+        (self.l_breath,) = self.ax_breath.plot([], [], color="#5da37c",
+                                                linewidth=1.0, alpha=0.9)
+        self.breath_score_text = self.ax_breath.text(
+            0.01, 0.94, "", transform=self.ax_breath.transAxes,
+            fontsize=8, color="#a0d0b0", va="top",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a2a1a", edgecolor="#2a4a2a", alpha=0.8))
+
+        # ── Panel 2: Heart Rate ────────────────────────────────────────────
+        self.ax_hr.set_title("2  Heart Rate (HR)", fontsize=10,
+                             color=C_ACCENT, fontweight="bold")
+        self.ax_hr.set_ylabel("BPM", fontsize=7)
         self.ax_hr.set_ylim(40, 120)
-        self.ax_hr.grid(True, alpha=0.3)
-        (self.line_hr,) = self.ax_hr.plot([], [], color="#e07b4c",
-                                           linewidth=1.5, label="HR")
-        self.ax_hrv = self.ax_hr.twinx()
-        self.ax_hrv.set_ylabel("RMSSD (ms)", color="#5b9bd5")
+        self.ax_hr.grid(True, alpha=0.25, linewidth=0.5)
+        (self.l_hr,) = self.ax_hr.plot([], [], color="#e07050",
+                                        linewidth=1.3)
+        self.hr_score_text = self.ax_hr.text(
+            0.01, 0.94, "", transform=self.ax_hr.transAxes,
+            fontsize=8, color="#e0a090", va="top",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#2a1a1a", edgecolor="#4a2a2a", alpha=0.8))
+
+        # ── Panel 3: HRV Recovery ─────────────────────────────────────────
+        self.ax_hrv.set_title("3  HRV Recovery (RMSSD)", fontsize=10,
+                              color=C_ACCENT, fontweight="bold")
+        self.ax_hrv.set_ylabel("RMSSD (ms)", fontsize=7)
         self.ax_hrv.set_ylim(0, 100)
-        (self.line_rmssd,) = self.ax_hrv.plot([], [], color="#5b9bd5",
-                                                linewidth=1.2, alpha=0.8, label="RMSSD")
-        lines = [self.line_hr, self.line_rmssd]
-        labels = [l.get_label() for l in lines]
-        self.ax_hr.legend(lines, labels, loc="upper left",
-                          fontsize=7, facecolor="#16213e", edgecolor="#333366")
+        self.ax_hrv.grid(True, alpha=0.25, linewidth=0.5)
+        (self.l_rmssd,) = self.ax_hrv.plot([], [], color="#6baed6",
+                                            linewidth=1.3)
+        self.hrv_score_text = self.ax_hrv.text(
+            0.01, 0.94, "", transform=self.ax_hrv.transAxes,
+            fontsize=8, color="#a0c8e8", va="top",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a1a2a", edgecolor="#2a3a5a", alpha=0.8))
 
-        # Panel 3: 评分曲线
-        self.ax_score.set_title("Scores", fontsize=11, color="#a0b0d0")
-        self.ax_score.set_ylabel("Score (0-100)")
-        self.ax_score.set_ylim(-5, 105)
-        self.ax_score.grid(True, alpha=0.3)
-        (self.line_bs,) = self.ax_score.plot([], [], color="#f0c05a",
-                                              linewidth=1.5, label="Breath Score")
-        (self.line_ci,) = self.ax_score.plot([], [], color="#6cb4d9",
-                                              linewidth=1.5, label="Calm Index")
-        self.ax_score.legend(loc="upper left", fontsize=7,
-                             facecolor="#16213e", edgecolor="#333366")
+        # ── Panel 4: Breath Quality (3 metrics) ────────────────────────────
+        self.ax_quality.set_title("4  Breath Quality", fontsize=10,
+                                  color=C_ACCENT, fontweight="bold")
+        self.ax_quality.set_ylabel("RR (bpm) / Reg", fontsize=7)
+        self.ax_quality.set_ylim(0, 25)
+        self.ax_quality.grid(True, alpha=0.25, linewidth=0.5)
+        (self.l_rr,) = self.ax_quality.plot([], [], color="#5da37c",
+                                             linewidth=1.2, alpha=0.9, label="RR")
+        (self.l_reg,) = self.ax_quality.plot([], [], color="#f0c05a",
+                                              linewidth=1.0, alpha=0.8, label="Regularity")
+        self.ax_amp = self.ax_quality.twinx()
+        self.ax_amp.set_ylabel("Amplitude", fontsize=7, color="#8bcf8b")
+        self.ax_amp.set_ylim(0, 1.0)
+        self.ax_amp.tick_params(axis="y", colors=C_TEXT_DIM)
+        (self.l_amp,) = self.ax_amp.plot([], [], color="#8bcf8b",
+                                          linewidth=1.0, alpha=0.6, label="Amplitude")
+        self.quality_score_text = self.ax_quality.text(
+            0.01, 0.94, "", transform=self.ax_quality.transAxes,
+            fontsize=7, color="#c0c0d0", va="top",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a1a2a", edgecolor="#2a2a4a", alpha=0.8))
 
-        # Panel 4: 天气状态面板
-        self.ax_weather.set_title("Weather Status", fontsize=11, color="#a0b0d0")
-        self.ax_weather.set_ylim(-0.1, 1.2)
-        self.ax_weather.set_ylabel("Intensity")
-        self.ax_weather.grid(True, alpha=0.3, axis="y")
-        (self.line_wi,) = self.ax_weather.plot([], [], color="#d4a843",
-                                                linewidth=1.5, drawstyle="steps-post")
-        self.weather_text = self.ax_weather.text(
-            0.02, 0.92, "", transform=self.ax_weather.transAxes,
-            fontsize=20, color="#e0e0f0", va="top", fontweight="bold"
-        )
-        self.prompt_text = self.ax_weather.text(
-            0.02, 0.45, "", transform=self.ax_weather.transAxes,
-            fontsize=11, color="#a0a0c0", va="center",
-            bbox=dict(boxstyle="round,pad=0.4", facecolor="#16213e", edgecolor="#333366")
-        )
+        # ── Panel 5: EDA + Motion ─────────────────────────────────────────
+        self.ax_eda.set_title("5  EDA + Motion", fontsize=10,
+                              color=C_ACCENT, fontweight="bold")
+        self.ax_eda.set_ylabel("EDA Tonic (S)", fontsize=7, color="#c09cd8")
+        self.ax_eda.set_ylim(3, 16)
+        self.ax_eda.grid(True, alpha=0.25, linewidth=0.5)
+        (self.l_eda,) = self.ax_eda.plot([], [], color="#c09cd8",
+                                          linewidth=1.2, alpha=0.9)
+        self.ax_mot = self.ax_eda.twinx()
+        self.ax_mot.set_ylabel("Motion (g)", fontsize=7, color="#6baed6")
+        self.ax_mot.set_ylim(0, 0.5)
+        (self.l_mot,) = self.ax_mot.plot([], [], color="#6baed6",
+                                          linewidth=1.0, alpha=0.7)
+        self.eda_score_text = self.ax_eda.text(
+            0.01, 0.94, "", transform=self.ax_eda.transAxes,
+            fontsize=7, color="#d0c0e0", va="top",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a1a2a", edgecolor="#3a2a5a", alpha=0.8))
 
-        self.fig.tight_layout(rect=[0, 0, 1, 0.95])
+        # ── Panel 6: Weather Composite ─────────────────────────────────────
+        self.ax_weather.set_title("6  Weather Composite", fontsize=10,
+                                  color=C_ACCENT, fontweight="bold")
+        self.ax_weather.axis("off")
+
+        # Weather header (large text)
+        self.weather_header = self.ax_weather.text(
+            0.5, 0.90, "", transform=self.ax_weather.transAxes,
+            fontsize=22, ha="center", va="top", fontweight="bold")
+
+        self.weather_composite_text = self.ax_weather.text(
+            0.5, 0.72, "", transform=self.ax_weather.transAxes,
+            fontsize=13, ha="center", va="top", color=C_TEXT)
+
+        self.weather_trend_text = self.ax_weather.text(
+            0.5, 0.62, "", transform=self.ax_weather.transAxes,
+            fontsize=10, ha="center", va="top")
+
+        # Guidance prompt
+        self.guidance_text = self.ax_weather.text(
+            0.5, 0.48, "", transform=self.ax_weather.transAxes,
+            fontsize=10, ha="center", va="center", color="#e0d890",
+            bbox=dict(boxstyle="round,pad=0.5", facecolor="#1a1a0a", edgecolor="#3a3a1a", alpha=0.8))
+
+        # 8 score contribution bars
+        self.score_bars = None
 
         # artists for blit
         self._artists = [
-            self.line_breath, self.line_hr, self.line_rmssd,
-            self.line_bs, self.line_ci, self.line_wi,
-            self.weather_text, self.prompt_text,
+            self.l_breath, self.l_hr, self.l_rmssd,
+            self.l_rr, self.l_reg, self.l_amp, self.l_eda, self.l_mot,
+            self.breath_score_text, self.hr_score_text, self.hrv_score_text,
+            self.quality_score_text, self.eda_score_text,
+            self.weather_header, self.weather_composite_text,
+            self.weather_trend_text, self.guidance_text,
         ]
 
     def feed(self, msg: dict):
-        """从 UDP 消息提取数据并推入缓冲区"""
+        """Parse one UDP JSON message into buffers."""
         now = time.time()
-        self.data["ts"].append(now)
-        self.data["respiration_raw"].append(
-            msg.get("breath", {}).get("depth", 0)
-        )
-        self.data["breath_phase"].append(
-            msg.get("breath", {}).get("phase", "exhale")
-        )
-        self.data["breath_score"].append(
-            msg.get("breath", {}).get("score", 0)
-        )
-        self.data["calm_index"].append(
-            msg.get("calm", {}).get("index", 0)
-        )
-        self.data["hr"].append(
-            msg.get("hrv", {}).get("hr", 0)
-        )
-        self.data["rmssd"].append(
-            msg.get("hrv", {}).get("rmssd", 0)
-        )
-        self.data["weather_intensity"].append(
-            msg.get("weather", {}).get("intensity", 0)
-        )
-        self.data["weather_type"] = msg.get("weather", {}).get("type", "storm")
-        self.data["guidance_prompt"] = msg.get("guidance", {}).get("prompt", "")
+        self.ts.append(now)
+
+        breath = msg.get("breath", {})
+        cardiac = msg.get("cardiac", {})
+        aux = msg.get("aux", {})
+        scores = msg.get("scores", {})
+        weather = msg.get("weather", {})
+        guidance = msg.get("guidance", {})
+
+        self.respiration_raw.append(breath.get("depth", 0))
+        self.breath_phase.append(breath.get("phase", "exhale"))
+        self.hr.append(cardiac.get("hr", 0))
+        self.rmssd.append(cardiac.get("rmssd", 0))
+        self.breath_rate.append(breath.get("rate", 0))
+        self.breath_amplitude.append(breath.get("amplitude", 0))
+        self.breath_regularity.append(breath.get("regularity_raw", 0))
+        self.eda_tonic.append(aux.get("eda_tonic", 0))
+        self.motion_index.append(aux.get("motion_index", 0))
+
+        self.scores = scores
+        self.weather = weather
+        self.guidance_prompt = guidance.get("prompt", "")
 
     def update(self, frame):
-        """matplotlib FuncAnimation 回调"""
-        ts = self.data["ts"]
+        """matplotlib FuncAnimation callback."""
+        ts = list(self.ts)
         if len(ts) < 2:
             return self._artists
 
-        t0 = ts[-1] - self.history
-        t_rel = [t - ts[0] for t in ts]  # relative time from start
+        # Convert to relative seconds from start
+        t_rel = [t - ts[0] for t in ts]
+        t_end = t_rel[-1]
+        t_start = max(0, t_end - self.history)
 
-        # Panel 1: Breath waveform — 用 phase 着色
-        self.line_breath.set_data(t_rel, self.data["respiration_raw"])
-        self.ax_breath.set_xlim(max(0, t_rel[-1] - self.history), t_rel[-1] + 1)
+        def set_xlim(ax):
+            ax.set_xlim(t_start, t_end + 1)
 
-        # Panel 2: HR + RMSSD
-        self.line_hr.set_data(t_rel, self.data["hr"])
-        self.line_rmssd.set_data(t_rel, self.data["rmssd"])
-        self.ax_hr.set_xlim(max(0, t_rel[-1] - self.history), t_rel[-1] + 1)
+        # Panel 1: Respiration Waveform
+        self.l_breath.set_data(t_rel, list(self.respiration_raw))
+        set_xlim(self.ax_breath)
+        bs = self.scores.get("breath_sync", 0)
+        self.breath_score_text.set_text(f" Breath Sync: {bs:.0f}/100 ")
 
-        # Panel 3: Scores
-        self.line_bs.set_data(t_rel, self.data["breath_score"])
-        self.line_ci.set_data(t_rel, self.data["calm_index"])
-        self.ax_score.set_xlim(max(0, t_rel[-1] - self.history), t_rel[-1] + 1)
+        # Panel 2: Heart Rate
+        self.l_hr.set_data(t_rel, list(self.hr))
+        set_xlim(self.ax_hr)
+        hs = self.scores.get("hr_stability", 0)
+        self.hr_score_text.set_text(f" HR Stability: {hs:.0f}/100 ")
 
-        # Panel 4: Weather
-        self.line_wi.set_data(t_rel, self.data["weather_intensity"])
-        self.ax_weather.set_xlim(max(0, t_rel[-1] - self.history), t_rel[-1] + 1)
+        # Panel 3: HRV Recovery
+        self.l_rmssd.set_data(t_rel, list(self.rmssd))
+        set_xlim(self.ax_hrv)
+        hv = self.scores.get("hrv_recovery", 0)
+        self.hrv_score_text.set_text(f" HRV Recovery: {hv:.0f}/100 ")
 
-        wt = self.data["weather_type"] or "storm"
-        wi = self.data["weather_intensity"][-1] if self.data["weather_intensity"] else 0
+        # Panel 4: Breath Quality (RR + Regularity on left, Amplitude on right)
+        self.l_rr.set_data(t_rel, list(self.breath_rate))
+        self.l_reg.set_data(t_rel, [r * 20 for r in self.breath_regularity])  # scale to ~0-20
+        self.l_amp.set_data(t_rel, list(self.breath_amplitude))
+        set_xlim(self.ax_quality)
+        rm = self.scores.get("rate_match", 0)
+        dq = self.scores.get("depth_quality", 0)
+        rg = self.scores.get("regularity", 0)
+        self.quality_score_text.set_text(
+            f" Rate:{rm:.0f}  Depth:{dq:.0f}  Reg:{rg:.0f} ")
 
-        weather_emoji = {"storm": "⛈", "heat": "🔥", "snow": "❄", "fade": "🌫"}
-        weather_name = {"storm": "Storm 焦虑", "heat": "Heat 烦躁",
-                        "snow": "Snow 低落", "fade": "Fade 孤独"}
-        self.weather_text.set_text(
-            f"{weather_emoji.get(wt, '?')}  {weather_name.get(wt, wt)}  强度:{wi:.2f}"
-        )
-        self.weather_text.set_color(WEATHER_COLORS.get(wt, "#e0e0f0"))
+        # Panel 5: EDA + Motion
+        self.l_eda.set_data(t_rel, list(self.eda_tonic))
+        self.l_mot.set_data(t_rel, list(self.motion_index))
+        set_xlim(self.ax_eda)
+        ec = self.scores.get("eda_calm", 0)
+        ms = self.scores.get("motion_stillness", 0)
+        self.eda_score_text.set_text(f" EDA:{ec:.0f}  Motion:{ms:.0f} ")
 
-        prompt = self.data["guidance_prompt"]
-        self.prompt_text.set_text(f"  {prompt}  " if prompt else "")
+        # Panel 6: Weather Composite
+        wt = self.weather.get("type", "storm")
+        wi = self.weather.get("intensity", 0.5)
+        wc = self.weather.get("composite", 50)
+        trend = self.weather.get("trend", "stable")
+        dominant = self.weather.get("dominant", "")
+
+        trend_symbol = {"weakening": "  Clear", "stable": "  Stable",
+                        "intensifying": "  Storming"}
+        trend_color = {"weakening": "#5da37c", "stable": "#f0c05a",
+                       "intensifying": "#e07050"}
+
+        color = WEATHER_COLORS.get(wt, "#e0e0f0")
+        self.weather_header.set_text(f"{WEATHER_EMOJI.get(wt, wt)}")
+        self.weather_header.set_color(color)
+
+        self.weather_composite_text.set_text(
+            f"Composite: {wc:.0f}/100   Intensity: {wi:.2f}   Dominant: {dominant}")
+        self.weather_trend_text.set_text(
+            f"{trend_symbol.get(trend, trend)}   Guidance: {self.guidance_prompt[:30]}")
+        self.weather_trend_text.set_color(trend_color.get(trend, C_TEXT))
+
+        self.guidance_text.set_text(f"  {self.guidance_prompt}  "
+                                    if self.guidance_prompt else "")
+
+        # Redraw score bar chart in panel 6
+        self._draw_score_bars()
 
         return self._artists
+
+    def _draw_score_bars(self):
+        """Draw horizontal bar chart of 8 score contributions in Panel 6."""
+        if not self.scores:
+            return
+
+        # Remove old bars
+        for child in list(self.ax_weather.get_children()):
+            if isinstance(child, plt.Rectangle) and child.get_width() > 0.1:
+                if child.get_gid() and child.get_gid().startswith("score_bar"):
+                    child.remove()
+
+        labels = []
+        values = []
+        colors = []
+        for key in ["breath_sync", "hr_stability", "hrv_recovery",
+                     "rate_match", "depth_quality", "regularity",
+                     "eda_calm", "motion_stillness"]:
+            labels.append(SCORE_LABELS.get(key, key))
+            values.append(self.scores.get(key, 50))
+            colors.append(SCORE_COLORS.get(key, C_ACCENT))
+
+        # Sort by value descending
+        sorted_idx = np.argsort(values)
+        labels = [labels[i] for i in sorted_idx]
+        values = [values[i] for i in sorted_idx]
+        colors = [colors[i] for i in sorted_idx]
+
+        n = len(labels)
+        bar_height = 0.025
+        y_start = 0.32
+        y_positions = [y_start - i * bar_height * 1.5 for i in range(n)]
+
+        for i, (label, val, color) in enumerate(zip(labels, values, colors)):
+            y = y_positions[i]
+            # Background
+            self.ax_weather.barh(y, 100, bar_height, left=0,
+                                 color=C_GRID, height=bar_height * 0.8,
+                                 transform=self.ax_weather.transAxes,
+                                 gid=f"score_bar_bg_{i}")
+            # Value bar
+            self.ax_weather.barh(y, val, bar_height, left=0,
+                                 color=color, height=bar_height * 0.8,
+                                 transform=self.ax_weather.transAxes,
+                                 gid=f"score_bar_{i}")
+            # Label
+            self.ax_weather.text(0.01, y, f"{label}", fontsize=6,
+                                 color=C_TEXT, va="center",
+                                 transform=self.ax_weather.transAxes,
+                                 gid=f"score_label_{i}")
+            # Value
+            self.ax_weather.text(0.97, y, f"{val:.0f}", fontsize=6,
+                                 color="#e0e0f0", va="center", ha="right",
+                                 transform=self.ax_weather.transAxes,
+                                 gid=f"score_val_{i}")
+
+
+# ── Direct Pipeline Runner (--direct mode) ──────────────────────────────────
+
+class DirectPipeline(threading.Thread):
+    """Runs the mock pipeline internally and pushes UDP-format messages to queue."""
+
+    def __init__(self, weather: str, data_queue: queue.Queue):
+        super().__init__(daemon=True)
+        self.weather = weather
+        self.queue = data_queue
+        self.running = True
+
+    def run(self):
+        import sys, os
+        _root = os.path.dirname(os.path.abspath(__file__))
+        if _root not in sys.path:
+            sys.path.insert(0, _root)
+        import importlib
+
+        mock_data = importlib.import_module("01-数据采集.mock_data")
+        sig_mod = importlib.import_module("02-信号处理.signal_pipeline")
+        score_mod = importlib.import_module("02-信号处理.scoring_model")
+        udp_mod = importlib.import_module("05-通信协议.udp_sender")
+
+        cfg = mock_data.MockConfig.for_weather(self.weather)
+        generator = mock_data.generate_frames(duration=0, cfg=cfg)  # infinite
+        pipeline = sig_mod.SignalPipeline()
+        scorer = score_mod.ScoringModel(
+            cfg=score_mod.ScoringConfig.for_weather(self.weather))
+
+        for frame in generator:
+            if not self.running:
+                break
+            processed = pipeline.feed(
+                frame.timestamp, frame.respiration_raw, frame.ecg_raw,
+                frame.eda_raw, frame.acc_magnitude, frame.temp_skin)
+            score = scorer.score(processed,
+                                 breath_phase=frame.breath_phase,
+                                 guidance_prompt=frame.guidance_prompt,
+                                 weather_type=frame.weather_type)
+            msg = udp_mod.build_message(score.to_dict())
+            self.queue.put(msg)
+            time.sleep(0.1)  # 10 Hz
+
+    def stop(self):
+        self.running = False
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="SRP Live Visualizer")
-    parser.add_argument("--host", default=UDP_HOST, help=f"UDP host (default: {UDP_HOST})")
-    parser.add_argument("--port", type=int, default=UDP_PORT, help=f"UDP port (default: {UDP_PORT})")
-    parser.add_argument("--history", type=int, default=HISTORY_SECONDS,
-                        help=f"History window in seconds (default: {HISTORY_SECONDS})")
-    parser.add_argument("--fps", type=int, default=TARGET_FPS,
-                        help=f"Refresh FPS (default: {TARGET_FPS})")
+    parser = argparse.ArgumentParser(description="SRP 6-Panel Live Dashboard")
+    parser.add_argument("--host", default=UDP_HOST)
+    parser.add_argument("--port", type=int, default=UDP_PORT)
+    parser.add_argument("--history", type=int, default=HISTORY_SECONDS)
+    parser.add_argument("--fps", type=int, default=TARGET_FPS)
+    parser.add_argument("--direct", action="store_true",
+                        help="Run pipeline internally (no UDP needed)")
+    parser.add_argument("--weather", type=str, default="storm",
+                        choices=["storm", "heat", "snow", "fade"],
+                        help="Weather type for --direct mode")
     args = parser.parse_args()
 
     data_queue = queue.Queue()
-    listener = UDPListener(args.host, args.port, data_queue)
-    listener.start()
+
+    if args.direct:
+        runner = DirectPipeline(args.weather, data_queue)
+        runner.start()
+        print(f"SRP 6-Panel Dashboard — Direct Mode ({args.weather})")
+    else:
+        runner = UDPListener(args.host, args.port, data_queue)
+        runner.start()
+        print(f"SRP 6-Panel Dashboard — UDP {args.host}:{args.port}")
+        print(f"  Start pipeline: python main.py --weather storm --duration 0")
 
     dashboard = Dashboard(history_seconds=args.history)
 
-    # Timer: drain UDP queue into dashboard buffers
     def drain_queue():
         try:
-            for _ in range(50):  # drain up to 50 messages per tick
+            for _ in range(50):
                 msg = data_queue.get_nowait()
                 dashboard.feed(msg)
         except queue.Empty:
@@ -293,24 +516,21 @@ def main():
 
     ani = animation.FuncAnimation(
         dashboard.fig, dashboard.update,
-        interval=1000 // args.fps,  # ms
-        blit=False, cache_frame_data=False,
+        interval=1000 // args.fps, blit=False, cache_frame_data=False,
     )
 
-    # Periodic drain via timer (FuncAnimation doesn't have pre-update hooks)
     _timer = dashboard.fig.canvas.new_timer(interval=1000 // args.fps)
     _timer.add_callback(drain_queue)
 
-    print(f"SRP Visualizer ready — listening on UDP {args.host}:{args.port}")
-    print(f"History: {args.history}s | Refresh: {args.fps} FPS")
-    print("Start the data pipeline:  python main.py --weather storm")
-    print("Close the window or Ctrl+C to exit.\n")
+    print(f"  History: {args.history}s | Refresh: {args.fps} FPS")
+    print(f"  Close window or Ctrl+C to exit.\n")
 
     _timer.start()
     plt.show()
 
-    listener.stop()
-    print(f"\nDone. UDP frames received: {listener.frame_count}")
+    runner.stop()
+    count = getattr(runner, "frame_count", 0)
+    print(f"\nDone. Frames received: {count}")
 
 
 if __name__ == "__main__":

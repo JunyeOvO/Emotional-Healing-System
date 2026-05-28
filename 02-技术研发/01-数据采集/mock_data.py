@@ -1,15 +1,19 @@
 """
-SRP Mock Data Generator (Sprint 0)
-====================================
+SRP Mock Data Generator (Sprint 0 v0.3)
+========================================
 Generates simulated physiological signals for pipeline development
-before real Polar H10 + respiratory belt are available.
+before real Polar H10 + respiratory belt + auxiliary sensors are available.
 
-Produces:
-  - Respiratory waveform (sine wave @ 0.2 Hz = 12 breaths/min)
-  - ECG-like signal (QRS bursts @ 1.2 Hz = 72 BPM)
+Produces per frame (10 Hz):
+  - Respiration waveform (sine wave, weather-specific pattern)
+  - ECG-like signal (QRS bursts @ configured HR)
+  - EDA (skin conductance: tonic + phasic SCR)
+  - ACC magnitude (body motion, settling-down pattern)
+  - Skin temperature (slow drift, peripheral vasodilation)
   - Breath phase classification (inhale / hold / exhale)
+  - Guidance prompt text
 
-Output rate: 10 Hz configurable (default matches UDP spec)
+Output rate: 10 Hz
 """
 
 import time
@@ -22,71 +26,92 @@ import numpy as np
 # ── Weather-specific Breathing Configs ──────────────────────────────────────
 
 WEATHER_BREATHING_CONFIG: dict[str, dict] = {
-    "storm": {  # 焦虑 → 4-2-6 盒式呼吸 (12s cycle)
+    "storm": {
         "breath_rate_hz": 1.0 / 12.0,
         "inhale_duration": 4.0,
         "hold_duration": 2.0,
         "exhale_duration": 6.0,
         "hr_bpm": 85.0,
         "breath_amplitude": 0.5,
+        "eda_tonic_base": 8.0,
+        "acc_rest_level": 0.06,
     },
-    "heat": {   # 烦躁 → 长呼气降温 1:2 (9s cycle)
+    "heat": {
         "breath_rate_hz": 1.0 / 9.0,
         "inhale_duration": 3.0,
         "hold_duration": 0.0,
         "exhale_duration": 6.0,
         "hr_bpm": 80.0,
         "breath_amplitude": 0.6,
+        "eda_tonic_base": 12.0,
+        "acc_rest_level": 0.08,
     },
-    "snow": {   # 低落 → 稳定呼吸 5-5 (10s cycle)
+    "snow": {
         "breath_rate_hz": 1.0 / 10.0,
         "inhale_duration": 5.0,
         "hold_duration": 0.0,
         "exhale_duration": 5.0,
         "hr_bpm": 65.0,
         "breath_amplitude": 0.4,
+        "eda_tonic_base": 5.0,
+        "acc_rest_level": 0.02,
     },
-    "fade": {   # 孤独 → 自主呼吸 (8s variable cycle)
+    "fade": {
         "breath_rate_hz": 1.0 / 8.0,
         "inhale_duration": 3.5,
         "hold_duration": 0.0,
         "exhale_duration": 4.5,
         "hr_bpm": 62.0,
         "breath_amplitude": 0.35,
+        "eda_tonic_base": 6.0,
+        "acc_rest_level": 0.03,
     },
 }
 
 
-# ── Configuration ──────────────────────────────────────────────────────────
+# ── Configuration ───────────────────────────────────────────────────────────
 
 @dataclass
 class MockConfig:
     """Configurable parameters for mock signal generation."""
     # Breathing
-    breath_rate_hz: float = 0.2       # 12 breaths/min
-    breath_amplitude: float = 0.5      # normalized amplitude
-    breath_noise_std: float = 0.02     # small Gaussian noise
+    breath_rate_hz: float = 0.2
+    breath_amplitude: float = 0.5
+    breath_noise_std: float = 0.02
 
     # ECG / Heart
-    hr_bpm: float = 72.0              # resting heart rate
+    hr_bpm: float = 72.0
     ecg_noise_std: float = 0.01
 
+    # EDA (skin conductance, μS)
+    eda_tonic_base: float = 8.0        # baseline μS
+    eda_phasic_rate: float = 2.0       # SCR peaks per minute
+    eda_noise_std: float = 0.05
+
+    # ACC (motion, g)
+    acc_rest_level: float = 0.04       # baseline motion at rest
+    acc_motion_rate: float = 1.5       # movement bursts per minute
+    acc_noise_std: float = 0.005
+
+    # TEMP (skin temperature, °C)
+    temp_base: float = 34.0
+    temp_drift_rate: float = 0.002     # °C/sec warming
+    temp_noise_std: float = 0.02
+
     # Output
-    frame_rate: float = 10.0           # Hz (matches UDP spec)
+    frame_rate: float = 10.0
 
     # Breath pattern (seconds per phase)
-    # 4-2-6 pattern: inhale 4s, hold 2s, exhale 6s
     inhale_duration: float = 4.0
     hold_duration: float = 2.0
     exhale_duration: float = 6.0
 
-    # Weather simulation (for demo variation)
-    weather_type: str = "storm"       # storm / heat / snow / fade
-    weather_intensity_base: float = 0.5  # 0=calm, 1=severe
+    # Weather simulation
+    weather_type: str = "storm"
+    weather_intensity_base: float = 0.5
 
     @classmethod
     def for_weather(cls, weather_type: str, intensity: float = 0.5) -> "MockConfig":
-        """Factory: create MockConfig pre-configured for a weather type."""
         params = WEATHER_BREATHING_CONFIG.get(weather_type, WEATHER_BREATHING_CONFIG["storm"])
         return cls(
             breath_rate_hz=params["breath_rate_hz"],
@@ -95,50 +120,96 @@ class MockConfig:
             exhale_duration=params["exhale_duration"],
             hr_bpm=params["hr_bpm"],
             breath_amplitude=params["breath_amplitude"],
+            eda_tonic_base=params["eda_tonic_base"],
+            acc_rest_level=params["acc_rest_level"],
             weather_type=weather_type,
             weather_intensity_base=intensity,
         )
 
 
-# ── Signal Generators ──────────────────────────────────────────────────────
+# ── Signal Generators ───────────────────────────────────────────────────────
 
 def _respiration(t: float, cfg: MockConfig) -> float:
-    """Simulate a respiratory waveform (sine + noise)."""
     signal = math.sin(2 * math.pi * cfg.breath_rate_hz * t) * cfg.breath_amplitude
     signal += np.random.normal(0, cfg.breath_noise_std)
     return signal
 
 
 def _ecg_signal(t: float, cfg: MockConfig) -> float:
-    """Simulate a simplified QRS-like ECG signal.
+    hr_hz = cfg.hr_bpm / 60.0
+    period = 1.0 / hr_hz
+    phase_in_cycle = (t % period) / period
 
-    Produces periodic sharp positive peaks (representing R-waves)
-    at the configured HR, with slight timing jitter for realism.
-    """
-    hr_hz = cfg.hr_bpm / 60.0              # 1.2 Hz
-    period = 1.0 / hr_hz                   # seconds between R-waves
-    phase_in_cycle = (t % period) / period  # [0, 1)
-
-    # QRS burst centered at 30% of the cardiac cycle
     qrs_center = 0.3
     qrs_width = 0.05
     qrs = math.exp(-((phase_in_cycle - qrs_center) / qrs_width) ** 2) * 0.8
 
-    # Tiny T-wave (repolarization) at ~70%
     t_center = 0.7
     t_wave = math.exp(-((phase_in_cycle - t_center) / 0.08) ** 2) * 0.15
 
-    signal = qrs + t_wave + np.random.normal(0, cfg.ecg_noise_std)
-    return signal
+    return qrs + t_wave + np.random.normal(0, cfg.ecg_noise_std)
 
 
-# ── Breath Phase Classifier ────────────────────────────────────────────────
+def _eda_signal(t: float, cfg: MockConfig) -> float:
+    """Simulate skin conductance: slow tonic drift + phasic SCR peaks.
+
+    Tonic component drifts downward over time (calming effect).
+    Phasic component fires occasional SCR peaks (1-3/min).
+    """
+    # Tonic: slowly decreasing baseline (calming down over 3-5 min)
+    tonic_drift = -0.3 * math.tanh(t / 120.0)
+    tonic = cfg.eda_tonic_base + tonic_drift
+
+    # Phasic: occasional SCR peaks
+    scr_interval = 60.0 / cfg.eda_phasic_rate  # seconds between peaks
+    scr_phase = (t % scr_interval) / scr_interval
+    # Sharp SCR at phase ~0 (rise 1s, decay 3s)
+    if scr_phase < 0.3:
+        scr = 1.5 * math.exp(-((t % scr_interval) / 1.5) ** 0.7)
+    elif (t - 0.3) % scr_interval < scr_interval and scr_phase >= 0.3:
+        scr = 0.3 * math.exp(-((t % scr_interval - 0.3 * scr_interval) / 3.0))
+    else:
+        scr = 0
+
+    return tonic + scr + np.random.normal(0, cfg.eda_noise_std)
+
+
+def _acc_magnitude(t: float, cfg: MockConfig) -> float:
+    """Simulate body motion: low baseline + occasional movement bursts.
+
+    Motion decreases over time as user settles into the breathing exercise.
+    """
+    # Settling-down envelope: motion halves over 2 minutes
+    envelope = 0.5 + 0.5 * math.exp(-t / 60.0)
+
+    # Baseline rest motion
+    baseline = cfg.acc_rest_level * envelope
+
+    # Occasional movement burst
+    burst_interval = 60.0 / cfg.acc_motion_rate
+    burst_phase = (t % burst_interval) / burst_interval
+    if burst_phase < 0.08:
+        burst = 0.4 * envelope * math.exp(-((burst_phase * burst_interval) / 0.5) ** 2)
+    else:
+        burst = 0
+
+    return baseline + burst + np.random.normal(0, cfg.acc_noise_std)
+
+
+def _temp_skin(t: float, cfg: MockConfig) -> float:
+    """Simulate skin temperature: slow warming trend + noise.
+
+    Peripheral vasodilation during relaxation causes ~0.5°C rise over 5 min.
+    """
+    warming = 0.5 * math.tanh(t / 180.0)
+    # Very subtle respiratory-synchronous oscillation (±0.02°C)
+    resp_osc = 0.02 * math.sin(2 * math.pi * cfg.breath_rate_hz * t)
+    return cfg.temp_base + warming + resp_osc + np.random.normal(0, cfg.temp_noise_std)
+
+
+# ── Breath Phase Classifier ──────────────────────────────────────────────────
 
 def _breath_phase(t: float, cfg: MockConfig) -> str:
-    """Classify current breath phase based on 4-2-6 breathing pattern.
-
-    Uses a repeating 12-second cycle: inhale→hold→exhale.
-    """
     cycle_duration = cfg.inhale_duration + cfg.hold_duration + cfg.exhale_duration
     cycle_pos = t % cycle_duration
 
@@ -150,7 +221,7 @@ def _breath_phase(t: float, cfg: MockConfig) -> str:
         return "exhale"
 
 
-# ── Guidance Text ──────────────────────────────────────────────────────────
+# ── Guidance Text ────────────────────────────────────────────────────────────
 
 _WEATHER_PROMPTS: dict[str, dict[str, str]] = {
     "storm": {
@@ -177,33 +248,40 @@ _WEATHER_PROMPTS: dict[str, dict[str, str]] = {
 
 
 def _guidance_prompt(phase: str, cfg: MockConfig) -> str:
-    """Return per-weather guidance prompt for the current breath phase."""
     weather_prompts = _WEATHER_PROMPTS.get(cfg.weather_type, _WEATHER_PROMPTS["storm"])
     return weather_prompts.get(phase, "")
 
 
-# ── Frame Generator (main public API) ──────────────────────────────────────
+# ── Frame Definition ────────────────────────────────────────────────────────
 
 @dataclass
 class MockFrame:
-    """A single 10Hz frame of simulated physiological data."""
+    """A single 10 Hz frame of simulated multi-sensor physiological data."""
     timestamp: float
-    # Raw signals
-    respiration_raw: float
-    ecg_raw: float
-    # Derived
-    breath_phase: str
-    guidance_prompt: str
-    # Injected weather parameters (for demo variety)
-    weather_type: str
-    weather_intensity_base: float
+
+    # Primary biosignals
+    respiration_raw: float       # RSP waveform, normalized
+    ecg_raw: float               # ECG-like QRS signal
+
+    # Auxiliary biosignals (optional sensors)
+    eda_raw: float               # Skin conductance, μS
+    acc_magnitude: float         # Body motion, g (rms of 3-axis)
+    temp_skin: float             # Skin temperature, °C
+
+    # Derived / metadata
+    breath_phase: str            # inhale / hold / exhale
+    guidance_prompt: str         # Per-weather+phase guidance text
+    weather_type: str            # storm / heat / snow / fade
+    weather_intensity_base: float  # 0=clear, 1=severe (injected for simulation)
 
     def to_dict(self) -> dict:
-        """Serialize to dict for downstream consumers."""
         return {
             "timestamp": self.timestamp,
             "respiration_raw": round(self.respiration_raw, 4),
             "ecg_raw": round(self.ecg_raw, 4),
+            "eda_raw": round(self.eda_raw, 4),
+            "acc_magnitude": round(self.acc_magnitude, 4),
+            "temp_skin": round(self.temp_skin, 2),
             "breath_phase": self.breath_phase,
             "guidance_prompt": self.guidance_prompt,
             "weather_type": self.weather_type,
@@ -211,19 +289,12 @@ class MockFrame:
         }
 
 
+# ── Frame Generator ─────────────────────────────────────────────────────────
+
 def generate_frames(
     duration: float = 60.0,
     cfg: MockConfig | None = None,
 ) -> Generator[MockFrame, None, None]:
-    """Generate mock physiological data frames at 10 Hz.
-
-    Args:
-        duration: Total simulation duration in seconds.
-        cfg: Configuration object; uses defaults if None.
-
-    Yields:
-        MockFrame objects at cfg.frame_rate Hz.
-    """
     if cfg is None:
         cfg = MockConfig()
 
@@ -241,6 +312,9 @@ def generate_frames(
             timestamp=t,
             respiration_raw=_respiration(t, cfg),
             ecg_raw=_ecg_signal(t, cfg),
+            eda_raw=_eda_signal(t, cfg),
+            acc_magnitude=_acc_magnitude(t, cfg),
+            temp_skin=_temp_skin(t, cfg),
             breath_phase=_breath_phase(t, cfg),
             guidance_prompt=_guidance_prompt(_breath_phase(t, cfg), cfg),
             weather_type=cfg.weather_type,
@@ -248,27 +322,29 @@ def generate_frames(
         )
 
 
-# ── Convenience Function ───────────────────────────────────────────────────
+# ── Convenience ──────────────────────────────────────────────────────────────
 
 def generate_frame_list(duration: float = 60.0, cfg: MockConfig | None = None) -> list[MockFrame]:
-    """Return all frames as a list (for testing / batch processing)."""
     return list(generate_frames(duration, cfg))
 
 
-# ── Self-test ──────────────────────────────────────────────────────────────
+# ── Self-test ────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("MockDataGenerator self-test")
+    print("MockDataGenerator self-test (v0.3 — multi-sensor)")
     frames = generate_frame_list(duration=5.0)
     print(f"Generated {len(frames)} frames in 5 seconds")
     print(f"Frame rate: {len(frames) / 5.0:.1f} Hz")
     print(f"\nFirst 3 frames:")
     for f in frames[:3]:
         print(f"  t={f.timestamp:.2f}s  resp={f.respiration_raw:+.4f}  "
-              f"ecg={f.ecg_raw:.4f}  phase={f.breath_phase}")
-    print(f"Phase distribution: ", end="")
-    from collections import Counter
-    counts = Counter(f.breath_phase for f in frames)
-    for phase, n in counts.items():
-        print(f"{phase}={n} ", end="")
-    print()
+              f"ecg={f.ecg_raw:.4f}  eda={f.eda_raw:.2f}  "
+              f"acc={f.acc_magnitude:.4f}  temp={f.temp_skin:.2f}  "
+              f"phase={f.breath_phase}")
+    print(f"\nSignal ranges across {len(frames)} frames:")
+    print(f"  EDA: {min(f.eda_raw for f in frames):.2f} — "
+          f"{max(f.eda_raw for f in frames):.2f} μS")
+    print(f"  ACC: {min(f.acc_magnitude for f in frames):.4f} — "
+          f"{max(f.acc_magnitude for f in frames):.4f} g")
+    print(f"  TEMP: {min(f.temp_skin for f in frames):.2f} — "
+          f"{max(f.temp_skin for f in frames):.2f} °C")

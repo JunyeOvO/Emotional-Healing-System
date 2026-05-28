@@ -1,15 +1,16 @@
 """
-SRP UDP JSON Sender (Sprint 0)
-================================
-Sends scored physiological data as JSON over UDP to TD and Unity.
+SRP UDP JSON Sender (Sprint 0 v0.3)
+====================================
+Sends multi-signal scored data as JSON over UDP to TD and Unity.
 
-Spec (from UDP协议定义.md):
-  - Transport: UDP
-  - Encoding: JSON (UTF-8)
-  - Rate: 10 Hz (100ms interval)
-  - Ports: TD:5005, Unity:5006
+Spec:
+  Transport: UDP
+  Encoding: JSON (UTF-8)
+  Rate: 10 Hz
+  Ports: TD:5005, Unity:5006
 
-Message format: see build_message() below.
+Message structure includes all 8 independent scores, raw signals,
+derived features, and weather composite.
 """
 
 import json
@@ -20,11 +21,8 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-
-# ── Port Configuration ─────────────────────────────────────────────────────
-
-UDP_TD_PORT = 5005      # TouchDesigner
-UDP_UNITY_PORT = 5006   # Unity 2D
+UDP_TD_PORT = 5005
+UDP_UNITY_PORT = 5006
 
 DEFAULT_TARGETS = [
     ("127.0.0.1", UDP_TD_PORT),
@@ -32,63 +30,73 @@ DEFAULT_TARGETS = [
 ]
 
 
-# ── Message Builder ────────────────────────────────────────────────────────
-
 def build_message(score_dict: dict) -> dict:
-    """Build the full UDP JSON message per the protocol specification.
-
-    Args:
-        score_dict: Output from ScoreFrame.to_dict()
-
-    Returns:
-        Complete message dict matching UDP协议定义.md format.
-    """
+    """Build full UDP JSON message with all 8 independent scores."""
     ts = score_dict.get("timestamp", time.time())
 
     return {
         "version": "1.0",
         "timestamp": ts,
-        "breath": {
-            "score": score_dict.get("breath_score", 0),
-            "rate": score_dict.get("rr", 0),
-            "depth": score_dict.get("respiration_raw", 0),
-            "phase": score_dict.get("breath_phase", "exhale"),
-            "guidance_phase": score_dict.get("breath_phase", "exhale"),
+
+        # All 8 independent scores
+        "scores": {
+            "breath_sync": score_dict.get("breath_sync", 50),
+            "hr_stability": score_dict.get("hr_stability", 50),
+            "hrv_recovery": score_dict.get("hrv_recovery", 50),
+            "rate_match": score_dict.get("rate_match", 50),
+            "depth_quality": score_dict.get("depth_quality", 50),
+            "regularity": score_dict.get("regularity", 50),
+            "eda_calm": score_dict.get("eda_calm", 50),
+            "motion_stillness": score_dict.get("motion_stillness", 50),
         },
-        "calm": {
-            "index": score_dict.get("calm_index", 0),
-            "trend": score_dict.get("weather_trend", "stable"),
-            "weather_intensity": score_dict.get("weather_intensity", 0),
-        },
-        "hrv": {
-            "hr": score_dict.get("hr", 0),
-            "rmssd": score_dict.get("rmssd", 0),
-            "coherence": 0.5,  # placeholder until real HRV coherence implemented
-        },
+
+        # Weather composite
         "weather": {
             "type": score_dict.get("weather_type", "storm"),
-            "intensity": score_dict.get("weather_intensity", 0),
-            "transition": score_dict.get("weather_trend", "stable"),
+            "composite": score_dict.get("weather_composite", 50),
+            "intensity": score_dict.get("weather_intensity", 0.5),
+            "trend": score_dict.get("weather_trend", "stable"),
+            "dominant": score_dict.get("dominant_domain", "—"),
         },
+
+        # Breath domain
+        "breath": {
+            "phase": score_dict.get("breath_phase", "exhale"),
+            "rate": score_dict.get("rr", 0),
+            "depth": score_dict.get("respiration_raw", 0),
+            "amplitude": score_dict.get("respiration_amplitude", 0),
+            "regularity_raw": score_dict.get("breath_regularity_raw", 0),
+        },
+
+        # Cardiac domain
+        "cardiac": {
+            "hr": score_dict.get("hr", 0),
+            "rmssd": score_dict.get("rmssd", 0),
+            "ecg_raw": score_dict.get("ecg_raw", 0),
+        },
+
+        # Auxiliary domain
+        "aux": {
+            "eda_raw": score_dict.get("eda_raw", 0),
+            "eda_tonic": score_dict.get("eda_tonic", 0),
+            "acc_magnitude": score_dict.get("acc_magnitude", 0),
+            "motion_index": score_dict.get("motion_index", 0),
+            "temp_skin": score_dict.get("temp_skin", 0),
+        },
+
+        # Guidance
         "guidance": {
             "prompt": score_dict.get("guidance_prompt", ""),
-            "circle_radius": 0.8,  # placeholder, driven by breath phase
+            "circle_radius": 0.8,
             "target_breath_rate": 10,
         },
     }
 
 
-# ── UDP Sender ─────────────────────────────────────────────────────────────
-
 class UDPSender:
     """Sends UDP JSON messages to multiple targets (TD + Unity)."""
 
     def __init__(self, targets: list[tuple[str, int]] | None = None):
-        """Initialize UDP socket.
-
-        Args:
-            targets: List of (host, port) tuples. Defaults to localhost:5005,5006.
-        """
         self.targets = targets or DEFAULT_TARGETS
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -96,14 +104,6 @@ class UDPSender:
         self.error_count = 0
 
     def send(self, score_dict: dict) -> bool:
-        """Send one scored frame to all targets.
-
-        Args:
-            score_dict: ScoreFrame.to_dict() output.
-
-        Returns:
-            True if sent to all targets successfully.
-        """
         message = build_message(score_dict)
         payload = json.dumps(message, ensure_ascii=False).encode("utf-8")
 
@@ -120,14 +120,12 @@ class UDPSender:
         return all_ok
 
     def close(self):
-        """Close the UDP socket."""
         try:
             self.sock.close()
         except Exception:
             pass
 
     def stats(self) -> dict:
-        """Return sender statistics."""
         return {
             "frames_sent": self.frame_count,
             "errors": self.error_count,
@@ -135,36 +133,30 @@ class UDPSender:
         }
 
 
-# ── Self-test ──────────────────────────────────────────────────────────────
-
 if __name__ == "__main__":
     import sys, os
     _parent = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if _parent not in sys.path:
         sys.path.insert(0, _parent)
 
-    # Quick test: send 5 frames (no receiver needed for error count)
     sender = UDPSender()
     print(f"UDP Sender self-test: {len(sender.targets)} targets")
     for i in range(5):
         test_frame = {
             "timestamp": time.time(),
-            "breath_score": 72.5,
-            "calm_index": 68.3,
-            "rr": 14.2,
-            "hr": 72.0,
-            "rmssd": 45.2,
-            "weather_intensity": 0.32,
-            "weather_trend": "weakening",
-            "weather_type": "storm",
-            "breath_phase": "inhale",
+            "breath_sync": 72.5, "hr_stability": 68.0, "hrv_recovery": 55.3,
+            "rate_match": 60.2, "depth_quality": 58.1, "regularity": 65.7,
+            "eda_calm": 70.8, "motion_stillness": 82.4,
+            "weather_composite": 65.0, "weather_intensity": 0.35,
+            "weather_trend": "weakening", "dominant_domain": "eda_calm",
+            "weather_type": "storm", "breath_phase": "inhale",
+            "rr": 8.5, "hr": 78.0, "rmssd": 40.2,
+            "respiration_raw": 0.45, "respiration_amplitude": 0.4,
+            "breath_regularity_raw": 0.6,
+            "ecg_raw": 0.15, "eda_raw": 7.2, "eda_tonic": 7.0,
+            "acc_magnitude": 0.03, "motion_index": 0.025,
+            "temp_skin": 34.1,
             "guidance_prompt": "慢慢吸气...4秒",
-            "respiration_raw": 0.65,
-            "ecg_raw": 0.12,
-            "breath_sync": 70.0,
-            "hrv_score": 65.0,
-            "regularity_score": 60.0,
-            "depth_score": 55.0,
         }
         ok = sender.send(test_frame)
         print(f"  Frame {i + 1}: {'OK' if ok else 'FAIL'}")

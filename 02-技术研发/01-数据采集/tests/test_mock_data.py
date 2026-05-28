@@ -22,11 +22,14 @@ class TestMockConfig:
 
 class TestMockFrame:
     def test_to_dict(self):
-        f = mock.MockFrame(0.0, 0.5, 0.1, "inhale", "test", "storm", 0.5)
+        f = mock.MockFrame(0.0, 0.5, 0.1, 8.0, 0.04, 34.0, "inhale", "test", "storm", 0.5)
         d = f.to_dict()
         assert "timestamp" in d
         assert d["breath_phase"] == "inhale"
         assert d["weather_type"] == "storm"
+        assert "eda_raw" in d
+        assert "acc_magnitude" in d
+        assert "temp_skin" in d
 
 
 class TestGenerateFrames:
