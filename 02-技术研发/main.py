@@ -40,6 +40,9 @@ def run_pipeline(args: argparse.Namespace):
     logger.info("SRP Data Pipeline — Multi-Sensor Mode")
     logger.info(f"Mode: {'Mock' if args.mock else 'Real Device'} | "
                 f"Duration: {dur_label} | Weather: {args.weather}")
+    logger.info("")
+    logger.info("  For live dashboard, run:  python visualizer.py --weather " + args.weather)
+    logger.info("  This is the headless pipeline (UDP + CSV only).")
     logger.info("=" * 60)
 
     # --- Phase 1: Data Source ---

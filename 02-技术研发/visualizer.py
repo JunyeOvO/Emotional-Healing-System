@@ -485,24 +485,26 @@ def main():
     parser.add_argument("--port", type=int, default=UDP_PORT)
     parser.add_argument("--history", type=int, default=HISTORY_SECONDS)
     parser.add_argument("--fps", type=int, default=TARGET_FPS)
-    parser.add_argument("--direct", action="store_true",
-                        help="Run pipeline internally (no UDP needed)")
+    parser.add_argument("--udp", action="store_true",
+                        help="Use UDP mode (needs main.py running separately)")
     parser.add_argument("--weather", type=str, default="storm",
                         choices=["storm", "heat", "snow", "fade"],
-                        help="Weather type for --direct mode")
+                        help="Weather type (default: storm)")
     args = parser.parse_args()
 
     data_queue = queue.Queue()
 
-    if args.direct:
+    if args.udp:
+        runner = UDPListener(args.host, args.port, data_queue)
+        runner.start()
+        print(f"SRP 6-Panel Dashboard — UDP Mode ({args.host}:{args.port})")
+        print(f"  Start pipeline in another terminal:")
+        print(f"    python main.py --weather {args.weather} --duration 0")
+    else:
         runner = DirectPipeline(args.weather, data_queue)
         runner.start()
         print(f"SRP 6-Panel Dashboard — Direct Mode ({args.weather})")
-    else:
-        runner = UDPListener(args.host, args.port, data_queue)
-        runner.start()
-        print(f"SRP 6-Panel Dashboard — UDP {args.host}:{args.port}")
-        print(f"  Start pipeline: python main.py --weather storm --duration 0")
+        print(f"  Pipeline running internally, no UDP needed.")
 
     dashboard = Dashboard(history_seconds=args.history)
 
