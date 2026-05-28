@@ -48,8 +48,9 @@ def run_pipeline(args: argparse.Namespace):
     """
     logger.info("=" * 60)
     logger.info("SRP Data Pipeline — Starting")
+    dur_label = f"{args.duration:.0f}s" if args.duration > 0 else "infinite (Ctrl+C to stop)"
     logger.info(f"Mode: {'Mock' if args.mock else 'Real Device'} | "
-                f"Duration: {args.duration}s | Weather: {args.weather}")
+                f"Duration: {dur_label} | Weather: {args.weather}")
     logger.info("=" * 60)
 
     # --- Phase 1: Data Source ---
@@ -170,7 +171,7 @@ def main():
     )
     parser.add_argument(
         "--duration", type=float, default=60.0,
-        help="Pipeline runtime in seconds (default: 60)",
+        help="Pipeline runtime in seconds. 0 = run until Ctrl+C (default: 60)",
     )
     parser.add_argument(
         "--weather", type=str, default="storm",

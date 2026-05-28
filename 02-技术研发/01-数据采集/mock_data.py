@@ -227,10 +227,15 @@ def generate_frames(
     if cfg is None:
         cfg = MockConfig()
 
-    n_frames = int(duration * cfg.frame_rate)
+    import itertools
     dt = 1.0 / cfg.frame_rate
 
-    for i in range(n_frames):
+    if duration <= 0:
+        iterator = itertools.count()
+    else:
+        iterator = range(int(duration * cfg.frame_rate))
+
+    for i in iterator:
         t = i * dt
         yield MockFrame(
             timestamp=t,
