@@ -1,4 +1,4 @@
-# SRP SE — 数据管道 (Sprint 0 v0.1)
+# SRP SE — 数据管道 (Sprint 0 v0.3)
 
 > 负责: 生理数据采集 → 信号处理 → 评分模型 → UDP通信 → 系统集成
 > 技术栈: Python 3.11 + NeuroKit2 + BioSPPy + bleak + UDP JSON
@@ -6,15 +6,14 @@
 ## 快速启动
 
 ```bash
-# 激活环境
-source ~/.hermes-venv/bin/activate
-cd /mnt/c/Users/fujunye/Desktop/Hermes/03-SRP/02-技术研发
-
 # 安装依赖
-pip install --proxy http://172.24.48.1:7897 -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+pip install -r requirements.txt
 
-# 运行模拟数据管道 (60秒)
-python main.py --mock --duration 60
+# 运行模拟数据管道 (60秒, 终端1)
+python main.py --weather storm --duration 60
+
+# 实时可视化仪表盘 (终端2)
+python visualizer.py
 
 # 运行测试
 python -m pytest tests/ -v
@@ -30,6 +29,8 @@ python -m pytest tests/ -v
 | 信号处理 | 02-信号处理/scoring_model.py | breath_score + calm_index (0-100) |
 | 通信 | 05-通信协议/udp_sender.py | UDP JSON @ 10Hz → :5005(TD) :5006(Unity) |
 | 通信 | 05-通信协议/csv_logger.py | 结构化 CSV 日志 |
+| 可视化 | visualizer.py | 4面板实时仪表盘 (监听UDP 5005) |
+| TD桥接 | 03-TouchDesigner/osc_bridge/ | OSC 远程遥控 TD 工程 |
 
 ## 测试
 
@@ -51,5 +52,6 @@ mock_data.py ──→ signal_pipeline.py ──→ scoring_model.py
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
+| v0.3 | 2026-05-28 | OSC远程遥控桥接 + 实时可视化仪表盘 |
 | v0.2 | 2026-05-27 | Sprint 1: 4天气呼吸+评分, 全链路压测, BLE骨架 |
 | v0.1 | 2026-05-26 | Sprint 0: 骨架初始化 |
