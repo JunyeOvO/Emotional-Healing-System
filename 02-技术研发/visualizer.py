@@ -379,11 +379,11 @@ class Dashboard:
         if not self.scores:
             return
 
-        # Remove old bars
+        # Remove old bars and labels from panel 6
         for child in list(self.ax_weather.get_children()):
-            if isinstance(child, plt.Rectangle) and child.get_width() > 0.1:
-                if child.get_gid() and child.get_gid().startswith("score_bar"):
-                    child.remove()
+            gid = child.get_gid() if hasattr(child, 'get_gid') else None
+            if gid and gid.startswith("score_"):
+                child.remove()
 
         labels = []
         values = []
@@ -409,13 +409,13 @@ class Dashboard:
         for i, (label, val, color) in enumerate(zip(labels, values, colors)):
             y = y_positions[i]
             # Background
-            self.ax_weather.barh(y, 100, bar_height, left=0,
-                                 color=C_GRID, height=bar_height * 0.8,
+            self.ax_weather.barh(y, 100, height=bar_height * 0.8, left=0,
+                                 color=C_GRID,
                                  transform=self.ax_weather.transAxes,
                                  gid=f"score_bar_bg_{i}")
             # Value bar
-            self.ax_weather.barh(y, val, bar_height, left=0,
-                                 color=color, height=bar_height * 0.8,
+            self.ax_weather.barh(y, val, height=bar_height * 0.8, left=0,
+                                 color=color,
                                  transform=self.ax_weather.transAxes,
                                  gid=f"score_bar_{i}")
             # Label
