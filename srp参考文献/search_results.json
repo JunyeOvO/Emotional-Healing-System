@@ -1,0 +1,1206 @@
+{
+  "01_情绪调节理论": {
+    "query": "emotion+regulation+theory+process+model+strategies+meta-analysis",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Studying Children's Intrapersonal Emotion Regulation Strategies from the Process Model of Emotion Regulation",
+        "authors": "López-Pérez, Gummerum, Wilson et al.",
+        "year": 2017,
+        "journal": "The Journal of Genetic Psychology",
+        "doi": "10.1080/00221325.2016.1230085",
+        "cited": 18
+      },
+      {
+        "title": "Anger and emotion regulation strategies: a meta-analysis",
+        "authors": "Pop, Nechita, Miu et al.",
+        "year": 2025,
+        "journal": "Scientific Reports",
+        "doi": "10.1038/s41598-025-91646-0",
+        "cited": 16
+      },
+      {
+        "title": "Emotion regulation strategies in borderline personality disorder: a meta-analysis",
+        "authors": "Bud, Nechita, Szentagotai Tatar",
+        "year": 2023,
+        "journal": "Clinical Psychologist",
+        "doi": "10.1080/13284207.2022.2152668",
+        "cited": 12
+      },
+      {
+        "title": "Supplemental Material for Why Do Feelings Persist Over Time in Daily Life? Investigating the Role of Emotion-Regulation Strategies in the Process Underlying Emotional Inertia",
+        "authors": "",
+        "year": 2025,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0001541.supp",
+        "cited": 0
+      },
+      {
+        "title": "Mnemonic emotion regulation: a three-process model",
+        "authors": "Nørby",
+        "year": 2019,
+        "journal": "Cognition and Emotion",
+        "doi": "10.1080/02699931.2018.1523137",
+        "cited": 17
+      },
+      {
+        "title": "Integrating mindfulness into the extended process model of emotion regulation: The dual-mode model of mindful emotion regulation.",
+        "authors": "Raugh, Strauss",
+        "year": 2023,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0001308",
+        "cited": 35
+      },
+      {
+        "title": "Supplemental Material for The Structure of Common Emotion Regulation Strategies: A Meta-Analytic Examination",
+        "authors": "",
+        "year": 2017,
+        "journal": "Psychological Bulletin",
+        "doi": "10.1037/bul0000093.supp",
+        "cited": 2
+      },
+      {
+        "title": "The five factor model of personality and emotion regulation: A meta-analysis",
+        "authors": "Barańczuk",
+        "year": 2019,
+        "journal": "Personality and Individual Differences",
+        "doi": "10.1016/j.paid.2018.11.025",
+        "cited": 180
+      },
+      {
+        "title": "Attachment orientations and emotion regulation: new insights from the study of interpersonal emotion regulation strategies",
+        "authors": "Messina, Calvo, Grecucci",
+        "year": 2024,
+        "journal": "Research in Psychotherapy: Psychopathology, Process and Outcome",
+        "doi": "10.4081/ripppo.2023.703",
+        "cited": 29
+      },
+      {
+        "title": "Supplemental Material for The Common Sense Model of Self-Regulation: Meta-Analysis and Test of a Process Model",
+        "authors": "",
+        "year": 2017,
+        "journal": "Psychological Bulletin",
+        "doi": "10.1037/bul0000118.supp",
+        "cited": 1
+      }
+    ]
+  },
+  "02_大学生心理健康": {
+    "query": "college+student+mental+health+anxiety+depression+prevalence+China",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Prevalence of depression and anxiety in college students",
+        "authors": "Shah, Pol",
+        "year": 2020,
+        "journal": "Journal of Mental Health and Human Behaviour",
+        "doi": "10.4103/jmhhb.jmhhb_16_20",
+        "cited": 32
+      },
+      {
+        "title": "Investigating the Mediating Role of Depression and Anxiety in the Relationship Between Internet Use and Sleep Duration Among College Students",
+        "authors": "Gong, Qiu, Zhang et al.",
+        "year": 2026,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2026.2638959",
+        "cited": 0
+      },
+      {
+        "title": "A Wave of Depression: Implications for College Student Mental Health",
+        "authors": "Rallis, Hungerford, Flynn",
+        "year": 2024,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/87568225.2023.2202352",
+        "cited": 0
+      },
+      {
+        "title": "Barriers to and Benefits of Mental Health Services in College Students with and without Depression, Anxiety, and Hazardous Alcohol Use",
+        "authors": "Peterson, Arterberry, Patrick",
+        "year": 2025,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2024.2373946",
+        "cited": 3
+      },
+      {
+        "title": "CBT + Exercise vs Treatment as Usual in Treating Anxiety and Depression in University Students: A Pilot Study",
+        "authors": "Newcombe, Olthuis, MacLean et al.",
+        "year": 2024,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/87568225.2023.2181255",
+        "cited": 2
+      },
+      {
+        "title": "A Pilot Study of the Effectiveness of Cognitive Resilience Training on Anxiety, Depression, and Suicidal Ideation Among Students of a Selected University in Mexico",
+        "authors": "Oguntayo, Gutiérrez-Vega",
+        "year": 2025,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2024.2346298",
+        "cited": 2
+      },
+      {
+        "title": "Emotion Regulation Buffers the Effects of Childhood Adversity on Depression, Anxiety, and Stress in College Students",
+        "authors": "Lin, Poulin, Hatfield et al.",
+        "year": 2026,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2025.2482524",
+        "cited": 1
+      },
+      {
+        "title": "The Nitty Gritty of Stress and Mental Health: The Role of Grit in Moderating the Relationship Between Stress, Anxiety, and Depression",
+        "authors": "Garris, Ko, Novotny",
+        "year": 2025,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2024.2405942",
+        "cited": 0
+      },
+      {
+        "title": "Depression and Anxiety Stigma, Shame, and Communication About Mental Health Among College Students: Implications for Communication with Students",
+        "authors": "Carmack, Nelson, Hocke-Mirzashvili et al.",
+        "year": 2018,
+        "journal": "College Student Affairs Journal",
+        "doi": "10.1353/csj.2018.0004",
+        "cited": 4
+      },
+      {
+        "title": "Passive Vs. Interactive Digital Intervention for State Anxiety Among Undergraduates: Randomized Outcomes",
+        "authors": "Pareek, Jain",
+        "year": 2026,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2026.2653092",
+        "cited": 0
+      }
+    ]
+  },
+  "03_生物反馈与HRV": {
+    "query": "HRV+biofeedback+anxiety+stress+depression+meta-analysis+randomized",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Comparing Effectiveness of HRV-Biofeedback and Mindfulness for Workplace Stress Reduction: A Randomized Controlled Trial",
+        "authors": "Brinkmann, Press, Helmert et al.",
+        "year": 2020,
+        "journal": "Applied Psychophysiology and Biofeedback",
+        "doi": "10.1007/s10484-020-09477-w",
+        "cited": 53
+      },
+      {
+        "title": "Trauma‐focused guided self‐help interventions for posttraumatic stress disorder: A meta‐analysis of randomized controlled trials",
+        "authors": "Siddaway, Meiser‐Stedman, Chester et al.",
+        "year": 2022,
+        "journal": "Depression and Anxiety",
+        "doi": "10.1002/da.23272",
+        "cited": 9
+      },
+      {
+        "title": "The Effect of Lifestyle Interventions on Anxiety, Depression and Stress: A Systematic Review and Meta-Analysis of Randomized Clinical Trials",
+        "authors": "Amiri, Mahmood, Javaid et al.",
+        "year": 2024,
+        "journal": "Healthcare",
+        "doi": "10.3390/healthcare12222263",
+        "cited": 21
+      },
+      {
+        "title": "THE EFFECTIVENESS OF HRV BIOFEEDBACK IN REDUCING MUSICAL PERFORMANCE ANXIETY: AN INITIAL STUDY",
+        "authors": "Rabelo, Mármora, Ribeiro",
+        "year": 2018,
+        "journal": "Psicologia, Saúde &amp; Doenças",
+        "doi": "10.15309/18psd190203",
+        "cited": 0
+      },
+      {
+        "title": "META-ANALYSIS OF ACUTE EXERCISE EFFECTS ON STATE ANXIETY: AN UPDATE OF RANDOMIZED CONTROLLED TRIALS OVER THE PAST 25 YEARS",
+        "authors": "Ensari, Greenlee, Motl et al.",
+        "year": 2015,
+        "journal": "Depression and Anxiety",
+        "doi": "10.1002/da.22370",
+        "cited": 212
+      },
+      {
+        "title": "Effectiveness of Mindfulness-Based Stress Reduction on Salivary Cortisol and α-amylase Level, Anxiety and Depression in Students: A Randomized and Parallel-Group Clinical Trial",
+        "authors": "Hassanvandi, Mohammadzadegan, Saadat et al.",
+        "year": 2025,
+        "journal": "Applied Psychophysiology and Biofeedback",
+        "doi": "10.1007/s10484-025-09690-5",
+        "cited": 0
+      },
+      {
+        "title": "Analysis of Heart Rate variability (HRV) in Frequency Domain and Recurrence Quantification Analysis during the Treatment by Transcutaneous Vagus Nerve Stimulation",
+        "authors": "E",
+        "year": 2019,
+        "journal": "Annals of Depression and Anxiety",
+        "doi": "10.26420/anndepressanxiety.2018.1093",
+        "cited": 0
+      },
+      {
+        "title": "The Effectiveness of Virtual Reality–Based Mindfulness Interventions for Managing Stress, Anxiety, and Depression: Protocol for a Systematic Review and Meta-Analysis of Randomized Controlled Trials",
+        "authors": "Shankar, Bundele, Mukhopadhyay",
+        "year": 2025,
+        "journal": "JMIR Research Protocols",
+        "doi": "10.2196/68231",
+        "cited": 5
+      },
+      {
+        "title": "Yoga for anxiety: A systematic review and meta-analysis of randomized controlled trials",
+        "authors": "Cramer, Lauche, Anheyer et al.",
+        "year": 2018,
+        "journal": "Depression and Anxiety",
+        "doi": "10.1002/da.22762",
+        "cited": 255
+      },
+      {
+        "title": "Verkörperte Selbstregulation: HRV-Biofeedback in der kognitiven Verhaltenstherapie",
+        "authors": "Schwarzl",
+        "year": 2026,
+        "journal": "Psychotherapie Forum",
+        "doi": "10.1007/s00729-026-00303-y",
+        "cited": 0
+      }
+    ]
+  },
+  "04_VR心理干预": {
+    "query": "virtual+reality+psychological+intervention+exposure+therapy+anxiety",
+    "count": 10,
+    "papers": [
+      {
+        "title": "PublicVR: a virtual reality exposure therapy intervention for adults with speech anxiety",
+        "authors": "Spyridonis, Daylamani-Zad, Nightingale",
+        "year": 2024,
+        "journal": "Virtual Reality",
+        "doi": "10.1007/s10055-024-00998-x",
+        "cited": 16
+      },
+      {
+        "title": "Psychoanalysis-based Virtual Reality Exposure (PVRE) -The Self-help Intervention on Social Anxiety Disorder (SAD)",
+        "authors": "Ya",
+        "year": 2020,
+        "journal": "Theory and Practice of Psychological Counseling",
+        "doi": "10.35534/tppc.0207029",
+        "cited": 1
+      },
+      {
+        "title": "Improving virtual reality exposure therapy with open access and overexposure: a single 30-minute session of overexposure therapy reduces public speaking anxiety",
+        "authors": "Macdonald",
+        "year": 2024,
+        "journal": "Frontiers in Virtual Reality",
+        "doi": "10.3389/frvir.2024.1506938",
+        "cited": 5
+      },
+      {
+        "title": "Towards co-located multi-user mixed reality exposure therapy for anxiety disorders",
+        "authors": "Schier, Badeja, Hoyer et al.",
+        "year": 2026,
+        "journal": "Virtual Reality",
+        "doi": "10.1007/s10055-025-01279-x",
+        "cited": 0
+      },
+      {
+        "title": "Erratum: Cognitive Behavioral Therapy Based Virtual Reality Exposure Intervention in Public Speaking Anxiety: A Case Study",
+        "authors": "No author",
+        "year": 2023,
+        "journal": "Journal of Cognitive-Behavioral Psychotherapy and Research",
+        "doi": "10.5455/jcbpr.146601",
+        "cited": 0
+      },
+      {
+        "title": "Opening the Black Box: The Underlying Working Mechanisms in Virtual-Reality Exposure Therapy for Anxiety Disorders",
+        "authors": "Scheveneels, Engelhard, Meyerbröker",
+        "year": 2025,
+        "journal": "Clinical Psychological Science",
+        "doi": "10.1177/21677026241267945",
+        "cited": 11
+      },
+      {
+        "title": "Cognitive Behavioral Therapy Based Virtual Reality Exposure Intervention in Public Speaking Anxiety: A Case Study",
+        "authors": "ZER, NTEM, AAN",
+        "year": 2022,
+        "journal": "Journal of Cognitive-Behavioral Psychotherapy and Research",
+        "doi": "10.5455/jcbpr.131947",
+        "cited": 0
+      },
+      {
+        "title": "Virtual Reality Exposure Therapy for Public Speaking Anxiety",
+        "authors": "?",
+        "year": 2019,
+        "journal": "Case Medical Research",
+        "doi": "10.31525/ct1-nct03885414",
+        "cited": 0
+      },
+      {
+        "title": "Does virtual reality increase emotional engagement during exposure for PTSD? Subjective distress during prolonged and virtual reality exposure therapy",
+        "authors": "Reger, Smolenski, Norr et al.",
+        "year": 2019,
+        "journal": "Journal of Anxiety Disorders",
+        "doi": "10.1016/j.janxdis.2018.06.001",
+        "cited": 52
+      },
+      {
+        "title": "Gamified virtual reality exposure therapy for adolescents with public speaking anxiety: a four-armed randomized controlled trial",
+        "authors": "Kahlon, Lindner, Nordgreen",
+        "year": 2023,
+        "journal": "Frontiers in Virtual Reality",
+        "doi": "10.3389/frvir.2023.1240778",
+        "cited": 21
+      }
+    ]
+  },
+  "05_多模态情绪识别": {
+    "query": "multimodal emotion recognition EEG physiological deep learning",
+    "count": 10,
+    "papers": [
+      {
+        "title": "NeuroFusion-Multimodal Emotion Recognition using EEG and Deep Learning",
+        "authors": "Hasini Chowdary G",
+        "year": 2026,
+        "journal": "International Journal of Scientific Research in Engineering and Management",
+        "doi": "10.55041/ijsrem61625",
+        "cited": 0
+      },
+      {
+        "title": "EEG-Based Emotion Recognition Using Deep Learning Model for Workers Safet",
+        "authors": "",
+        "year": 2024,
+        "journal": "Nanotechnology Perceptions",
+        "doi": "10.62441/nano-ntp.v20is2.25",
+        "cited": 2
+      },
+      {
+        "title": "Virtual reality-induced emotion recognition with deep learning-based multimodal physiological feature fusion",
+        "authors": "Fan, Zhao, Guo et al.",
+        "year": 2026,
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2026.1759471",
+        "cited": 0
+      },
+      {
+        "title": "A review on EEG-based multimodal learning for emotion recognition",
+        "authors": "Pillalamarri, Shanmugam",
+        "year": 2025,
+        "journal": "Artificial Intelligence Review",
+        "doi": "10.1007/s10462-025-11126-9",
+        "cited": 75
+      },
+      {
+        "title": "Automated Emotion Recognition Using Hybrid CNN-RNN Models on Multimodal Physiological Signals.",
+        "authors": "AZEEZ",
+        "year": 2025,
+        "journal": "AlKadhim Journal for Computer Science",
+        "doi": "10.61710/kjcs.v3i2.100",
+        "cited": 0
+      },
+      {
+        "title": "Multimodal Arabic emotion recognition using deep learning",
+        "authors": "Al Roken, Barlas",
+        "year": 2023,
+        "journal": "Speech Communication",
+        "doi": "10.1016/j.specom.2023.103005",
+        "cited": 9
+      },
+      {
+        "title": "Integrating Multimodal Data for Deep Learning-Based Facial Emotion Recognition",
+        "authors": "Li",
+        "year": 2025,
+        "journal": "Highlights in Science, Engineering and Technology",
+        "doi": "10.54097/gpy08650",
+        "cited": 2
+      },
+      {
+        "title": "Research Advanced in Multimodal Emotion Recognition Based on Deep Learning",
+        "authors": "Kong",
+        "year": 2024,
+        "journal": "Highlights in Science, Engineering and Technology",
+        "doi": "10.54097/p3yprn36",
+        "cited": 2
+      },
+      {
+        "title": "A deep reinforcement learning approach for emotion recognition from unaligned multimodal inputs",
+        "authors": "El Hamdaoui, Nfaoui",
+        "year": 2026,
+        "journal": "Machine Learning with Applications",
+        "doi": "10.1016/j.mlwa.2026.100873",
+        "cited": 0
+      },
+      {
+        "title": "EEG SIGNAL-BASED EMOTION RECOGNITION USING A DEEP LEARNING APPROACH WITH GRU-BGWO",
+        "authors": "Mukil Alagirisamy",
+        "year": 2025,
+        "journal": "International Journal of Applied Mathematics",
+        "doi": "10.12732/ijam.v38i5s.355",
+        "cited": 0
+      }
+    ]
+  },
+  "06_数字心理健康": {
+    "query": "digital+mental+health+intervention+mobile+app+efficacy+college",
+    "count": 10,
+    "papers": [
+      {
+        "title": "A Culturally Driven Digital Intervention for Student Mental Health: Mixed-Methods Evaluation of Counselor NU Mobile App in Oman",
+        "authors": "Ghailani, Simon",
+        "year": 2026,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2026.2637866",
+        "cited": 0
+      },
+      {
+        "title": "Investigating the interconnectedness of athletes’ performance beliefs, coping ability, and mental health, and the efficacy of a REBT-inspired mobile app intervention",
+        "authors": "Ruud, Jooste",
+        "year": 2025,
+        "journal": "Performance Enhancement &amp; Health",
+        "doi": "10.1016/j.peh.2025.100369",
+        "cited": 0
+      },
+      {
+        "title": "Media intervention and mental health: can media modify college student attitudes?",
+        "authors": "Hastings",
+        "year": 2025,
+        "journal": "Mental Health and Digital Technologies",
+        "doi": "10.1108/mhdt-03-2025-0022",
+        "cited": 0
+      },
+      {
+        "title": "A digital positive psychology intervention for college student mental health and health behaviors",
+        "authors": "Biber, Davis",
+        "year": 2024,
+        "journal": "Mental Health and Digital Technologies",
+        "doi": "10.1108/mhdt-02-2024-0007",
+        "cited": 4
+      },
+      {
+        "title": "Effects of a walking program using the “WalkON” mobile app among college students",
+        "authors": "Kim",
+        "year": 2024,
+        "journal": "DIGITAL HEALTH",
+        "doi": "10.1177/20552076241269463",
+        "cited": 3
+      },
+      {
+        "title": "Passive Vs. Interactive Digital Intervention for State Anxiety Among Undergraduates: Randomized Outcomes",
+        "authors": "Pareek, Jain",
+        "year": 2026,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2026.2653092",
+        "cited": 0
+      },
+      {
+        "title": "Efficacy Of Mobile App-Based Intervention On Step Counts And Motivation In College Students",
+        "authors": "Lee",
+        "year": 2025,
+        "journal": "Medicine &amp; Science in Sports &amp; Exercise",
+        "doi": "10.1249/01.mss.0001160424.70974.a2",
+        "cited": 0
+      },
+      {
+        "title": "Mental health INtervention with Digital APPlications (MIND-APP): Protocol for a Randomized Controlled Researcher Blinded Trial Evaluating the Effectiveness of the Tankevirus and Grubl Mental Health Apps Compared to a Placebo App (Preprint)",
+        "authors": "Rand, Menichetti, Wisløff et al.",
+        "year": 2026,
+        "journal": "JMIR Research Protocols",
+        "doi": "10.2196/84096",
+        "cited": 0
+      },
+      {
+        "title": "Development of a Mobile Phone App to Support Self-Monitoring of Emotional Well-Being: A Mental Health Digital Innovation",
+        "authors": "Rickard, Arjmand, Bakker et al.",
+        "year": 2016,
+        "journal": "JMIR Mental Health",
+        "doi": "10.2196/mental.6202",
+        "cited": 108
+      },
+      {
+        "title": "Tacting the Functions of Behavior and College Mental Health: A Mobile App-Based Approach to Developing Psychological Flexibility",
+        "authors": "Pierce, Twohig, Levin",
+        "year": 2025,
+        "journal": "Journal of College Student Mental Health",
+        "doi": "10.1080/28367138.2024.2409244",
+        "cited": 0
+      }
+    ]
+  },
+  "07_游戏化与严肃游戏": {
+    "query": "gamification+serious+games+mental+health+depression+anxiety+engagement",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Gaming Your Mental Health: A Narrative Review on Mitigating Symptoms of Depression and Anxiety Using Commercial Video Games",
+        "authors": "Kowal, Conroy, Ramsbottom et al.",
+        "year": 2021,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/26575",
+        "cited": 140
+      },
+      {
+        "title": "Using Mobile Health Gamification to Facilitate Cognitive Behavioral Therapy Skills Practice in Child Anxiety Treatment: Open Clinical Trial",
+        "authors": "Pramana, Parmanto, Lomas et al.",
+        "year": 2018,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/games.8902",
+        "cited": 100
+      },
+      {
+        "title": "The Role of AI in Serious Games and Gamification for Health: Scoping Review",
+        "authors": "Tolks, Schmidt, Kuhn",
+        "year": 2023,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/48258",
+        "cited": 62
+      },
+      {
+        "title": "Exploring Gamification and Serious Games for Mental Health: A Narrative Review",
+        "authors": "V M, Pricilla, P M et al.",
+        "year": 2024,
+        "journal": "Cureus",
+        "doi": "10.7759/cureus.74637",
+        "cited": 1
+      },
+      {
+        "title": "Patterns Among 754 Gamification Cases: Content Analysis for Gamification Development",
+        "authors": "Park, Kim",
+        "year": 2018,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/11336",
+        "cited": 22
+      },
+      {
+        "title": "Awareness, Prevention, Detection, and Therapy Applications for Depression and Anxiety in Serious Games for Children and Adolescents: Systematic Review",
+        "authors": "Martinez, Menéndez-Menéndez, Bustillo",
+        "year": 2021,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/30482",
+        "cited": 52
+      },
+      {
+        "title": "The Use of User-Centered Participatory Design in Serious Games for Anxiety and Depression",
+        "authors": "Dekker, Williams",
+        "year": 2017,
+        "journal": "Games for Health Journal",
+        "doi": "10.1089/g4h.2017.0058",
+        "cited": 64
+      },
+      {
+        "title": "Engagement With Gamification Elements in a Smoking Cessation App and Short-term Smoking Abstinence: Quantitative Assessment",
+        "authors": "Rajani, Bustamante, Weth et al.",
+        "year": 2023,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/39975",
+        "cited": 21
+      },
+      {
+        "title": "Serious Games, Gamification, and Serious Mental Illness: A Scoping Review",
+        "authors": "Fitzgerald, Ratcliffe",
+        "year": 2020,
+        "journal": "Psychiatric Services",
+        "doi": "10.1176/appi.ps.201800567",
+        "cited": 106
+      },
+      {
+        "title": "Effect of Gamification on Task Engagement During an Eye-Tracking Test Battery in 5-Year-Old Children Born Preterm: Observational Study",
+        "authors": "De Gobbis, Malavolta, De Beukelaer et al.",
+        "year": 2025,
+        "journal": "JMIR Serious Games",
+        "doi": "10.2196/77109",
+        "cited": 0
+      }
+    ]
+  },
+  "08_具身对话代理": {
+    "query": "conversational+agent+chatbot+mental+health+therapeutic+alliance+AI",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Applications of AI-powered Conversational Chatbot for Mental Health",
+        "authors": "Chang",
+        "year": 2024,
+        "journal": "Highlights in Science, Engineering and Technology",
+        "doi": "10.54097/4vcjj296",
+        "cited": 1
+      },
+      {
+        "title": "Exploring user characteristics, motives, and expectations and the therapeutic alliance in the mental health conversational AI Clare®: a baseline study",
+        "authors": "Schäfer, Krause, Köhler",
+        "year": 2025,
+        "journal": "Frontiers in Digital Health",
+        "doi": "10.3389/fdgth.2025.1576135",
+        "cited": 6
+      },
+      {
+        "title": "AI-enhanced therapeutic alliance: bridging AI innovation and mental health care",
+        "authors": "R, M, K B et al.",
+        "year": 2025,
+        "journal": "Mental Health and Social Inclusion",
+        "doi": "10.1108/mhsi-10-2025-0281",
+        "cited": 0
+      },
+      {
+        "title": "User perceptions and experiences of an AI-driven conversational agent for mental health support",
+        "authors": "Chaudhry, Debi",
+        "year": 2024,
+        "journal": "mHealth",
+        "doi": "10.21037/mhealth-23-55",
+        "cited": 51
+      },
+      {
+        "title": "Evaluating the Therapeutic Alliance With a Free-Text CBT Conversational Agent (Wysa): A Mixed-Methods Study",
+        "authors": "Beatty, Malik, Meheli et al.",
+        "year": 2022,
+        "journal": "Frontiers in Digital Health",
+        "doi": "10.3389/fdgth.2022.847991",
+        "cited": 194
+      },
+      {
+        "title": "A chatbot for the soul: mental health care, privacy, and intimacy in AI-based conversational agents",
+        "authors": "Kneese, Vecchione, Marwick",
+        "year": 2025,
+        "journal": "Communication and Change",
+        "doi": "10.1007/s44382-025-00015-y",
+        "cited": 4
+      },
+      {
+        "title": "Efficacy of a Conversational AI Agent for Psychiatric Symptoms and Digital Therapeutic Alliance",
+        "authors": "Shoshani, Gurfinkel, Kor et al.",
+        "year": 2026,
+        "journal": "JAMA Network Open",
+        "doi": "10.1001/jamanetworkopen.2026.6713",
+        "cited": 1
+      },
+      {
+        "title": "Development of a Mental Health Care AI Chatbot",
+        "authors": "Verma, Usmani, Abdullah et al.",
+        "year": 2026,
+        "journal": "International Journal of Research Publication and Reviews",
+        "doi": "10.55248/gengpi.07.0426.d1003",
+        "cited": 0
+      },
+      {
+        "title": "Language adaptations of mental health interventions: User interaction comparisons with an AI-enabled conversational agent (Wysa) in English and Spanish",
+        "authors": "Dinesh, Rao, Sinha",
+        "year": 2024,
+        "journal": "DIGITAL HEALTH",
+        "doi": "10.1177/20552076241255616",
+        "cited": 11
+      },
+      {
+        "title": "Delusional Experiences Emerging From AI Chatbot Interactions or “AI Psychosis”",
+        "authors": "Hudon, Stip",
+        "year": 2025,
+        "journal": "JMIR Mental Health",
+        "doi": "10.2196/85799",
+        "cited": 28
+      }
+    ]
+  },
+  "09_神经反馈与BCI": {
+    "query": "neurofeedback+EEG+brain+computer+interface+emotion+regulation+VR",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Affective Brain-Computer Music Interface in Emotion Regulation and Neurofeedback: A Research Protocol",
+        "authors": "Glassman, Dwyer, John et al.",
+        "year": 2022,
+        "journal": "Undergraduate Research in Natural and Clinical Science and Technology Journal",
+        "doi": "10.26685/urncst.345",
+        "cited": 4
+      },
+      {
+        "title": "Probing fMRI brain connectivity and activity changes during emotion regulation by EEG neurofeedback",
+        "authors": "Dehghani, Soltanian-Zadeh, Hossein-Zadeh",
+        "year": 2023,
+        "journal": "Frontiers in Human Neuroscience",
+        "doi": "10.3389/fnhum.2022.988890",
+        "cited": 21
+      },
+      {
+        "title": "An EEG channel selection method for motor imagery based brain–computer interface and neurofeedback using Granger causality",
+        "authors": "Varsehi, Firoozabadi",
+        "year": 2021,
+        "journal": "Neural Networks",
+        "doi": "10.1016/j.neunet.2020.11.002",
+        "cited": 117
+      },
+      {
+        "title": "Objective Emotion Assessment Using a Triple Attention Network for an EEG-Based Brain–Computer Interface",
+        "authors": "Zhang, Zhang, Zhang et al.",
+        "year": 2025,
+        "journal": "Brain Sciences",
+        "doi": "10.3390/brainsci15111167",
+        "cited": 1
+      },
+      {
+        "title": "An Electroencephalography-Based Brain–Computer Interface for Emotion Regulation With Virtual Reality Neurofeedback",
+        "authors": "Li, Huang, Gao et al.",
+        "year": 2024,
+        "journal": "IEEE Transactions on Cognitive and Developmental Systems",
+        "doi": "10.1109/tcds.2024.3357547",
+        "cited": 19
+      },
+      {
+        "title": "Neural modulation enhancement using connectivity-based EEG neurofeedback with simultaneous fMRI for emotion regulation",
+        "authors": "Dehghani, Soltanian-Zadeh, Hossein-Zadeh",
+        "year": 2023,
+        "journal": "NeuroImage",
+        "doi": "10.1016/j.neuroimage.2023.120320",
+        "cited": 29
+      },
+      {
+        "title": "The effects of alpha/theta neurofeedback on mood, anxiety, emotion regulation and trait impulsivity",
+        "authors": "Dinc, Rybski, Dineen",
+        "year": 2025,
+        "journal": "Brain Research",
+        "doi": "10.1016/j.brainres.2025.149943",
+        "cited": 0
+      },
+      {
+        "title": "Brain-Computer Interface Application in Recognition and Regulation of Emotion",
+        "authors": "Liu",
+        "year": 2024,
+        "journal": "Theoretical and Natural Science",
+        "doi": "10.54254/2753-8818/2024.17996",
+        "cited": 0
+      },
+      {
+        "title": "Global Data-Driven Analysis of Brain Connectivity During Emotion Regulation by Electroencephalography Neurofeedback",
+        "authors": "Dehghani, Soltanian-Zadeh, Hossein-Zadeh",
+        "year": 2020,
+        "journal": "Brain Connectivity",
+        "doi": "10.1089/brain.2019.0734",
+        "cited": 21
+      },
+      {
+        "title": "Dynamic functional connectivity estimation for neurofeedback emotion regulation paradigm with simultaneous EEG-fMRI analysis",
+        "authors": "Mosayebi, Dehghani, Hossein-Zadeh",
+        "year": 2022,
+        "journal": "Frontiers in Human Neuroscience",
+        "doi": "10.3389/fnhum.2022.933538",
+        "cited": 7
+      }
+    ]
+  },
+  "10_虚拟场景与临场感": {
+    "query": "virtual+environment+presence+immersion+nature+restorative+biophilic",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Immersion and Presence in Virtual Nature: How Does the Delivery Technology Affect the Psychological Immersion, Presence, and Virtual Reality Sickness in Virtual Nature?",
+        "authors": "Kari, Ojala, Kurkilahti et al.",
+        "year": 2026,
+        "journal": "International Journal of Human–Computer Interaction",
+        "doi": "10.1080/10447318.2026.2651376",
+        "cited": 0
+      },
+      {
+        "title": "The Influence of Immersion on Situational Awareness in a Virtual Environment",
+        "authors": "Hébert-Lavoie, Ozell, Doyon-Poulin",
+        "year": 2024,
+        "journal": "PRESENCE: Virtual and Augmented Reality",
+        "doi": "10.1162/pres_a_00427",
+        "cited": 5
+      },
+      {
+        "title": "Restorative psychophysiological effects of biophilic virtual environment",
+        "authors": "Sella, Salmaso, Tizi et al.",
+        "year": 2025,
+        "journal": "Journal of Environmental Psychology",
+        "doi": "10.1016/j.jenvp.2025.102639",
+        "cited": 5
+      },
+      {
+        "title": "Presence in Virtual Reality and Everyday Life: Immersion within a World of Representation",
+        "authors": "Loomis",
+        "year": 2016,
+        "journal": "Presence: Teleoperators and Virtual Environments",
+        "doi": "10.1162/pres_a_00255",
+        "cited": 38
+      },
+      {
+        "title": "The Phenomenon of Presence in Virtual Reality Is Mistakenly Equated with Immersion",
+        "authors": "Korżel, Łupkowski",
+        "year": 2023,
+        "journal": "PRESENCE: Virtual and Augmented Reality",
+        "doi": "10.1162/pres_a_00404",
+        "cited": 4
+      },
+      {
+        "title": "Composing in virtual immersion: avatar and representation",
+        "authors": "Webster, Kourkoulakou",
+        "year": 2022,
+        "journal": "Hybrid",
+        "doi": "10.4000/hybrid.2968",
+        "cited": 0
+      },
+      {
+        "title": "Cognitive Presence and Effect of Immersion in Virtual Learning Environment",
+        "authors": "Katernyak, Loboda",
+        "year": 2016,
+        "journal": "Universal Journal of Educational Research",
+        "doi": "10.13189/ujer.2016.041109",
+        "cited": 2
+      },
+      {
+        "title": "A biophilic mind-set for a restorative built environment",
+        "authors": "Panagopoulos, Sbarcea, Herman",
+        "year": 2021,
+        "journal": "Landscape architecture and art",
+        "doi": "10.22616/j.landarchart.2020.17.08",
+        "cited": 7
+      },
+      {
+        "title": "Enhancing Presence, Immersion, and Interaction in Multisensory Experiences Through Touch and Haptic Feedback",
+        "authors": "Gao, Spence",
+        "year": 2025,
+        "journal": "Virtual Worlds",
+        "doi": "10.3390/virtualworlds4010003",
+        "cited": 22
+      },
+      {
+        "title": "Biophilic Design: Virtual Nature Application in a Windowless Room",
+        "authors": "Maulina, Susanto",
+        "year": 2023,
+        "journal": "Sinektika: Jurnal Arsitektur",
+        "doi": "10.23917/sinektika.v20i1.20484",
+        "cited": 1
+      }
+    ]
+  },
+  "11_注意力恢复与自然": {
+    "query": "attention+restoration+nature+virtual+forest+bathing+stress+reduction",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Digital Forest Bathing: Stress Reduction through Virtual Nature: Exploring the Effectiveness of Digital Wellness Solutions",
+        "authors": "Oe, Yamaoka, Bai",
+        "year": 2025,
+        "journal": "International Journal of Academic Research in Business and Social Sciences",
+        "doi": "10.6007/ijarbss/v15-i4/25246",
+        "cited": 0
+      },
+      {
+        "title": "Forest bathing for stress reduction: a critical review",
+        "authors": "Pavlovic, Connolly",
+        "year": 2023,
+        "journal": "Australian Journal of Herbal and Naturopathic Medicine",
+        "doi": "10.33235/ajhnm.35.2.56-72",
+        "cited": 0
+      },
+      {
+        "title": "Restore or Get Restored: The Effect of Control on Stress Reduction and Restoration in Virtual Nature Settings",
+        "authors": "Reese, Kohler, Menzel",
+        "year": 2021,
+        "journal": "Sustainability",
+        "doi": "10.3390/su13041995",
+        "cited": 34
+      },
+      {
+        "title": "The Psychological Benefits of Virtual Forest Bathing: A Classroom-Based Study Using Simulated Nature Exposure",
+        "authors": "Kang",
+        "year": 2025,
+        "journal": "International Educational Research",
+        "doi": "10.30560/ier.v8n3p41",
+        "cited": 0
+      },
+      {
+        "title": "Digital Forest Bathing: A Systematic Review",
+        "authors": "Tersch, Anheyer, Ostermann",
+        "year": 2026,
+        "journal": "Virtual Worlds",
+        "doi": "10.3390/virtualworlds5010009",
+        "cited": 0
+      },
+      {
+        "title": "Understanding the Emotional Benefits of Animal Sounds: Insights from Stress Reduction and Attention Restoration Theories",
+        "authors": "Li",
+        "year": 2023,
+        "journal": "SSRN Electronic Journal",
+        "doi": "10.2139/ssrn.4651804",
+        "cited": 0
+      },
+      {
+        "title": "How ‘forest bathing’ keeps lungs healthy",
+        "authors": "Gies",
+        "year": 2026,
+        "journal": "Nature",
+        "doi": "10.1038/d41586-026-00105-x",
+        "cited": 0
+      },
+      {
+        "title": "Supplemental Material for Nature Through Virtual Reality as a Stress-Reduction Tool: A Systematic Review",
+        "authors": "",
+        "year": 2023,
+        "journal": "International Journal of Stress Management",
+        "doi": "10.1037/str0000300.supp",
+        "cited": 0
+      },
+      {
+        "title": "Cross‐scale interdependencies require attention in forest restoration",
+        "authors": "Wiegant, Guariguata",
+        "year": 2023,
+        "journal": "Restoration Ecology",
+        "doi": "10.1111/rec.13980",
+        "cited": 1
+      },
+      {
+        "title": "Effects of Multisensory Virtual Forest Bathing on Stress and Well-Being in Young Adults: Protocol for a Randomised Controlled Trial",
+        "authors": "Schuil, Kalamkar, Grubert et al.",
+        "year": 2024,
+        "journal": "THE MIND - Bulletin on Mind-Body Medicine Research",
+        "doi": "10.61936/themind/2024121210",
+        "cited": 0
+      }
+    ]
+  },
+  "12_中国文化情绪调节": {
+    "query": "Chinese+culture+emotion+regulation+college+student+expression+suppression",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Supplemental Material for Suppression and Expression as Distinct Emotion-Regulation Processes in Daily Interactions: Longitudinal and Meta-Analyses",
+        "authors": "",
+        "year": 2018,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0000334.supp",
+        "cited": 1
+      },
+      {
+        "title": "College Student Binge Eating: Attachment, Psychological Needs Satisfaction, and Emotion Regulation",
+        "authors": "Han, Lee",
+        "year": 2017,
+        "journal": "Journal of College Student Development",
+        "doi": "10.1353/csd.2017.0084",
+        "cited": 17
+      },
+      {
+        "title": "Suppression and expression as distinct emotion-regulation processes in daily interactions: Longitudinal and meta-analyses.",
+        "authors": "Cameron, Overall",
+        "year": 2017,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0000334",
+        "cited": 131
+      },
+      {
+        "title": "Solitude capacity and emotional experience in Chinese college students: The suppression effect of emotion regulation",
+        "authors": "Song, Li, Wang et al.",
+        "year": 2025,
+        "journal": "Journal of Psychology in Africa",
+        "doi": "10.32604/jpa.2025.065781",
+        "cited": 2
+      },
+      {
+        "title": "College Students’ Social Goals and Psychological Adjustment: Mediation via Emotion Regulation",
+        "authors": "Shim, Wang, Makara et al.",
+        "year": 2017,
+        "journal": "Journal of College Student Development",
+        "doi": "10.1353/csd.2017.0096",
+        "cited": 18
+      },
+      {
+        "title": "Personality-Culture Interaction as a Predictor of Emotion Suppression on Facebook",
+        "authors": "Kim, D. Stavrositu",
+        "year": 2021,
+        "journal": "Korean Society for Emotion and Sensibility",
+        "doi": "10.14695/kjsos.2021.24.4.91",
+        "cited": 0
+      },
+      {
+        "title": "Supplemental Material for Is Daily Emotion Suppression Associated With Poor Sleep? The Moderating Role of Culture",
+        "authors": "",
+        "year": 2023,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0001206.supp",
+        "cited": 0
+      },
+      {
+        "title": "Intergenerational transmission of maternal emotion regulation to child emotion regulation: Moderated mediation of maternal positive and negative emotions.",
+        "authors": "Tan, Smith",
+        "year": 2018,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0000523",
+        "cited": 40
+      },
+      {
+        "title": "Emotion Regulation Strategies and Stress in Irish College Students and Chinese International College Students in Ireland",
+        "authors": "Sun, Nolan",
+        "year": 2021,
+        "journal": "Journal of International Students",
+        "doi": "10.32674/jis.v11i4.2516",
+        "cited": 14
+      },
+      {
+        "title": "Supplemental Material for Emotion Experience and Expression Goals Shape Emotion Regulation Strategy Choice",
+        "authors": "",
+        "year": 2021,
+        "journal": "Emotion",
+        "doi": "10.1037/emo0001012.supp",
+        "cited": 0
+      }
+    ]
+  },
+  "13_行为激活疗法": {
+    "query": "behavioral+activation+depression+efficacy+digital+internet+delivered",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Internet-Delivered Cognitive Behavioral Therapy for Major Depression  and Anxiety Disorders",
+        "authors": "Hoseini, Zare",
+        "year": 2020,
+        "journal": "Critical Comments in Biomedicine",
+        "doi": "10.18502/ccb.v1i2.2892",
+        "cited": 2
+      },
+      {
+        "title": "Acceptability, satisfaction and perceived efficacy of “ Space from Depression ” an internet-delivered treatment for depression",
+        "authors": "Richards, Murphy, Viganó et al.",
+        "year": 2016,
+        "journal": "Internet Interventions",
+        "doi": "10.1016/j.invent.2016.06.007",
+        "cited": 63
+      },
+      {
+        "title": "Effectiveness of Digital Behavioral Activation Interventions for Depression and Anxiety: Systematic Review and Meta-Analysis",
+        "authors": "Jia, Macon, Doering et al.",
+        "year": 2025,
+        "journal": "Journal of Medical Internet Research",
+        "doi": "10.2196/68054",
+        "cited": 9
+      },
+      {
+        "title": "EFFECTIVENESS OF INTERNET-DELIVERED COGNITIVE BEHAVIORAL THERAPY FOR POSTTRAUMATIC STRESS DISORDER: A SYSTEMATIC REVIEW AND META-ANALYSIS",
+        "authors": "Sijbrandij, Kunovski, Cuijpers",
+        "year": 2016,
+        "journal": "Depression and Anxiety",
+        "doi": "10.1002/da.22533",
+        "cited": 161
+      },
+      {
+        "title": "Implementing Internet-Delivered Cognitive Behavioral Therapy for Depression and Anxiety in Adults: Systematic Review",
+        "authors": "Duffy, Richards, Hisler et al.",
+        "year": 2024,
+        "journal": "Journal of Medical Internet Research",
+        "doi": "10.2196/47927",
+        "cited": 10
+      },
+      {
+        "title": "Evaluating the Efficacy of Internet-Delivered Cognitive Behavioral Therapy Blended With Synchronous Chat Sessions to Treat Adolescent Depression: Randomized Controlled Trial",
+        "authors": "Topooco, Byléhn, Dahlström Nysäter et al.",
+        "year": 2019,
+        "journal": "Journal of Medical Internet Research",
+        "doi": "10.2196/13393",
+        "cited": 79
+      },
+      {
+        "title": "Internet-Delivered Cognitive Behavioral Therapy (ICBT): A Case Study of an Early Adulthood Patient Diagnosed with Costochondritis, Anxiety and Depression",
+        "authors": "Weniger",
+        "year": 2025,
+        "journal": "Journal of Anxiety &amp; Depression",
+        "doi": "10.46527/2582-3264.170",
+        "cited": 0
+      },
+      {
+        "title": "Layperson-Supported, Web-Delivered Cognitive Behavioral Therapy for Depression in Older Adults: Randomized Controlled Trial",
+        "authors": "Xiang, Kayser, Turner et al.",
+        "year": 2024,
+        "journal": "Journal of Medical Internet Research",
+        "doi": "10.2196/53001",
+        "cited": 24
+      },
+      {
+        "title": "The effect of internet-delivered cognitive behavioral therapy for depression and anxiety on quality of life: A meta-analysis of randomized controlled trials",
+        "authors": "Maj, Michalak, Graczykowska et al.",
+        "year": 2023,
+        "journal": "Internet Interventions",
+        "doi": "10.1016/j.invent.2023.100654",
+        "cited": 17
+      },
+      {
+        "title": "Internet-Based Behavioral Activation for Depression: Systematic Review and Meta-Analysis",
+        "authors": "Alber, Krämer, Rosar et al.",
+        "year": 2023,
+        "journal": "Journal of Medical Internet Research",
+        "doi": "10.2196/41643",
+        "cited": 30
+      }
+    ]
+  },
+  "14_色彩与审美心理": {
+    "query": "color+psychology+aesthetic+emotion+visual+art+wellbeing+mood",
+    "count": 10,
+    "papers": [
+      {
+        "title": "Intervention of Art Education on College Students' Aesthetic Mood Based on Emotion Recognition Algorithm",
+        "authors": "",
+        "year": 2024,
+        "journal": "Frontiers in Art Research",
+        "doi": "10.25236/far.2024.060914",
+        "cited": 0
+      },
+      {
+        "title": "Sad but beautiful; Brain responses to aesthetic judgment and emotion appraisal of visual art",
+        "authors": "김지선, 강한모, 김채연 et al.",
+        "year": 2015,
+        "journal": "Korean Journal of Cognitive and Biological Psychology",
+        "doi": "10.22172/cogbio.2015.27.2.008",
+        "cited": 1
+      },
+      {
+        "title": "Can a Brief Interaction With Online, Digital Art Improve Wellbeing? A Comparative Study of the Impact of Online Art and Culture Presentations on Mood, State-Anxiety, Subjective Wellbeing, and Loneliness",
+        "authors": "Trupp, Bignardi, Chana et al.",
+        "year": 2022,
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2022.782033",
+        "cited": 39
+      },
+      {
+        "title": "Supplemental Material for Emotion, Embodiment, and Aesthetic Appraisal: The Impact of Interoceptive Abilities and Art Type",
+        "authors": "",
+        "year": 2026,
+        "journal": "Psychology of Aesthetics, Creativity, and the Arts",
+        "doi": "10.1037/aca0000716.supp",
+        "cited": 0
+      },
+      {
+        "title": "Art and Psychological Well-Being: Linking the Brain to the Aesthetic Emotion",
+        "authors": "Mastandrea, Fagioli, Biasi",
+        "year": 2019,
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2019.00739",
+        "cited": 163
+      },
+      {
+        "title": "Early Depth Engagement in Art Perception: visual dynamics and aesthetic experience",
+        "authors": "Nojo",
+        "year": 2026,
+        "journal": "Frontiers in Psychology",
+        "doi": "10.3389/fpsyg.2026.1781822",
+        "cited": 1
+      },
+      {
+        "title": "Form and color visual perception in green exercise: Positive effects on attention, mood, and self-esteem",
+        "authors": "Zhang, Jin, Wang et al.",
+        "year": 2023,
+        "journal": "Journal of Environmental Psychology",
+        "doi": "10.1016/j.jenvp.2023.102028",
+        "cited": 32
+      },
+      {
+        "title": "Aesthetic Empathy: An Investigation in Phenomenological Psychology of Visual Art Experiences",
+        "authors": "Hansen, Roald",
+        "year": 2022,
+        "journal": "Journal of Phenomenological Psychology",
+        "doi": "10.1163/15691624-20221397",
+        "cited": 6
+      },
+      {
+        "title": "Research on Visual Expression of Color Collocation in Art Education Based on Art Psychology",
+        "authors": "Li",
+        "year": 2022,
+        "journal": "International Journal of Education and Humanities",
+        "doi": "10.54097/ijeh.v3i3.1005",
+        "cited": 1
+      },
+      {
+        "title": "Mood moderates the effect of aesthetic appeal on performance",
+        "authors": "Reppa, McDougall, Sonderegger et al.",
+        "year": 2021,
+        "journal": "Cognition and Emotion",
+        "doi": "10.1080/02699931.2020.1800446",
+        "cited": 16
+      }
+    ]
+  }
+}

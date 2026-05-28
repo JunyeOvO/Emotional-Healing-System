@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+*.venv/
+
+# pytest
+.pytest_cache/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Project-specific
+*.csv
+!requirements.txt
+
+# Unity (generated)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+*.csproj
+*.unityproj
+*.sln
+
+# TouchDesigner (backups)
+*.toe.backup.*
+
+# Large binary assets (keep tracked separately)
+*.zip
+*.psd
+*.blend
