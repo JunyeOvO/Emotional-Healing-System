@@ -15,8 +15,15 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from typing import Optional
 from dataclasses import dataclass
 from collections import deque
+import warnings
 import numpy as np
 import neurokit2 as nk
+
+# Suppress noisy NeuroKit2/numpy warnings on mock data with low peak counts.
+# These are expected during warmup and smooth-signal periods — the fallback
+# estimators handle them correctly.
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="numpy")
+warnings.filterwarnings("ignore", message="Too few peaks detected", module="neurokit2")
 
 
 # ── Configuration ──────────────────────────────────────────────────────────
@@ -99,7 +106,8 @@ class SignalPipeline:
             resp_clean = nk.rsp_clean(resp_arr, sampling_rate=10)
             resp_info = nk.rsp_findpeaks(resp_clean, sampling_rate=10)
             rsp_rate = nk.rsp_rate(resp_clean, sampling_rate=10, method="peak")
-            rr_val = float(np.nanmean(rsp_rate)) if len(rsp_rate) > 0 else self._last_rr
+            valid = rsp_rate[~np.isnan(rsp_rate)]
+            rr_val = float(np.mean(valid)) if len(valid) > 0 else self._last_rr
         except Exception:
             # Fallback: simple peak counting
             rr_val = self._simple_resp_rate(resp_arr)
