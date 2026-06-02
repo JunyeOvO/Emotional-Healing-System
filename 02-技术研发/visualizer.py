@@ -1,10 +1,10 @@
 """
-SRP Live Visualizer v0.3 — 6-Panel Multi-Signal Dashboard
+SRP Live Visualizer v1.1 — 6-Panel 4-Dimension Dashboard
 ==========================================================
 UDP listener + real-time 6-panel matplotlib dashboard.
 
 One chart per physiological signal domain, each with its independent score.
-Weather composite panel integrates all 8 scores.
+Weather composite panel integrates all 4 scores.
 
 Usage:
     # Terminal 1: start pipeline
@@ -54,16 +54,12 @@ WEATHER_EMOJI = {"storm": "Storm", "heat": "Heat", "snow": "Snow", "fade": "Fade
 PHASE_COLORS = {"inhale": "#5da37c", "exhale": "#c47b5a", "hold": "#d4a843"}
 
 SCORE_COLORS = {
-    "breath_sync": "#5da37c", "hr_stability": "#e07050",
-    "hrv_recovery": "#6baed6", "rate_match": "#5da37c",
-    "depth_quality": "#8bcf8b", "regularity": "#f0c05a",
-    "eda_calm": "#c09cd8", "motion_stillness": "#6baed6",
+    "breath_sync": "#5da37c", "breath_depth": "#8bcf8b",
+    "hrv_coherence": "#6baed6", "eda_calm": "#c09cd8",
 }
 SCORE_LABELS = {
-    "breath_sync": "Breath Sync", "hr_stability": "HR Stability",
-    "hrv_recovery": "HRV Recovery", "rate_match": "Rate Match",
-    "depth_quality": "Depth Quality", "regularity": "Regularity",
-    "eda_calm": "EDA Calm", "motion_stillness": "Motion Stillness",
+    "breath_sync": "Breath Sync", "breath_depth": "Breath Depth",
+    "hrv_coherence": "HRV Coherence", "eda_calm": "EDA Calm",
 }
 
 
@@ -116,7 +112,6 @@ class Dashboard:
         self.breath_amplitude: deque = deque(maxlen=MAX_SAMPLES)
         self.breath_regularity: deque = deque(maxlen=MAX_SAMPLES)
         self.eda_tonic: deque = deque(maxlen=MAX_SAMPLES)
-        self.motion_index: deque = deque(maxlen=MAX_SAMPLES)
 
         # Latest scores
         self.scores: dict = {}
@@ -179,7 +174,7 @@ class Dashboard:
             bbox=dict(boxstyle="round,pad=0.3", facecolor="#2a1a1a", edgecolor="#4a2a2a", alpha=0.8))
 
         # ── Panel 3: HRV Recovery ─────────────────────────────────────────
-        self.ax_hrv.set_title("3  HRV Recovery (RMSSD)", fontsize=10,
+        self.ax_hrv.set_title("3  HRV Coherence (RMSSD)", fontsize=10,
                               color=C_ACCENT, fontweight="bold")
         self.ax_hrv.set_ylabel("RMSSD (ms)", fontsize=7)
         self.ax_hrv.set_ylim(0, 100)
@@ -191,43 +186,30 @@ class Dashboard:
             fontsize=8, color="#a0c8e8", va="top",
             bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a1a2a", edgecolor="#2a3a5a", alpha=0.8))
 
-        # ── Panel 4: Breath Quality (3 metrics) ────────────────────────────
-        self.ax_quality.set_title("4  Breath Quality", fontsize=10,
+        # ── Panel 4: Breath Depth ────────────────────────────────
+        self.ax_quality.set_title("4  Breath Depth", fontsize=10,
                                   color=C_ACCENT, fontweight="bold")
-        self.ax_quality.set_ylabel("RR (bpm) / Reg", fontsize=7)
-        self.ax_quality.set_ylim(0, 25)
+        self.ax_quality.set_ylabel("Amplitude", fontsize=7)
+        self.ax_quality.set_ylim(0, 1.0)
         self.ax_quality.grid(True, alpha=0.25, linewidth=0.5)
-        (self.l_rr,) = self.ax_quality.plot([], [], color="#5da37c",
-                                             linewidth=1.2, alpha=0.9, label="RR")
-        (self.l_reg,) = self.ax_quality.plot([], [], color="#f0c05a",
-                                              linewidth=1.0, alpha=0.8, label="Regularity")
-        self.ax_amp = self.ax_quality.twinx()
-        self.ax_amp.set_ylabel("Amplitude", fontsize=7, color="#8bcf8b")
-        self.ax_amp.set_ylim(0, 1.0)
-        self.ax_amp.tick_params(axis="y", colors=C_TEXT_DIM)
-        (self.l_amp,) = self.ax_amp.plot([], [], color="#8bcf8b",
-                                          linewidth=1.0, alpha=0.6, label="Amplitude")
+        (self.l_amp,) = self.ax_quality.plot([], [], color="#8bcf8b",
+                                              linewidth=1.2, alpha=0.9, label="Amplitude")
         self.quality_score_text = self.ax_quality.text(
             0.01, 0.94, "", transform=self.ax_quality.transAxes,
-            fontsize=7, color="#c0c0d0", va="top",
-            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a1a2a", edgecolor="#2a2a4a", alpha=0.8))
+            fontsize=8, color="#c0d0c0", va="top",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a2a1a", edgecolor="#2a4a2a", alpha=0.8))
 
-        # ── Panel 5: EDA + Motion ─────────────────────────────────────────
-        self.ax_eda.set_title("5  EDA + Motion", fontsize=10,
+        # ── Panel 5: EDA Calm ─────────────────────────────────
+        self.ax_eda.set_title("5  EDA Calm (Skin Conductance)", fontsize=10,
                               color=C_ACCENT, fontweight="bold")
-        self.ax_eda.set_ylabel("EDA Tonic (S)", fontsize=7, color="#c09cd8")
+        self.ax_eda.set_ylabel("EDA Tonic (μS)", fontsize=7, color="#c09cd8")
         self.ax_eda.set_ylim(3, 16)
         self.ax_eda.grid(True, alpha=0.25, linewidth=0.5)
         (self.l_eda,) = self.ax_eda.plot([], [], color="#c09cd8",
                                           linewidth=1.2, alpha=0.9)
-        self.ax_mot = self.ax_eda.twinx()
-        self.ax_mot.set_ylabel("Motion (g)", fontsize=7, color="#6baed6")
-        self.ax_mot.set_ylim(0, 0.5)
-        (self.l_mot,) = self.ax_mot.plot([], [], color="#6baed6",
-                                          linewidth=1.0, alpha=0.7)
         self.eda_score_text = self.ax_eda.text(
             0.01, 0.94, "", transform=self.ax_eda.transAxes,
-            fontsize=7, color="#d0c0e0", va="top",
+            fontsize=8, color="#d0c0e0", va="top",
             bbox=dict(boxstyle="round,pad=0.3", facecolor="#1a1a2a", edgecolor="#3a2a5a", alpha=0.8))
 
         # ── Panel 6: Weather Composite ─────────────────────────────────────
@@ -260,7 +242,7 @@ class Dashboard:
         # artists for blit
         self._artists = [
             self.l_breath, self.l_hr, self.l_rmssd,
-            self.l_rr, self.l_reg, self.l_amp, self.l_eda, self.l_mot,
+            self.l_amp, self.l_eda,
             self.breath_score_text, self.hr_score_text, self.hrv_score_text,
             self.quality_score_text, self.eda_score_text,
             self.weather_header, self.weather_composite_text,
@@ -274,7 +256,7 @@ class Dashboard:
 
         breath = msg.get("breath", {})
         cardiac = msg.get("cardiac", {})
-        aux = msg.get("aux", {})
+        eda = msg.get("eda", {})
         scores = msg.get("scores", {})
         weather = msg.get("weather", {})
         guidance = msg.get("guidance", {})
@@ -286,11 +268,11 @@ class Dashboard:
         self.breath_rate.append(breath.get("rate", 0))
         self.breath_amplitude.append(breath.get("amplitude", 0))
         self.breath_regularity.append(breath.get("regularity_raw", 0))
-        self.eda_tonic.append(aux.get("eda_tonic", 0))
-        self.motion_index.append(aux.get("motion_index", 0))
+        self.eda_tonic.append(eda.get("tonic", 0))
 
         self.scores = scores
         self.weather = weather
+        self.calm_index = msg.get("calm_index", sum(scores.values()) / max(len(scores), 1) if scores else 50)
         self.guidance_prompt = guidance.get("prompt", "")
 
     def update(self, frame):
@@ -316,40 +298,32 @@ class Dashboard:
         # Panel 2: Heart Rate
         self.l_hr.set_data(t_rel, list(self.hr))
         set_xlim(self.ax_hr)
-        hs = self.scores.get("hr_stability", 0)
-        self.hr_score_text.set_text(f" HR Stability: {hs:.0f}/100 ")
+        self.hr_score_text.set_text(f" HR: {self.hr[-1]:.0f} BPM ")
 
-        # Panel 3: HRV Recovery
+        # Panel 3: HRV Coherence (RMSSD)
         self.l_rmssd.set_data(t_rel, list(self.rmssd))
         set_xlim(self.ax_hrv)
-        hv = self.scores.get("hrv_recovery", 0)
-        self.hrv_score_text.set_text(f" HRV Recovery: {hv:.0f}/100 ")
+        hv = self.scores.get("hrv_coherence", 0)
+        self.hrv_score_text.set_text(f" HRV Coherence: {hv:.0f}/100 ")
 
-        # Panel 4: Breath Quality (RR + Regularity on left, Amplitude on right)
-        self.l_rr.set_data(t_rel, list(self.breath_rate))
-        self.l_reg.set_data(t_rel, [r * 20 for r in self.breath_regularity])  # scale to ~0-20
+        # Panel 4: Breath Depth (Amplitude)
         self.l_amp.set_data(t_rel, list(self.breath_amplitude))
         set_xlim(self.ax_quality)
-        rm = self.scores.get("rate_match", 0)
-        dq = self.scores.get("depth_quality", 0)
-        rg = self.scores.get("regularity", 0)
-        self.quality_score_text.set_text(
-            f" Rate:{rm:.0f}  Depth:{dq:.0f}  Reg:{rg:.0f} ")
+        bd = self.scores.get("breath_depth", 0)
+        self.quality_score_text.set_text(f" Breath Depth: {bd:.0f}/100 ")
 
-        # Panel 5: EDA + Motion
+        # Panel 5: EDA Calm
         self.l_eda.set_data(t_rel, list(self.eda_tonic))
-        self.l_mot.set_data(t_rel, list(self.motion_index))
         set_xlim(self.ax_eda)
         ec = self.scores.get("eda_calm", 0)
-        ms = self.scores.get("motion_stillness", 0)
-        self.eda_score_text.set_text(f" EDA:{ec:.0f}  Motion:{ms:.0f} ")
+        self.eda_score_text.set_text(f" EDA Calm: {ec:.0f}/100 ")
 
         # Panel 6: Weather Composite
         wt = self.weather.get("type", "storm")
         wi = self.weather.get("intensity", 0.5)
-        wc = self.weather.get("composite", 50)
         trend = self.weather.get("trend", "stable")
         dominant = self.weather.get("dominant", "")
+        calm = getattr(self, "calm_index", 50)
 
         trend_symbol = {"weakening": "  Clear", "stable": "  Stable",
                         "intensifying": "  Storming"}
@@ -361,7 +335,7 @@ class Dashboard:
         self.weather_header.set_color(color)
 
         self.weather_composite_text.set_text(
-            f"Composite: {wc:.0f}/100   Intensity: {wi:.2f}   Dominant: {dominant}")
+            f"Calm Index: {calm:.0f}/100   Intensity: {wi:.2f}   Dominant: {dominant}")
         self.weather_trend_text.set_text(
             f"{trend_symbol.get(trend, trend)}   Guidance: {self.guidance_prompt[:30]}")
         self.weather_trend_text.set_color(trend_color.get(trend, C_TEXT))
@@ -388,9 +362,7 @@ class Dashboard:
         labels = []
         values = []
         colors = []
-        for key in ["breath_sync", "hr_stability", "hrv_recovery",
-                     "rate_match", "depth_quality", "regularity",
-                     "eda_calm", "motion_stillness"]:
+        for key in ["breath_sync", "breath_depth", "hrv_coherence", "eda_calm"]:
             labels.append(SCORE_LABELS.get(key, key))
             values.append(self.scores.get(key, 50))
             colors.append(SCORE_COLORS.get(key, C_ACCENT))

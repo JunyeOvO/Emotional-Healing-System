@@ -33,17 +33,21 @@ EXPECTED_FRAMES = len(WEATHER_CYCLE) * SECONDS_PER_SEGMENT * FRAME_RATE  # 600
 
 @dataclass
 class SegmentStats:
-    """Per-weather segment statistics."""
+    """Per-weather segment statistics across all 4 dimensions."""
     weather_type: str
     frames: int = 0
     errors: int = 0
     warmup_dropped: int = 0
-    breath_scores: list[float] = field(default_factory=list)
+    breath_sync_scores: list[float] = field(default_factory=list)
+    breath_depth_scores: list[float] = field(default_factory=list)
+    hrv_coherence_scores: list[float] = field(default_factory=list)
+    eda_calm_scores: list[float] = field(default_factory=list)
     calm_indices: list[float] = field(default_factory=list)
     weather_intensities: list[float] = field(default_factory=list)
 
-    def avg_breath_score(self) -> float:
-        return sum(self.breath_scores) / len(self.breath_scores) if self.breath_scores else 0.0
+    def avg_dim_score(self, dim: str) -> float:
+        scores = getattr(self, f"{dim}_scores", [])
+        return sum(scores) / len(scores) if scores else 0.0
 
     def avg_calm_index(self) -> float:
         return sum(self.calm_indices) / len(self.calm_indices) if self.calm_indices else 0.0
@@ -53,10 +57,11 @@ class SegmentStats:
 
 
 def run_stress_test(full: bool = False):
-    """Run 60-second 4-weather stress test and print report."""
+    """Run 60-second 4-weather stress test and print 4-dimension report."""
     mock_data = importlib.import_module("01-数据采集.mock_data")
     signal_pipeline_mod = importlib.import_module("02-信号处理.signal_pipeline")
     scoring_model_mod = importlib.import_module("02-信号处理.scoring_model")
+    dim_spec = importlib.import_module("02-信号处理.dimension_spec")
 
     if full:
         udp_sender_mod = importlib.import_module("05-通信协议.udp_sender")
@@ -68,11 +73,21 @@ def run_stress_test(full: bool = False):
     total_warmup_dropped = 0
     all_weather_intensities: list[float] = []
 
-    print("=" * 62)
-    print("  SRP FULL-PIPELINE STRESS TEST")
+    print("=" * 70)
+    print("  SRP FULL-PIPELINE STRESS TEST — 4-Dimension Mode")
     print(f"  {len(WEATHER_CYCLE)} weathers x {SECONDS_PER_SEGMENT}s @ {FRAME_RATE}Hz = {EXPECTED_FRAMES} frames")
     print(f"  UDP/CSV: {'enabled' if full else 'disabled (--full to enable)'}")
-    print("=" * 62)
+    print()
+    print("  4-Dimension Targets (per weather):")
+    print(f"  {'Weather':<8} {'sync(bpm)':>10} {'depth':>8} {'RMSSD(ms)':>10} {'SCL(μS)':>9}")
+    print(f"  {'─'*8} {'─'*10} {'─'*8} {'─'*10} {'─'*9}")
+    for w in WEATHER_CYCLE:
+        presets = dim_spec.WEATHER_DIMENSION_PRESETS[w]
+        print(f"  {w:<8} {presets.breath_sync.target_value:>10.1f} "
+              f"{presets.breath_depth.target_value:>8.2f} "
+              f"{presets.hrv_coherence.target_value:>10.0f} "
+              f"{presets.eda_calm.target_value:>9.1f}")
+    print("=" * 70)
 
     # Shared signal pipeline (maintains buffers across weather transitions)
     pipeline = signal_pipeline_mod.SignalPipeline()
@@ -89,7 +104,6 @@ def run_stress_test(full: bool = False):
         frames = mock_data.generate_frame_list(duration=SECONDS_PER_SEGMENT, cfg=cfg)
         stats = segment_stats[weather]
 
-        # Fresh scorer per weather with tuned config
         scorer = scoring_model_mod.ScoringModel(
             cfg=scoring_model_mod.ScoringConfig.for_weather(weather)
         )
@@ -109,11 +123,15 @@ def run_stress_test(full: bool = False):
                 score = scorer.score(
                     processed,
                     breath_phase=f.breath_phase,
+                    respiration_depth=f.respiration_depth,
                     guidance_prompt=f.guidance_prompt,
                     weather_type=f.weather_type,
                 )
                 score_dict = score.to_dict()
-                stats.breath_scores.append(score.breath_score)
+                stats.breath_sync_scores.append(score.breath_sync)
+                stats.breath_depth_scores.append(score.breath_depth)
+                stats.hrv_coherence_scores.append(score.hrv_coherence)
+                stats.eda_calm_scores.append(score.eda_calm)
                 stats.calm_indices.append(score.calm_index)
                 stats.weather_intensities.append(score.weather_intensity)
                 all_weather_intensities.append(score.weather_intensity)
@@ -133,32 +151,49 @@ def run_stress_test(full: bool = False):
         csv_log.close()
         sender.close()
 
-    # ── Report ──────────────────────────────────────────────────────────────
+    # ── 4-Dimension Report ─────────────────────────────────────────────────
 
     print()
-    print(f"  Duration: {elapsed:.1f}s | Total frames: {total_frames} | Errors: {total_errors}")
-    print(f"  Warmup-dropped: {total_warmup_dropped} (expected: first ~100 per pipeline warmup)")
-    print(f"  Successfully scored: {total_frames - total_warmup_dropped}")
-    print("-" * 62)
-    print(f"  {'Weather':<8} {'Frames':>6} {'Errors':>6} {'AvgBreath':>10} {'AvgCalm':>9} {'AvgIntensity':>13}")
-    print("-" * 62)
+    print(f"  Duration: {elapsed:.1f}s | Frames: {total_frames} | Errors: {total_errors}")
+    print(f"  Warmup-dropped: {total_warmup_dropped}")
+    print(f"  Scored: {total_frames - total_warmup_dropped}")
+    print("-" * 70)
+    header = (f"  {'Weather':<8} {'sync':>6} {'depth':>6} "
+              f"{'hrv':>6} {'eda':>6} {'calm':>7} {'intensity':>10}")
+    print(header)
+    print("-" * 70)
 
     for w in WEATHER_CYCLE:
         s = segment_stats[w]
-        print(f"  {w:<8} {s.frames:>6} {s.errors:>6} {s.avg_breath_score():>10.1f} {s.avg_calm_index():>9.1f} {s.avg_intensity():>13.4f}")
+        print(f"  {w:<8} "
+              f"{s.avg_dim_score('breath_sync'):>6.1f} "
+              f"{s.avg_dim_score('breath_depth'):>6.1f} "
+              f"{s.avg_dim_score('hrv_coherence'):>6.1f} "
+              f"{s.avg_dim_score('eda_calm'):>6.1f} "
+              f"{s.avg_calm_index():>7.1f} "
+              f"{s.avg_intensity():>10.4f}")
 
-    print("-" * 62)
-    overall_bs = sum(sum(s.breath_scores) for s in segment_stats.values()) / max(
-        sum(len(s.breath_scores) for s in segment_stats.values()), 1
-    )
-    overall_ci = sum(sum(s.calm_indices) for s in segment_stats.values()) / max(
-        sum(len(s.calm_indices) for s in segment_stats.values()), 1
-    )
-    overall_wi = sum(all_weather_intensities) / max(len(all_weather_intensities), 1)
-    print(f"  {'OVERALL':<8} {total_frames:>6} {total_errors:>6} {overall_bs:>10.1f} {overall_ci:>9.1f} {overall_wi:>13.4f}")
-    print("=" * 62)
+    print("-" * 70)
 
-    # ── Verdict ──────────────────────────────────────────────────────────────
+    # Overall averages across all 4 dimensions
+    all_sync = [s for stats in segment_stats.values() for s in stats.breath_sync_scores]
+    all_depth = [s for stats in segment_stats.values() for s in stats.breath_depth_scores]
+    all_hrv = [s for stats in segment_stats.values() for s in stats.hrv_coherence_scores]
+    all_eda = [s for stats in segment_stats.values() for s in stats.eda_calm_scores]
+
+    overall_sync = sum(all_sync) / max(len(all_sync), 1)
+    overall_depth = sum(all_depth) / max(len(all_depth), 1)
+    overall_hrv = sum(all_hrv) / max(len(all_hrv), 1)
+    overall_eda = sum(all_eda) / max(len(all_eda), 1)
+    overall_ci = sum(all_weather_intensities) / max(len(all_weather_intensities), 1)
+
+    print(f"  {'OVERALL':<8} "
+          f"{overall_sync:>6.1f} {overall_depth:>6.1f} "
+          f"{overall_hrv:>6.1f} {overall_eda:>6.1f} "
+          f"{1.0-overall_ci:>7.1%} {overall_ci:>10.4f}")
+    print("=" * 70)
+
+    # ── Verdict ────────────────────────────────────────────────────────────
 
     passed = True
     if total_frames != EXPECTED_FRAMES:
@@ -167,20 +202,18 @@ def run_stress_test(full: bool = False):
     if total_errors > 0:
         print(f"  FAIL: {total_errors} pipeline errors")
         passed = False
-    if overall_wi > 0:
-        wi_range_violations = [
-            wi for wi in all_weather_intensities if not (0 <= wi <= 1)
-        ]
+    if all_weather_intensities:
+        wi_range_violations = [wi for wi in all_weather_intensities if not (0 <= wi <= 1)]
         if wi_range_violations:
-            print(f"  FAIL: {len(wi_range_violations)} weather_intensity out of [0,1] range")
+            print(f"  FAIL: {len(wi_range_violations)} weather_intensity out of [0,1]")
             passed = False
 
     if passed:
-        print(f"  VERDICT: PASS — {EXPECTED_FRAMES} frames, 0 errors")
+        print(f"  VERDICT: PASS — {EXPECTED_FRAMES} frames, 0 errors, 4 dimensions valid")
     else:
         print(f"  VERDICT: FAIL")
 
-    print("=" * 62)
+    print("=" * 70)
     return 0 if passed else 1
 
 

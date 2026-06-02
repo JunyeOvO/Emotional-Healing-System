@@ -116,14 +116,9 @@ class SignalPipeline:
         # --- Respiratory processing ---
         resp_arr = np.array(self.resp_buffer, dtype=np.float64)
 
-        try:
-            resp_clean = nk.rsp_clean(resp_arr, sampling_rate=10)
-            rsp_rate = nk.rsp_rate(resp_clean, sampling_rate=10, method="peak")
-            valid = rsp_rate[~np.isnan(rsp_rate)]
-            rr_val = float(np.mean(valid)) if len(valid) > 0 else self._last_rr
-        except Exception:
-            rr_val = self._simple_resp_rate(resp_arr)
-
+        rr_val = self._autocorr_resp_rate(resp_arr)
+        if rr_val is None:
+            rr_val = self._last_rr
         self._last_rr = rr_val
         resp_amp = float(np.std(resp_arr[-PROCESSING_WINDOW:]))
         self._last_resp_amp = resp_amp
@@ -133,20 +128,9 @@ class SignalPipeline:
         ecg_arr = np.array(self.ecg_buffer, dtype=np.float64)
 
         try:
-            ecg_clean = nk.ecg_clean(ecg_arr, sampling_rate=10)
-            if len(ecg_clean) >= 50:
-                peaks, info = nk.ecg_peaks(ecg_clean, sampling_rate=10)
-                hr_val = float(info.get("ECG_Rate_Mean", self._last_hr))
-                rr_intervals = np.diff(peaks) / 10.0 * 1000
-                if len(rr_intervals) > 1:
-                    rmssd_val = float(np.sqrt(np.mean(np.diff(rr_intervals) ** 2)))
-                else:
-                    rmssd_val = self._last_rmssd
-                self._last_hr = hr_val
-                self._last_rmssd = rmssd_val
-            else:
-                hr_val = self._last_hr
-                rmssd_val = self._last_rmssd
+            hr_val, rmssd_val = self._extract_hrv(ecg_arr)
+            self._last_hr = hr_val
+            self._last_rmssd = rmssd_val
         except Exception:
             hr_val = self._last_hr
             rmssd_val = self._last_rmssd
@@ -179,13 +163,99 @@ class SignalPipeline:
             temp_skin=temp_skin,
         )
 
+    # ── Cardiac: custom peak detector for low-rate / synthesized ECG ─────
+
+    def _extract_hrv(self, ecg_arr: np.ndarray) -> tuple[float, float]:
+        """Extract HR and RMSSD from ECG array using peak detection on
+        upsampled signal for sub-sample peak timing precision.
+
+        NeuroKit2's ecg_peaks requires >=100 Hz for reliable QRS detection.
+        At 10 Hz (synth / wearable), we upsample 10x to 100 Hz so that
+        QRS peak positions are resolved to ~10 ms instead of ~100 ms,
+        bringing RMSSD quantization noise down to physiologically plausible levels.
+
+        Returns (hr_bpm, rmssd_ms).
+        """
+        n = len(ecg_arr)
+        if n < 30:
+            return self._last_hr, self._last_rmssd
+
+        # Upsample 10 Hz → 100 Hz via cubic interpolation
+        up_factor = 10
+        x_orig = np.arange(n)
+        x_up = np.linspace(0, n - 1, (n - 1) * up_factor + 1)
+        from scipy.interpolate import interp1d
+        ecg_up = interp1d(x_orig, ecg_arr, kind='cubic')(x_up)
+        sr_up = 100.0  # Hz after upsampling
+
+        centered = ecg_up - np.mean(ecg_up)
+        threshold = np.std(centered) * 0.4
+        if threshold <= 0:
+            return self._last_hr, self._last_rmssd
+
+        # Peak detection on upsampled signal with 300 ms refractory period
+        min_dist = int(sr_up * 0.3)  # 300 ms
+        peaks: list[int] = []
+        for i in range(1, len(centered) - 1):
+            if centered[i] <= threshold:
+                continue
+            if centered[i] <= centered[i - 1] or centered[i] < centered[i + 1]:
+                continue
+            if peaks and (i - peaks[-1]) < min_dist:
+                if centered[i] > centered[peaks[-1]]:
+                    peaks[-1] = i
+                continue
+            peaks.append(i)
+
+        if len(peaks) < 2:
+            return self._last_hr, self._last_rmssd
+
+        rr_ms = np.diff(peaks) * (1000.0 / sr_up)
+        hr_val = float(60000.0 / np.mean(rr_ms))
+        hr_val = max(40.0, min(120.0, hr_val))
+
+        rmssd_val = self._last_rmssd
+        if len(rr_ms) >= 2:
+            rmssd_val = float(np.sqrt(np.mean(np.diff(rr_ms) ** 2)))
+            rmssd_val = max(5.0, min(200.0, rmssd_val))
+
+        return hr_val, rmssd_val
+
     # ── Fallback estimators ──────────────────────────────────────────────
 
-    def _simple_resp_rate(self, signal: np.ndarray) -> float:
+    def _autocorr_resp_rate(self, signal: np.ndarray) -> Optional[float]:
+        """Detect respiration rate via autocorrelation peak.
+
+        Robust to asymmetric waveforms (non-sinusoidal inhale/hold/exhale)
+        where zero-crossing and NK2 peak detectors fail. Returns bpm or None.
+        """
+        n = len(signal)
+        if n < 30:
+            return None
+
         centered = signal - np.mean(signal)
-        crossings = np.sum(np.diff(np.signbit(centered)))
-        secs = len(signal) / 10.0
-        return (crossings / 2) * (60 / secs) if secs > 0 else self._last_rr
+        acorr = np.correlate(centered, centered, mode="full")
+        acorr = acorr[len(acorr) // 2:]
+        if acorr[0] < 1e-10:
+            return None
+        acorr = acorr / acorr[0]
+
+        # Search for first major peak in physiologically plausible range:
+        # 4 bpm (15s周期 = 150 samples) to 30 bpm (2s周期 = 20 samples)
+        min_lag = max(int(10 * 60.0 / 30.0), 10)   # 20 samples
+        max_lag = min(int(10 * 60.0 / 4.0), n - 2)  # 150 samples
+        threshold = 0.25  # minimum autocorrelation for a valid peak
+
+        best_lag = None
+        for lag in range(min_lag, max_lag):
+            if acorr[lag] > threshold and acorr[lag] > acorr[lag - 1] and acorr[lag] >= acorr[lag + 1]:
+                best_lag = lag
+                break
+
+        if best_lag is None:
+            return None
+
+        return 600.0 / best_lag  # 10 Hz * 60 s / lag_samples
 
     def _estimate_regularity(self, signal: np.ndarray) -> float:
         centered = signal - np.mean(signal)
