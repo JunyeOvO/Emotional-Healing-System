@@ -15,11 +15,14 @@ Usage:
   python main.py --weather storm --duration 60
   python main.py --weather heat --duration 0     # infinite until Ctrl+C
   python main.py --weather snow --no-udp         # offline CSV only
+  python main.py --real --weather storm --dur 300  # real device mode (stage 3)
+  python main.py --real --no-ecg                   # skip ECG (demo mode)
 """
 
 import sys
 import os
 import time
+import atexit
 import argparse
 import logging
 import signal
@@ -40,14 +43,50 @@ logger = logging.getLogger("main")
 COMPACT_INTERVAL = 50     # every 5s: compact 1-line status
 DETAIL_INTERVAL = 300     # every 30s: detailed 4-dimension table
 
+LOCK_FILE = os.path.join(_root, ".pipeline.lock")
+
+
+def _acquire_lock() -> bool:
+    """Create PID lock file. Return False if another instance is running."""
+    if os.path.exists(LOCK_FILE):
+        try:
+            with open(LOCK_FILE) as f:
+                old_pid = int(f.read().strip())
+            try:
+                os.kill(old_pid, 0)
+            except OSError:
+                pass  # PID is dead, safe to overwrite
+            else:
+                logger.error(
+                    f"Pipeline already running (PID {old_pid}). "
+                    f"Stop it first or remove {LOCK_FILE}."
+                )
+                return False
+        except (ValueError, FileNotFoundError):
+            pass
+    with open(LOCK_FILE, "w") as f:
+        f.write(str(os.getpid()))
+    atexit.register(_release_lock)
+    return True
+
+
+def _release_lock():
+    try:
+        os.remove(LOCK_FILE)
+    except Exception:
+        pass
+
 
 def _import(module_name: str):
     return importlib.import_module(module_name)
 
 
 def run_pipeline(args: argparse.Namespace):
+    if not _acquire_lock():
+        sys.exit(1)
+
     dur_label = f"{args.duration:.0f}s" if args.duration > 0 else "infinite (Ctrl+C to stop)"
-    mock_label = "Mock" if args.mock else "Real Device"
+    mock_label = "Real Device" if args.real else "Mock"
 
     # ── Startup header ────────────────────────────────────────────────────
     dim_spec = _import("02-信号处理.dimension_spec")
@@ -65,13 +104,48 @@ def run_pipeline(args: argparse.Namespace):
     logger.info("=" * 60)
 
     # ── Phase 1: Data Source ──────────────────────────────────────────────
-    if args.mock:
+    device_manager = None
+    frame_generator = None
+
+    if args.real:
+        # ── Real Device Mode ──
+        _01_path = os.path.join(_root, "01-数据采集")
+        if _01_path not in sys.path:
+            sys.path.insert(0, _01_path)
+        from device_manager import DeviceManager
+        from ring_buffer import RingBuffer
+
+        device_manager = DeviceManager(rate_hz=10.0)
+
+        # Register available devices based on CLI flags
+        if not args.no_ecg:
+            logger.warning(
+                "Polar H10 driver not yet implemented (Phase C). "
+                "Use --mock for simulated pipeline testing."
+            )
+        if not args.no_resp:
+            logger.warning(
+                "Respiration belt driver not yet implemented (Phase F). "
+                "Use --mock for simulated pipeline testing."
+            )
+        if not args.no_eda:
+            logger.warning(
+                "EDA wristband driver not yet implemented (Phase F). "
+                "Use --mock for simulated pipeline testing."
+            )
+
+        if not device_manager._drivers:
+            logger.error("No devices registered. Use --mock mode for testing.")
+            sys.exit(1)
+
+        device_manager.start()
+        logger.info(f"Connected devices: {device_manager.connected_devices}")
+
+    else:
+        # ── Mock Mode ──
         mock_data = _import("01-数据采集.mock_data")
         cfg = mock_data.MockConfig.for_weather(args.weather)
         frame_generator = mock_data.generate_frames(duration=args.duration, cfg=cfg)
-    else:
-        logger.error("Real device mode not yet implemented (stage 3)")
-        sys.exit(1)
 
     # ── Phase 2: Signal Processing ────────────────────────────────────────
     signal_pipeline_mod = _import("02-信号处理.signal_pipeline")
@@ -83,12 +157,16 @@ def run_pipeline(args: argparse.Namespace):
 
     # ── Phase 3: Outputs ──────────────────────────────────────────────────
     udp_sender_mod = _import("05-通信协议.udp_sender")
+    osc_sender_mod = _import("05-通信协议.osc_sender")
     csv_logger_mod = _import("05-通信协议.csv_logger")
-    sender = udp_sender_mod.UDPSender() if not args.no_udp else None
+    udp_sender = udp_sender_mod.UDPSender() if not args.no_udp else None
+    osc_sender = osc_sender_mod.OSCSender() if not args.no_osc else None
     csv_log = csv_logger_mod.CSVLogger(prefix=f"sim_{args.weather}")
     csv_log.open()
-    if sender:
-        logger.info(f"UDP → {[f'{h}:{p}' for h, p in sender.targets]}")
+    if udp_sender:
+        logger.info(f"UDP → {[f'{h}:{p}' for h, p in udp_sender.targets]}")
+    if osc_sender:
+        logger.info(f"OSC → {osc_sender.host}:{osc_sender.port}")
     logger.info(f"CSV → {csv_log.filename}")
     logger.info("Pipeline running... (Ctrl+C to stop)")
     logger.info("")
@@ -115,38 +193,90 @@ def run_pipeline(args: argparse.Namespace):
     signal.signal(signal.SIGINT, handle_signal)
     signal.signal(signal.SIGTERM, handle_signal)
 
+    # Source metadata for UDP v1.2
+    udp_sources = {}
+    if args.real:
+        udp_sources = {
+            "breath": "belt" if not args.no_resp else "none",
+            "cardiac": "polar_h10" if not args.no_ecg else "none",
+            "eda": "wristband" if not args.no_eda else "none",
+        }
+    else:
+        udp_sources = {"breath": "mock", "cardiac": "mock", "eda": "mock"}
+
     try:
-        for mock_frame in frame_generator:
+        while True:
             if shutdown:
+                break
+
+            # ── Read frame from source ──
+            if device_manager:
+                raw_frame = device_manager.read_frame(timeout=0.5)
+                if raw_frame is None:
+                    if not device_manager.is_running:
+                        break
+                    continue
+            elif frame_generator:
+                try:
+                    raw_frame = next(frame_generator)
+                except StopIteration:
+                    break
+            else:
                 break
 
             frame_idx += 1
 
             processed = pipeline.feed(
-                mock_frame.timestamp,
-                mock_frame.respiration_raw,
-                mock_frame.ecg_raw,
-                mock_frame.eda_raw,
-                mock_frame.acc_magnitude,
-                mock_frame.temp_skin,
+                raw_frame.timestamp,
+                raw_frame.respiration_raw,
+                raw_frame.ecg_raw,
+                raw_frame.eda_raw,
+                raw_frame.acc_magnitude,
+                raw_frame.temp_skin,
             )
 
             score = scorer.score(
                 processed,
-                breath_phase=mock_frame.breath_phase,
-                respiration_depth=mock_frame.respiration_depth,
-                guidance_prompt=mock_frame.guidance_prompt,
-                weather_type=mock_frame.weather_type,
+                breath_phase=raw_frame.breath_phase,
+                respiration_depth=raw_frame.respiration_depth,
+                guidance_prompt=raw_frame.guidance_prompt,
+                weather_type=raw_frame.weather_type,
             )
 
             score_dict = score.to_dict()
-            if sender:
-                sender.send(score_dict)
+
+            # Build UDP meta for v1.2 (device status, signal quality)
+            pipeline_latency = (time.time() - raw_frame.timestamp) * 1000
+            if device_manager:
+                udp_meta = {
+                    "frame_id": frame_idx,
+                    "devices": {
+                        name: "connected" if name in device_manager.connected_devices else "no_signal"
+                        for name in ("ecg", "resp", "eda")
+                    },
+                    "signal_quality": device_manager.signal_quality,
+                    "pipeline_latency_ms": pipeline_latency,
+                    "buffer_backlog_frames": device_manager.queue_backlog,
+                }
+            else:
+                udp_meta = {
+                    "frame_id": frame_idx,
+                    "devices": {"ecg": "mock", "resp": "mock", "eda": "mock"},
+                    "signal_quality": {"ecg": "mock", "resp": "mock", "eda": "mock"},
+                    "pipeline_latency_ms": pipeline_latency,
+                    "buffer_backlog_frames": 0,
+                }
+
+            if udp_sender:
+                udp_sender.send(score_dict, meta=udp_meta, sources=udp_sources)
+            if osc_sender:
+                osc_sender.send(udp_sender_mod.build_message(score_dict, meta=udp_meta, sources=udp_sources))
             csv_log.write(score_dict)
             processed_count += 1
 
-            # Real-time pacing: 10 Hz → 100ms per frame
-            time.sleep(0.1)
+            # Real-time pacing: 10 Hz → 100ms per frame (mock only; real paced by FrameClock)
+            if not args.real:
+                time.sleep(0.1)
 
             # ── Console Status ────────────────────────────────────────────
             if frame_idx % COMPACT_INTERVAL == 0:
@@ -161,9 +291,13 @@ def run_pipeline(args: argparse.Namespace):
     except Exception as e:
         logger.error(f"Pipeline error: {e}", exc_info=True)
     finally:
+        if device_manager:
+            device_manager.stop()
         csv_log.close()
-        if sender:
-            sender.close()
+        if udp_sender:
+            udp_sender.close()
+        if osc_sender:
+            osc_sender.close()
 
         elapsed = time.time() - start_time
         logger.info("")
@@ -172,8 +306,10 @@ def run_pipeline(args: argparse.Namespace):
         logger.info(f"  Frames generated: {frame_idx}")
         logger.info(f"  Frames processed: {processed_count}")
         logger.info(f"  Drop rate: {100*(frame_idx-processed_count)/max(frame_idx,1):.1f}%")
-        if sender:
-            logger.info(f"  UDP: {sender.stats()}")
+        if udp_sender:
+            logger.info(f"  UDP: {udp_sender.stats()}")
+        if osc_sender:
+            logger.info(f"  OSC: {osc_sender.stats()}")
         logger.info(f"  CSV: {csv_log.stats()}")
         logger.info("=" * 60)
 
@@ -234,6 +370,12 @@ def main():
                         help="Use simulated data (default)")
     parser.add_argument("--real", action="store_true",
                         help="Use real devices (stage 3)")
+    parser.add_argument("--no-ecg", action="store_true",
+                        help="Skip ECG device (Polar H10)")
+    parser.add_argument("--no-resp", action="store_true",
+                        help="Skip respiration belt")
+    parser.add_argument("--no-eda", action="store_true",
+                        help="Skip EDA wristband")
     parser.add_argument("--duration", type=float, default=60.0,
                         help="Runtime in seconds. 0 = until Ctrl+C (default: 60)")
     parser.add_argument("--weather", type=str, default="storm",
@@ -241,6 +383,8 @@ def main():
                         help="Weather type (default: storm)")
     parser.add_argument("--no-udp", action="store_true",
                         help="Disable UDP sending")
+    parser.add_argument("--no-osc", action="store_true",
+                        help="Disable OSC sending (to TD)")
 
     args = parser.parse_args()
     run_pipeline(args)

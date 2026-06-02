@@ -28,6 +28,7 @@ Desktop.ini
 # Project-specific
 *.csv
 !requirements.txt
+.pipeline.lock
 
 # Unity (generated)
 [Ll]ibrary/

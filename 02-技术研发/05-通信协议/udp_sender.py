@@ -1,6 +1,6 @@
 """
-SRP UDP JSON Sender v1.1 — 4-dimension scoring model.
-========================================================
+SRP UDP JSON Sender v1.2 — 4-dimension scoring model + device metadata.
+=======================================================================
 Sends 4-dimension scored data as JSON over UDP to TD and Unity.
 
 Spec:
@@ -9,8 +9,8 @@ Spec:
   Rate: 10 Hz
   Ports: TD:5005, Unity:5006
 
-Message structure includes 4 independent scores, raw signals,
-derived features, and weather composite.
+v1.2 adds per-signal source tracking, device connection status,
+and signal quality metadata (see 真实设备方案.md).
 """
 
 import json
@@ -30,16 +30,31 @@ DEFAULT_TARGETS = [
 ]
 
 
-def build_message(score_dict: dict) -> dict:
-    """Build full UDP JSON message with 4 independent scores."""
+def build_message(
+    score_dict: dict,
+    meta: Optional[dict] = None,
+    sources: Optional[dict[str, str]] = None,
+) -> dict:
+    """Build full UDP JSON message with 4 independent scores.
+
+    Args:
+        score_dict: Flat dict from ScoreFrame.to_dict().
+        meta: Optional device metadata dict with keys:
+              frame_id, devices, signal_quality, pipeline_latency_ms,
+              buffer_backlog_frames.
+        sources: Optional per-channel source strings, e.g.:
+                 {"breath": "belt", "cardiac": "polar_h10", "eda": "wristband"}.
+    """
     ts = score_dict.get("timestamp", time.time())
+    sources = sources or {}
+    meta = meta or {}
 
     # Compute circle_radius from respiration_depth (0=exhale, 1=inhale peak)
     resp_depth = score_dict.get("respiration_depth", 0.5)
     circle_radius = 0.08 + resp_depth * 0.17  # 0.08 → 0.25 range
 
     return {
-        "version": "1.1",
+        "version": "1.2",
         "timestamp": ts,
 
         # 4 independent scores
@@ -69,6 +84,7 @@ def build_message(score_dict: dict) -> dict:
             "amplitude": score_dict.get("respiration_amplitude", 0),
             "regularity_raw": score_dict.get("breath_regularity_raw", 0),
             "circle_radius": circle_radius,
+            "source": sources.get("breath", "none"),
         },
 
         # Cardiac domain
@@ -77,18 +93,29 @@ def build_message(score_dict: dict) -> dict:
             "rmssd": score_dict.get("rmssd", 0),
             "rr": score_dict.get("rr", 0),
             "ecg_raw": score_dict.get("ecg_raw", 0),
+            "source": sources.get("cardiac", "none"),
         },
 
         # EDA domain (pure sympathetic)
         "eda": {
             "tonic": score_dict.get("eda_tonic", 0),
             "raw": score_dict.get("eda_raw", 0),
+            "source": sources.get("eda", "none"),
         },
 
         # Guidance
         "guidance": {
             "prompt": score_dict.get("guidance_prompt", ""),
             "target_breath_rate": 10,
+        },
+
+        # Device metadata (v1.2)
+        "meta": {
+            "frame_id": meta.get("frame_id", 0),
+            "devices": meta.get("devices", {}),
+            "signal_quality": meta.get("signal_quality", {}),
+            "pipeline_latency_ms": meta.get("pipeline_latency_ms", 0.0),
+            "buffer_backlog_frames": meta.get("buffer_backlog_frames", 0),
         },
     }
 
@@ -103,8 +130,9 @@ class UDPSender:
         self.frame_count = 0
         self.error_count = 0
 
-    def send(self, score_dict: dict) -> bool:
-        message = build_message(score_dict)
+    def send(self, score_dict: dict, meta: Optional[dict] = None,
+             sources: Optional[dict[str, str]] = None) -> bool:
+        message = build_message(score_dict, meta=meta, sources=sources)
         payload = json.dumps(message, ensure_ascii=False).encode("utf-8")
 
         all_ok = True
@@ -140,7 +168,7 @@ if __name__ == "__main__":
         sys.path.insert(0, _parent)
 
     sender = UDPSender()
-    print(f"UDP Sender v1.1 self-test: {len(sender.targets)} targets")
+    print(f"UDP Sender v1.2 self-test: {len(sender.targets)} targets")
     for i in range(5):
         test_frame = {
             "timestamp": time.time(),
@@ -155,7 +183,15 @@ if __name__ == "__main__":
             "ecg_raw": 0.15, "eda_raw": 7.2, "eda_tonic": 7.0,
             "guidance_prompt": "慢慢吸气...4秒",
         }
-        ok = sender.send(test_frame)
+        test_meta = {
+            "frame_id": i,
+            "devices": {"ecg": "connected", "resp": "connected", "eda": "no_signal"},
+            "signal_quality": {"ecg_contact": True, "resp_quality": 0.87, "eda_contact": False},
+            "pipeline_latency_ms": 3.2,
+            "buffer_backlog_frames": 0,
+        }
+        test_sources = {"breath": "belt", "cardiac": "polar_h10", "eda": "none"}
+        ok = sender.send(test_frame, meta=test_meta, sources=test_sources)
         print(f"  Frame {i + 1}: {'OK' if ok else 'FAIL'}")
         time.sleep(0.1)
 
