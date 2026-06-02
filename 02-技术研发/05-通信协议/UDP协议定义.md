@@ -1,59 +1,133 @@
 # UDP JSON 通信协议
 
-> Python → TouchDesigner / Unity 实时数据传输
+> v1.1 — 匹配4维度评分模型。Python → TouchDesigner / Unity 实时数据传输。
 
 ## 协议规范
 
 - **传输层**：UDP
-- **编码**：JSON
+- **编码**：JSON (UTF-8)
 - **频率**：10Hz（每100ms一帧）
 - **端口**：TD:5005, Unity:5006
+- **MTU**：单帧 < 1500 bytes（避免UDP分片）
 
 ## 消息格式
 
 ```json
 {
-  "version": "1.0",
+  "version": "1.1",
   "timestamp": 1716300000.123,
-  "breath": {
-    "score": 72.5,
-    "rate": 14.2,
-    "depth": 0.65,
-    "phase": "inhale",
-    "guidance_phase": "hold"
+  "scores": {
+    "breath_sync": 72.5,
+    "breath_depth": 58.1,
+    "hrv_coherence": 68.3,
+    "eda_calm": 70.8
   },
-  "calm": {
-    "index": 68.3,
-    "trend": "improving",
-    "weather_intensity": 0.32
-  },
-  "hrv": {
-    "hr": 72,
-    "rmssd": 45.2,
-    "coherence": 0.58
-  },
+  "calm_index": 67.4,
   "weather": {
     "type": "storm",
-    "intensity": 0.32,
-    "transition": "weakening"
+    "intensity": 0.33,
+    "trend": "weakening",
+    "dominant": "breath_sync"
+  },
+  "breath": {
+    "phase": "inhale",
+    "rate": 6.2,
+    "amplitude": 0.45,
+    "regularity_raw": 0.6
+  },
+  "cardiac": {
+    "hr": 78,
+    "rmssd": 40.2,
+    "ecg_raw": 0.15
+  },
+  "eda": {
+    "tonic": 7.0,
+    "raw": 7.2
   },
   "guidance": {
     "prompt": "慢慢吸气...4秒",
-    "circle_radius": 0.8,
-    "target_breath_rate": 10
+    "circle_radius": 0.75,
+    "target_breath_rate": 5.0
   }
 }
 ```
 
 ## 字段说明
 
+### scores — 4维度评分 (0–100)
+
+| 字段 | 含义 | 生理通路 | 设备 |
+|------|------|------|------|
+| `breath_sync` | 呼吸率与目标频率的匹配度 | 呼吸→副交感 | PLUX呼吸带 |
+| `breath_depth` | 呼吸振幅与目标深度的匹配度 | 呼吸→副交感 | PLUX呼吸带 |
+| `hrv_coherence` | RMSSD向目标恢复程度 | 副交感(迷走) | Polar H10 |
+| `eda_calm` | 皮肤电导相对基线下降幅度 | 交感(纯) | EDA腕带 |
+
+### weather — 天气映射
+
 | 字段 | 范围 | 说明 |
 |------|:----:|------|
-| breath.score | 0-100 | 呼吸同步度 |
-| calm.index | 0-100 | 综合平静指数 |
-| calm.weather_intensity | 0-1 | 1=恶劣天气, 0=晴天 |
-| breath.phase | inhale/hold/exhale | 当前呼吸阶段 |
-| weather.transition | weakening/stable/intensifying | 天气变化趋势 |
+| `type` | storm/heat/snow/fade | 当前天气类型 |
+| `intensity` | 0–1 | 天气强度（1=恶劣, 0=晴天），= 1 - calm_index/100 |
+| `trend` | weakening/stable/intensifying | 天气变化趋势 |
+| `dominant` | 任一score字段名 | 当前主导维度 |
+
+### breath — 呼吸域
+
+| 字段 | 范围 | 说明 |
+|------|:----:|------|
+| `phase` | inhale/hold/exhale | 当前呼吸相位 |
+| `rate` | 0–30 bpm | 实时呼吸率 |
+| `amplitude` | 0–1 | 归一化呼吸振幅 |
+| `regularity_raw` | 0–1 | 呼吸模式规律性（自相关强度） |
+
+### cardiac — 心脏域
+
+| 字段 | 范围 | 说明 |
+|------|:----:|------|
+| `hr` | 40–200 BPM | 实时心率 |
+| `rmssd` | 0–200 ms | HRV时域指标（副交感金标准） |
+| `ecg_raw` | 0–3 | 归一化ECG原始值 |
+
+### eda — 皮肤电域
+
+| 字段 | 范围 | 说明 |
+|------|:----:|------|
+| `tonic` | 1–30 μS | 皮肤电导紧张性水平（SCL） |
+| `raw` | — | 原始EDA值 |
+
+### guidance — 引导信息
+
+| 字段 | 范围 | 说明 |
+|------|:----:|------|
+| `prompt` | 字符串 | 当前呼吸引导提示词 |
+| `circle_radius` | 0.15–1.0 | 引导圈缩放半径 |
+| `target_breath_rate` | 3–15 bpm | 目标呼吸频率 |
+
+## 版本兼容性
+
+| 版本 | 变更 | 日期 |
+|:--:|------|------|
+| v1.0 | 8维评分 + aux域(ACC/TEMP) | 2026-05 |
+| **v1.1** | **精简为4维；aux域改为eda域；移除motion/acc/temp** | 2026-06 |
+
+### v1.0 → v1.1 迁移
+
+- `scores` 对象：8字段 → 4字段（保留 `breath_sync`, `eda_calm`；`depth_quality`→`breath_depth`；`hrv_recovery`→`hrv_coherence`；移除 `hr_stability`, `rate_match`, `regularity`, `motion_stillness`）
+- `aux` 域 → 改为 `eda` 域（仅保留 `eda_tonic`, `eda_raw`；移除 `acc_magnitude`, `motion_index`, `temp_skin`）
+- 新增 `calm_index` 顶层字段（简化客户端访问）
+- 接收端应对未知字段做 **ignore-unknown** 处理
+
+## 与 MCP 开发桥接的关系
+
+```
+MCP（开发时）                    UDP JSON（运行时）
+Claude Code → TD 建节点          Python → UDP:5005 → TD
+Claude Code → Unity 搭场景        Python → UDP:5006 → Unity
+```
+
+MCP 负责搭建工程、写脚本；UDP JSON 负责运行时传输数据。
+详见：`02-技术研发/06-MCP开发桥接/`
 
 ## Hermes Skill
 

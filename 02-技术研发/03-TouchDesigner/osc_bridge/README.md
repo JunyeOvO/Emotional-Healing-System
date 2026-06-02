@@ -25,19 +25,33 @@ pip install python-osc
 
 ## TD 侧配置（一次性）
 
-1. 打开 `srp_main.toe`
-2. 从 Palette 拖入 **OSC In DAT**，命名为 `oscin1`，设置 port = `7000`
-3. 从 Palette 拖入 **Execute DAT**，命名为 `exec_osc`
-4. 将 `td_osc_receiver.py` 的内容粘贴到 Execute DAT 中
-5. 将 Execute DAT 的 **Monitor** 参数设为 `On`
+### 方案 A：WebServer DAT（推荐 — Claude Code 可直连）
 
-或者使用一键搭建：
+1. 在 TD 中确认 WebServer DAT 已放置（TAB → WebServer）
+2. 设置 port = `9980`，Active = `On`
+3. 打开 `td_webserver_callbacks.py`，全选复制
+4. 在 WebServer DAT 的 **Callbacks** 页签中粘贴
+5. 确认 TD Console 输出 `[WebServer Callbacks] SRP TD Bridge ready`
 
-```bash
-python osc_controller.py osc_setup   # 自动创建 oscin1 + exec_osc
-```
+**API 端点**：
 
-创建后手动将 `td_osc_receiver.py` 内容粘贴到 `exec_osc` 中并开启 Monitor。
+| 方法 | 端点 | 功能 |
+|------|------|------|
+| GET | `/status` | 工程信息 + 根节点列表 |
+| GET | `/nodes?path=/project1` | 列出子节点 |
+| POST | `/exec` `{"script":"..."}` | 执行 Python |
+| POST | `/inspect` `{"parent":"/project1"}` | 递归导出完整节点树 |
+| POST | `/params` `{"path":"..."}` | 读取参数 |
+| POST | `/params/set` `{"path":"..","params":{}}` | 设置参数 |
+| POST | `/node/create` `{"parent":"..","type":"..","name":".."}` | 创建节点 |
+| GET | `/errors?path=/project1` | 检查节点错误 |
+
+### 方案 B：OSC In DAT（已有 — 仍需 Execute DAT）
+
+1. 确认 OSC In DAT 已放置 → port `7000`
+2. 拖入 Execute DAT → 命名 `exec_osc`
+3. 将 `td_osc_receiver.py` 内容粘贴到 Execute DAT 中
+4. 将 Execute DAT 的 **Monitor** 参数设为 `On`
 
 ## 外部操控
 

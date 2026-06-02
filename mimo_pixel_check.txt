@@ -1,0 +1,30 @@
+{
+  "id": "f589823226cb45bfb6bfdf650befbc07",
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "这张图里有 **两个** 圆。它们采用了 **像素风**（可以看到边缘有明显的锯齿感），颜色主要是 **深蓝色**（外圈）和 **浅蓝色**（内圈）。",
+        "role": "assistant",
+        "tool_calls": null,
+        "reasoning_content": "用户想要一个简短的图像描述。我需要识别圆的数量、风格（是否像素化）以及颜色。图中显示的是两个同心圆。它们的边缘明显是锯齿状的，暗示是像素化风格。颜色是蓝色的。我将把这些观察结果综合成一个简洁的回答。"
+      }
+    }
+  ],
+  "created": 1780369982,
+  "model": "mimo-v2.5",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 111,
+    "prompt_tokens": 276,
+    "total_tokens": 387,
+    "completion_tokens_details": {
+      "reasoning_tokens": 64
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 192,
+      "image_tokens": 16
+    }
+  }
+}

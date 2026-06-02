@@ -1,5 +1,5 @@
 """
-Tests for scoring_model.py (v0.3 — 8 independent scores)
+Tests for scoring_model.py (v2.0 — 4 independent scores)
 """
 import sys, os
 from dataclasses import dataclass
@@ -17,12 +17,9 @@ class PF:
     hr: float = 70.0
     rmssd: float = 50.0
     eda_tonic: float = 8.0
-    motion_index: float = 0.04
     respiration_raw: float = 0.5
     ecg_raw: float = 0.1
     eda_raw: float = 8.0
-    acc_magnitude: float = 0.04
-    temp_skin: float = 34.0
 
 
 class TestScoringModel:
@@ -30,7 +27,7 @@ class TestScoringModel:
         model = sm.ScoringModel()
         result = model.score(None)
         assert result.breath_sync == 50
-        assert result.weather_composite == 50
+        assert result.calm_index == 50
         assert result.weather_intensity == 0.5
 
     def test_perfect_scoring(self):
@@ -39,7 +36,7 @@ class TestScoringModel:
                 hr=70.0, rmssd=50.0)
         result = model.score(pf)
         assert result.breath_sync > 80, f"Expected >80 got {result.breath_sync}"
-        assert result.weather_composite > 50
+        assert result.calm_index > 50
         assert 0 <= result.weather_intensity <= 1
 
     def test_poor_scoring(self):
@@ -55,25 +52,21 @@ class TestScoringModel:
                 hr=78.0, rmssd=35.0)
         result = model.score(pf)
         assert 0 <= result.breath_sync <= 100
-        assert 0 <= result.weather_composite <= 100
+        assert 0 <= result.calm_index <= 100
         assert 0 <= result.weather_intensity <= 1
-        # All 8 scores should be present
-        assert 0 <= result.hr_stability <= 100
-        assert 0 <= result.hrv_recovery <= 100
-        assert 0 <= result.rate_match <= 100
-        assert 0 <= result.depth_quality <= 100
-        assert 0 <= result.regularity <= 100
+        # All 4 scores should be present
+        assert 0 <= result.breath_depth <= 100
+        assert 0 <= result.hrv_coherence <= 100
         assert 0 <= result.eda_calm <= 100
-        assert 0 <= result.motion_stillness <= 100
 
-    def test_score_list_has_8_items(self):
+    def test_score_list_has_4_items(self):
         model = sm.ScoringModel()
         pf = PF()
         result = model.score(pf)
         sl = result.score_list()
-        assert len(sl) == 8
+        assert len(sl) == 4, f"Expected 4 scores got {len(sl)}: {sl}"
         assert sl[0][0] == "Breath Sync"
-        assert sl[-1][0] == "Motion Stillness"
+        assert sl[-1][0] == "EDA Calm"
 
 
 class TestPerWeatherScoring:
@@ -84,7 +77,6 @@ class TestPerWeatherScoring:
     def test_scoring_config_for_weather(self):
         cfg = sm.ScoringConfig.for_weather("heat")
         assert cfg.target_amplitude == 0.6
-        assert cfg.w_breath_sync == 0.15
         assert round(cfg.target_rr, 2) == 6.67
 
     def test_different_weathers_produce_different_scores(self):

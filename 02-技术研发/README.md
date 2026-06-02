@@ -26,7 +26,7 @@ python -m pytest tests/ -v
 | 数据采集 | 01-数据采集/mock_data.py | 正弦呼吸波 + 模拟ECG (72BPM) |
 | 数据采集 | 01-数据采集/ble_connect.py | Polar H10 BLE 连接 (阶段3) |
 | 信号处理 | 02-信号处理/signal_pipeline.py | NeuroKit2 滤波+特征提取 |
-| 信号处理 | 02-信号处理/scoring_model.py | breath_score + calm_index (0-100) |
+| 信号处理 | 02-信号处理/scoring_model.py | 4-dim scoring (breath_sync/depth/hrv_coherence/eda_calm) + calm_index |
 | 通信 | 05-通信协议/udp_sender.py | UDP JSON @ 10Hz → :5005(TD) :5006(Unity) |
 | 通信 | 05-通信协议/csv_logger.py | 结构化 CSV 日志 |
 | 可视化 | visualizer.py | 4面板实时仪表盘 (监听UDP 5005) |

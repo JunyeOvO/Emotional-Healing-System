@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "touchdesigner": {
+      "command": "npx",
+      "args": ["-y", "touchdesigner-mcp-server@latest", "--stdio"],
+      "env": {
+        "TD_HOST": "127.0.0.1",
+        "TD_PORT": "9981"
+      }
+    },
+    "unity-mcp": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}

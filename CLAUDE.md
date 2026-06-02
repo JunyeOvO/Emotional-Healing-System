@@ -30,7 +30,7 @@
 │   └── 情绪天气方案/四种天气设计.md 4种天气→呼吸策略→视觉要素
 ├── 02-技术研发/
 │   ├── 01-数据采集/设备方案.md      Polar H10 + 呼吸胸带
-│   ├── 02-信号处理/评分模型设计.md   breath_score + calm_index
+│   ├── 02-信号处理/评分模型设计.md   4维独立评分 (breath_sync/depth/hrv_coherence/eda_calm)
 │   ├── 03-TouchDesigner/TD原型规划.md 引导圈+提示词+监控台
 │   ├── 04-Unity视觉/场景设计.md      4天气场景+旅人Sprite
 │   └── 05-通信协议/UDP协议定义.md     JSON @ 10Hz
@@ -87,5 +87,5 @@
 | Python 3.11 + NeuroKit2 | 信号处理 | ✅ |
 | Polar H10 BLE | 心电采集 | ⬜ 待采购 |
 | 呼吸胸带 | 呼吸采集 | ⬜ 待选型 |
-| TouchDesigner | 实时可视化 | ⬜ 待安装 |
-| Unity 6000.3.15f1+ | 2D像素渲染 | ⬜ 待安装 |
+| TouchDesigner | 实时可视化 | ✅ D:\TouchDesigner\bin\TouchDesigner.exe |
+| Unity 6000.4.9f1 | 2D像素渲染 | ✅ D:\UnityEngine\6000.4.9f1\Editor\Unity.exe |

@@ -12,7 +12,7 @@
 | 子系统 | 你的职责 | RACI |
 |--------|----------|:--:|
 | 生理数据采集 | 连接 Polar H10 + 呼吸胸带，BLE 读取原始信号 | R/A |
-| 数据处理与建模 | NeuroKit2 清洗→特征提取→breath_score + calm_index | R/A |
+| 数据处理与建模 | NeuroKit2 清洗→特征提取→4维独立评分 (breath_sync/depth/hrv_coherence/eda_calm) + calm_index | R/A |
 | UDP 通信 | Python socket UDP JSON @ 10Hz → TD:5005 + Unity:5006 | R/A |
 | 系统集成 | 确保 Python→TD→Unity 端到端数据流可运行 | R/A |
 | Git 版本控制 | 分支管理、PR 流程、代码审查 | R |
@@ -158,8 +158,8 @@ def mock_ecg(t):
 
 使用 `deliverable-quality-gate` 检查：
 - [ ] `ble_connect.py` 能扫描并连接 Polar H10
-- [ ] `signal_pipeline.py` 能输出 breath_score 和 calm_index
+- [ ] `signal_pipeline.py` 能输出 4 维评分 (breath_sync, breath_depth, hrv_coherence, eda_calm) 和 calm_index
 - [ ] `udp_sender.py` 发送的 JSON 格式通过 TD 和 Unity 验证
-- [ ] CSV 日志包含完整的 ts/breath_score/calm_index/hr/rr 列
+- [ ] CSV 日志包含完整的 ts/4_scores/calm_index/hr/rr 列
 - [ ] 代码通过 pylint 无 critical error
 - [ ] Git 分支命名符合 `srp/<模块>/<描述>` 规范
