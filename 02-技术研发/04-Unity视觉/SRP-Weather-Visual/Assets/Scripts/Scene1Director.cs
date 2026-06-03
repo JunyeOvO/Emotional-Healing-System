@@ -32,17 +32,33 @@ public class Scene1Director : MonoBehaviour
     private bool shieldCracking;
     private float rainZoneProgress;
 
+    void Awake()
+    {
+        if (traveler == null) traveler = GameObject.Find("Traveler");
+        if (shield == null) shield = GameObject.Find("Traveler/Shield");
+        if (mainCamera == null) mainCamera = Camera.main;
+        if (backgroundContainer == null) backgroundContainer = GameObject.Find("BackgroundContainer");
+        if (rainPS == null) rainPS = GetComponentInChildren<ParticleSystem>();
+        if (lightningOverlay == null) lightningOverlay = GameObject.Find("LightningOverlay");
+    }
+
     void Start()
     {
-        travAnim = traveler.GetComponent<Animator>();
-        shieldSR = shield.GetComponent<SpriteRenderer>();
-        rainEmission = rainPS.emission;
-        rainEmission.rateOverTime = 0f;
+        travAnim = traveler != null ? traveler.GetComponent<Animator>() : null;
+        shieldSR = shield != null ? shield.GetComponent<SpriteRenderer>() : null;
+        if (rainPS != null)
+        {
+            rainEmission = rainPS.emission;
+            rainEmission.rateOverTime = 0f;
+        }
+        if (shield != null) shield.SetActive(false);
         StartCoroutine(Timeline());
     }
 
     IEnumerator Timeline()
     {
+        if (traveler == null || travAnim == null) yield break;
+
         // === Phase 0: Idle on wasteland (bg_01) ===
         travAnim.Play("Idle");
         yield return new WaitForSeconds(idleDuration);
@@ -59,23 +75,26 @@ public class Scene1Director : MonoBehaviour
             traveler.transform.position = new Vector3(x, traveler.transform.position.y, 0);
 
             // Camera follows with smooth lag
-            float targetCamX = Mathf.Min(x + 7f, 0f);
-            Vector3 camPos = mainCamera.transform.position;
-            camPos.x = Mathf.Lerp(camPos.x, targetCamX, 0.1f);
-            mainCamera.transform.position = camPos;
+            if (mainCamera != null)
+            {
+                float targetCamX = Mathf.Min(x + 7f, 0f);
+                Vector3 camPos = mainCamera.transform.position;
+                camPos.x = Mathf.Lerp(camPos.x, targetCamX, 0.1f);
+                mainCamera.transform.position = camPos;
+            }
 
             // Rain zone: bg_02 through bg_03
-            if (x <= BG1_BG2_EDGE)
+            if (x <= BG1_BG2_EDGE && rainPS != null)
             {
                 rainZoneProgress = Mathf.Clamp01((BG1_BG2_EDGE - x) / (BG1_BG2_EDGE - BG3_BG4_EDGE));
 
                 if (!rainStarted)
                 {
                     rainStarted = true;
-                    shield.SetActive(true);
-                    shieldSR.sprite = shieldSprites[0];
+                    if (shield != null) shield.SetActive(true);
+                    if (shieldSR != null && shieldSprites.Length > 0) shieldSR.sprite = shieldSprites[0];
                     rainPS.Play();
-                    StartCoroutine(FlashLoop());
+                    if (lightningOverlay != null) StartCoroutine(FlashLoop());
                 }
 
                 // Rain intensifies: 60 → 260 particles/s
@@ -94,15 +113,18 @@ public class Scene1Director : MonoBehaviour
 
         // === End: Stop and idle ===
         travAnim.Play("Idle");
-        rainEmission.rateOverTime = 0f;
-        rainPS.Stop();
-        if (shield.activeSelf)
+        if (rainPS != null)
+        {
+            rainEmission.rateOverTime = 0f;
+            rainPS.Stop();
+        }
+        if (shield != null && shield.activeSelf)
             shield.SetActive(false);
     }
 
     IEnumerator FlashLoop()
     {
-        while (true)
+        while (traveler != null && lightningOverlay != null)
         {
             yield return new WaitForSeconds(Random.Range(1.5f, 4f));
             if (traveler.transform.position.x > BG1_BG2_EDGE) break;
@@ -118,6 +140,7 @@ public class Scene1Director : MonoBehaviour
 
     IEnumerator CrackShield()
     {
+        if (shield == null || shieldSR == null || shieldSprites.Length == 0) yield break;
         int frame = 0;
         while (frame < shieldSprites.Length - 1 && shield.activeSelf)
         {

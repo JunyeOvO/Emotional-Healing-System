@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 145657219}
   - component: {fileID: 145657218}
   - component: {fileID: 145657220}
+  - component: {fileID: 145657221}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -369,6 +370,30 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &145657221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145657217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f83d55e46bfe9704f850f5e049f137c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraSwitch
+  bgCenters:
+  - 0
+  - 21.333
+  - 42.666
+  - 64
+  - 85.333
+  bgBoundaries:
+  - 10.667
+  - 32
+  - 53.333
+  - 74.667
+  traveler: {fileID: 0}
 --- !u!1 &509857053
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +549,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643420144}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc87ec353a113314f9ed8a45db84c2b5, type: 3}
   m_Name: 
@@ -928,7 +953,9 @@ GameObject:
   - component: {fileID: 1556967065}
   - component: {fileID: 1556967064}
   - component: {fileID: 1556967063}
-  - component: {fileID: 1556967066}
+  - component: {fileID: 1556967069}
+  - component: {fileID: 1556967068}
+  - component: {fileID: 1556967067}
   m_Layer: 0
   m_Name: Traveler
   m_TagString: Untagged
@@ -1009,7 +1036,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 3d4221b5c31bd4c419878c09d0bff016, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 20.09375, y: 28.125}
@@ -1026,14 +1053,47 @@ Transform:
   m_GameObject: {fileID: 1556967062}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.467, y: -1.594, z: 0}
+  m_LocalPosition: {x: -8.34, y: -1.7, z: 0}
   m_LocalScale: {x: 0.06667, y: 0.06667, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 936363183}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1556967066
+--- !u!114 &1556967067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556967062}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734f4094a72238246a278cd120a6d7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WalkBG05
+  xStart: 74.667
+  xEnd: 96
+  bridgeWorldY: -3.749
+  walkSpeed: 2.2
+--- !u!114 &1556967068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556967062}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dba28216a3f47e1419f3b4bc1e339e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WalkBG04
+  xStart: 53.333
+  xEnd: 74.667
+  bridgeWorldY: -3.787
+  nextWalker: {fileID: 1556967067}
+  walkSpeed: 2.2
+--- !u!114 &1556967069
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1042,12 +1102,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1556967062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07def9da27ea7a845ad92d84caf976c9, type: 3}
+  m_Script: {fileID: 11500000, guid: d3de078a649754b489ac216a80597265, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TravelerWalk
-  walkDuration: 20
-  rightBoundary: 10.667
-  leftBoundary: -10.667
+  m_EditorClassIdentifier: Assembly-CSharp::WalkBG01_03
+  zones:
+  - label: bg01
+    xStart: -8.34
+    xEnd: 10.667
+    bridgeWorldY: -1.7
+  - label: bg02
+    xStart: 10.667
+    xEnd: 32
+    bridgeWorldY: -1.7
+  - label: bg03
+    xStart: 32
+    xEnd: 53.333
+    bridgeWorldY: -1.7
+  nextWalker: {fileID: 1556967068}
+  walkSpeed: 2.2
 --- !u!1 &1602337768
 GameObject:
   m_ObjectHideFlags: 0
