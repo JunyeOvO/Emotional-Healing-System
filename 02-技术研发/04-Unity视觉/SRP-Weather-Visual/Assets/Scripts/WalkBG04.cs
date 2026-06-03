@@ -5,7 +5,7 @@ public class WalkBG04 : MonoBehaviour
     [Header("Bridge Zone (bg04)")]
     public float xStart = 53.333f;
     public float xEnd = 74.667f;
-    public float bridgeWorldY = -3.787f;
+    public float bridgeWorldY = -2.5f;
 
     [Header("Chain")]
     public MonoBehaviour nextWalker;
@@ -17,16 +17,25 @@ public class WalkBG04 : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private float currentX;
     private bool walking;
+    private Vector3 originalScale;
 
     void OnEnable()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
+        originalScale = transform.localScale;
+        transform.localScale = originalScale * 0.75f;
+
         currentX = xStart;
         UpdatePosition();
         animator.Play("Walk");
         walking = true;
+    }
+
+    void OnDisable()
+    {
+        transform.localScale = originalScale;
     }
 
     void Update()

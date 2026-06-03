@@ -1074,7 +1074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WalkBG05
   xStart: 74.667
   xEnd: 96
-  bridgeWorldY: -3.749
+  bridgeWorldY: -0.8
   walkSpeed: 2.2
 --- !u!114 &1556967068
 MonoBehaviour:
@@ -1090,7 +1090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WalkBG04
   xStart: 53.333
   xEnd: 74.667
-  bridgeWorldY: -3.787
+  bridgeWorldY: -2.5
   nextWalker: {fileID: 1556967067}
   walkSpeed: 2.2
 --- !u!114 &1556967069

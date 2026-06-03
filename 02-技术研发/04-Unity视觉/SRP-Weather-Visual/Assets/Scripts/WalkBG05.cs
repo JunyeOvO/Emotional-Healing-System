@@ -5,7 +5,7 @@ public class WalkBG05 : MonoBehaviour
     [Header("Bridge Zone (bg05)")]
     public float xStart = 74.667f;
     public float xEnd = 96f;
-    public float bridgeWorldY = -3.749f;
+    public float bridgeWorldY = -0.8f;
 
     [Header("Walking")]
     public float walkSpeed = 2.2f;
