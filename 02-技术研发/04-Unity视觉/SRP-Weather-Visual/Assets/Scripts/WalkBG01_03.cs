@@ -28,7 +28,7 @@ public class WalkBG01_03 : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private float currentX;
-    private bool walking;
+    public bool walking;
 
     void OnEnable()
     {

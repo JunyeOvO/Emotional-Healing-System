@@ -1,0 +1,32 @@
+{
+  "bg_01.png": {
+    "bridge_px_y": 588,
+    "mean": 568.9,
+    "std": 106.2,
+    "samples": 164
+  },
+  "bg_02.png": {
+    "bridge_px_y": 726,
+    "mean": 667.1,
+    "std": 152.7,
+    "samples": 168
+  },
+  "bg_03.png": {
+    "bridge_px_y": 668,
+    "mean": 655.7,
+    "std": 93.7,
+    "samples": 168
+  },
+  "bg_04.png": {
+    "bridge_px_y": 669,
+    "mean": 652.7,
+    "std": 104.5,
+    "samples": 168
+  },
+  "bg_05.png": {
+    "bridge_px_y": 671,
+    "mean": 643.3,
+    "std": 108.6,
+    "samples": 168
+  }
+}

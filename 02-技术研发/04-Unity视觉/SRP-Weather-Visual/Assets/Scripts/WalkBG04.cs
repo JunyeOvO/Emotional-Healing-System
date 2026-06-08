@@ -5,18 +5,18 @@ public class WalkBG04 : MonoBehaviour
     [Header("Bridge Zone (bg04)")]
     public float xStart = 53.333f;
     public float xEnd = 74.667f;
-    public float bridgeWorldY = -2.5f;
+    public float bridgeWorldY = -2.63f;
 
     [Header("Chain")]
     public MonoBehaviour nextWalker;
 
     [Header("Walking")]
-    public float walkSpeed = 2.2f;
+    public float walkSpeed = 1.76f;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     private float currentX;
-    private bool walking;
+    public bool walking;
     private Vector3 originalScale;
 
     void OnEnable()
