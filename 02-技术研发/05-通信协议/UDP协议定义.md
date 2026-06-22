@@ -1,6 +1,6 @@
 # UDP JSON 通信协议
 
-> v1.1 — 匹配4维度评分模型。Python → TouchDesigner / Unity 实时数据传输。
+> v1.2 — 匹配4维度评分模型与设备元数据。Python → TouchDesigner / Unity 实时数据传输。
 
 ## 协议规范
 
@@ -14,7 +14,7 @@
 
 ```json
 {
-  "version": "1.1",
+  "version": "1.2",
   "timestamp": 1716300000.123,
   "scores": {
     "breath_sync": 72.5,
@@ -33,21 +33,32 @@
     "phase": "inhale",
     "rate": 6.2,
     "amplitude": 0.45,
-    "regularity_raw": 0.6
+    "regularity_raw": 0.6,
+    "circle_radius": 0.1565,
+    "source": "mock"
   },
   "cardiac": {
     "hr": 78,
     "rmssd": 40.2,
-    "ecg_raw": 0.15
+    "rr": 6.2,
+    "ecg_raw": 0.15,
+    "source": "mock"
   },
   "eda": {
     "tonic": 7.0,
-    "raw": 7.2
+    "raw": 7.2,
+    "source": "mock"
   },
   "guidance": {
     "prompt": "慢慢吸气...4秒",
-    "circle_radius": 0.75,
     "target_breath_rate": 5.0
+  },
+  "meta": {
+    "frame_id": 1,
+    "devices": {"ecg": "mock", "resp": "mock", "eda": "mock"},
+    "signal_quality": {"ecg": "mock", "resp": "mock", "eda": "mock"},
+    "pipeline_latency_ms": 3.2,
+    "buffer_backlog_frames": 0
   }
 }
 ```
@@ -101,15 +112,25 @@
 | 字段 | 范围 | 说明 |
 |------|:----:|------|
 | `prompt` | 字符串 | 当前呼吸引导提示词 |
-| `circle_radius` | 0.15–1.0 | 引导圈缩放半径 |
 | `target_breath_rate` | 3–15 bpm | 目标呼吸频率 |
+
+### meta — 设备与管道状态（v1.2）
+
+| 字段 | 说明 |
+|------|------|
+| `frame_id` | 管道帧序号 |
+| `devices` | 各通道设备状态（mock/connected/no_signal） |
+| `signal_quality` | 各通道信号质量摘要 |
+| `pipeline_latency_ms` | 当前帧处理延迟 |
+| `buffer_backlog_frames` | 设备缓冲积压帧数 |
 
 ## 版本兼容性
 
 | 版本 | 变更 | 日期 |
 |:--:|------|------|
 | v1.0 | 8维评分 + aux域(ACC/TEMP) | 2026-05 |
-| **v1.1** | **精简为4维；aux域改为eda域；移除motion/acc/temp** | 2026-06 |
+| v1.1 | 精简为4维；aux域改为eda域；移除motion/acc/temp | 2026-06 |
+| **v1.2** | **新增source、meta、circle_radius；对接真实设备骨架与Unity解析类** | 2026-06 |
 
 ### v1.0 → v1.1 迁移
 

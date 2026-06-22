@@ -15,10 +15,14 @@ venv/
 .pytest_cache/
 .vscode/
 
+# Local agent/config state
+.codex/
+
 # OS
 .DS_Store
 Thumbs.db
 Desktop.ini
+~$*
 
 # IDE
 .idea/
@@ -30,15 +34,29 @@ Desktop.ini
 *.csv
 !requirements.txt
 .pipeline.lock
+td_*.png
+*_snapshot.png
+*_analysis.txt
+*_result.txt
+*_pixel_check.txt
 
 # Unity (generated)
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
 *.csproj
 *.unityproj
 *.sln
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+sysinfo.txt
 
 # TouchDesigner (backups)
 *.toe.backup.*

@@ -1,7 +1,0 @@
-C:\Users\fujunye\ComfyUI\.venv\Lib\site-packages\urllib3\connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host '172.24.48.1'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
-  warnings.warn(
-这张图呈现出一种简洁的几何美感。**背景**为深邃的暗蓝色，营造出类似深海或太空的科技感。
-
-**画面中主要包含一个圆形元素，但并非完整的正圆**。它更像是一个被上下水平截断的圆环（或是带有圆弧边缘的扁平椭圆截面）。该形状由**亮蓝色的细线条勾勒而成，线条发光**，但**内部是空心的（透明）**，直接透出背景色，并非实心填充，也没有内外圈的嵌套结构。
-
-**整体观感**极简且现代，带有典型的数据可视化或UI界面设计风格，冷色调的发光边框在深色背景下显得格外醒目。

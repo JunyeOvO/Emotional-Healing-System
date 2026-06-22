@@ -1,26 +1,26 @@
-# 基于生理数据的大学生情绪天气交互疗愈系统
+# 多模态交互情绪疗愈系统
 
-> SRP 项目 · 2026/5/20 — 2026/6/30 · 4 人团队
+> SRP v2.1 · 2026/5/20 — 2026/6/30 · 4 人团队
 
 ## 项目概况
 
-本项目将大学生常见的**焦虑、烦躁、低落、孤独**四类情绪体验转化为四种天气场景（风暴、炙烤、暴雪、褪色），通过呼吸胸带和心电胸带等生理数据采集设备监测身体状态，让用户通过**递进式呼吸调节训练**看到天气逐渐恢复，从而学习可操作的情绪调节方法。
+本项目将大学生常见的焦虑、烦躁、低落、孤独四类日常情绪体验转化为四种天气场景（风暴、炙烤、暴雪、褪色），通过呼吸胸带和心电胸带等消费级设备采集交互信号，让用户通过递进式呼吸调节训练看到天气逐渐恢复，从而学习可操作的情绪调节方法。
 
 **核心体验**：旅人在恶劣天气中前行；用户通过呼吸训练帮助天气恢复、旅人继续前进。
 
-**技术边界**：本项目属于情绪调节教育与交互体验研究，**不做医学诊断**，不宣称治疗焦虑、抑郁或其他疾病。
+**技术边界**：本项目属于情绪调节教育与交互体验研究，只做交互状态估计，不做严肃判断或医学用途宣称。
 
 ## 目录导航
 
-> 📘 详细框架文档见 **[PROJECT_FRAMEWORK.md](PROJECT_FRAMEWORK.md)**
+> 详细框架文档见 [PROJECT_FRAMEWORK.md](PROJECT_FRAMEWORK.md)，当前任务状态见 [当前阶段看板.md](00-项目管理/看板与进度/当前阶段看板.md)。
 
 ```
 03-SRP/
 │
 ├── README.md                              ← 本文件（项目总说明）
 ├── PROJECT_FRAMEWORK.md                   ← 企业级项目框架（详细版）
-├── SRP项目规划书.docx                      ← 项目规划书 V1.0（只读）
-├── srp参考文献/                            ← 88 篇参考文献 PDF（只读）
+├── AGENTS.md                              ← Codex/Claude 项目工作约束
+├── srp参考文献/                            ← 文献与评分模型证据
 │
 ├── 00-项目管理/                            ← 项目章程、会议纪要、进度跟踪、风险管理、团队协作
 ├── 01-需求与设计/                          ← 需求分析、系统架构、交互/视觉设计、情绪天气方案
@@ -34,39 +34,42 @@
 ### 环境准备
 
 ```bash
-# 激活 Python 虚拟环境
-source ~/.hermes-venv/bin/activate
+# Windows PowerShell: 激活 Python 虚拟环境
+& "$HOME\.hermes-venv\Scripts\Activate.ps1"
 
-# 安装核心依赖（待补充 requirements.txt）
-pip install -r 10-开发环境与工具/01-Python环境/requirements.txt
+# 安装核心依赖
+pip install -r 02-技术研发/requirements.txt
 ```
 
 ### 系统启动顺序
 
 1. **启动模拟数据发生器**（或佩戴真实设备）
    ```
-   python 02-技术研发/02-设备接口与采集/simulated-data/simulator.py
+   cd 02-技术研发
+   python main.py --weather storm --duration 60
    ```
 
 2. **启动数据处理服务**
    ```
-   python 02-技术研发/01-数据处理与建模/scripts/udp_server.py
+   python visualizer.py
    ```
 
 3. **打开 TouchDesigner 工程**
-   - 打开 `02-技术研发/03-TouchDesigner交互引导/tox-files/` 下的 `.toe` 工程文件
+   - 打开 `02-技术研发/03-TouchDesigner/呼吸引导.toe`
 
 4. **启动 Unity 场景**
-   - 打开 `02-技术研发/04-Unity-UE视觉体验/unity-project/` 下的 Unity 工程
+   - 打开 `02-技术研发/04-Unity视觉/SRP-Weather-Visual`
 
-5. **访问实验监控台**
-   - TouchDesigner 中切换到监控面板
+5. **联调端口**
+   - Python → TouchDesigner: UDP `5005`
+   - Python → Unity: UDP `5006`
+   - TouchDesigner → Unity: Spout 呼吸引导纹理
 
 ### 子系统依赖关系
 
 ```
-[设备采集] → [数据处理与建模] → [TouchDesigner 引导]
-                              → [Unity/UE 视觉体验]
+[设备采集] → [信号处理/评分模型] → [TouchDesigner 引导与监控]
+                                → [Unity 2D 天气视觉]
 [实验评价] 贯穿全流程
 ```
 
@@ -105,6 +108,7 @@ pip install -r 10-开发环境与工具/01-Python环境/requirements.txt
 | V0.1 | 2026/5/19 | 项目框架初始化，创建完整目录结构 |
 | V0.2 | 2026/5/25 | 阶段1完成：需求文档、天气方案、系统框架 |
 | V0.3 | 2026/5/27 | 阶段2 SE侧完成：数据管道、4天气评分配置、全链路压测(600帧/0错误)、29/29测试通过 |
+| V1.2 | 2026/6/22 | 同步 UDP v1.2、Unity 多场景工程、项目清理与 Git 发布状态 |
 
 ---
 

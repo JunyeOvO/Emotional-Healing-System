@@ -1,6 +1,6 @@
 # SRP Weather Visual — Unity 2D 工程框架
 
-> v2.1 — 2026/6/2 | Unity 6000.4.9f1 | URP 2D
+> v2.1 — 2026/6/22 | Unity 6000.4.9f1 | URP 2D
 
 ## 架构概览
 
@@ -52,10 +52,10 @@ StormScene
     └── WeatherController
 ```
 
-### 其他场景 (待搭建)
-- **HeatScene** — 炎热天气
-- **SnowScene** — 雪天
-- **FadeScene** — 消散/平静
+### 其他场景
+- **HeatScene** — 炙烤天气场景文件已建立，需继续校准热浪/色彩恢复机制
+- **SnowScene** — 暴雪天气场景文件已建立，需继续校准雪势/脚印机制
+- **FadeScene** — 褪色天气场景文件已建立，需继续校准重新上色机制
 
 ## 美术资产
 
@@ -136,12 +136,12 @@ Python UDP:5006 → UDPReceiver.cs
 | FixGameView | SRP/Fix GameView Resolution | GameView修复 |
 | ComprehensiveFix | SRP/Comprehensive Fix Scene | 综合修复 |
 | FinalRebuild | SRP/Final Rebuild | 最终重建 |
-| DebugCamera | SRP/Debug Camera Setup | 相机诊断 |
-| DiagTest | SRP/Diagnostic Test | 通用诊断 |
-| DiagURP | SRP/Diagnose URP Pipeline | URP诊断 |
-| DiagQuality | SRP/Diagnose Quality Settings | Quality诊断 |
-| DiagSprites | SRP/Diagnose Sprites | 精灵诊断 |
-| PlayModeDiag | SRP/Play Mode Diagnostic | Play模式诊断 |
+| DebugCamera | SRP/Debug Camera Setup | 相机判断 |
+| DiagTest | SRP/Diagnostic Test | 通用判断 |
+| DiagURP | SRP/Diagnose URP Pipeline | URP判断 |
+| DiagQuality | SRP/Diagnose Quality Settings | Quality判断 |
+| DiagSprites | SRP/Diagnose Sprites | 精灵判断 |
+| PlayModeDiag | SRP/Play Mode Diagnostic | Play模式判断 |
 | PixelChecker | SRP/Pixel Perfect Check | 像素验证 |
 | RenderCameraToFile | SRP/Render Camera to File | 渲染到文件 |
 | SwitchToForwardRenderer | SRP/Switch to Forward Renderer | 渲染器切换 |
@@ -152,9 +152,9 @@ Python UDP:5006 → UDPReceiver.cs
 
 | # | 问题 | 状态 |
 |---|------|:--:|
-| K1 | Play Mode 黑屏 — 编译通过但运行无渲染 | 🔴 |
+| K1 | Play Mode 渲染状态需复测 | 🟡 |
 | K2 | execute_code Windows "文件名或扩展名太长" | 🔴 (用MenuItem规避) |
-| K3 | HeatScene/SnowScene/FadeScene 未搭建 | ⬜ |
+| K3 | HeatScene/SnowScene/FadeScene 已建文件但机制未完成验收 | 🟡 |
 | K4 | BreathHUD 双圈像素HUD未实现 | ⬜ |
 | K5 | ScriptableObject 天气配置未创建 | ⬜ |
 | K6 | 旅人姿势动画未接入Scene1Director时间线 | ⬜ |
