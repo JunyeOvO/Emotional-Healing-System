@@ -7,7 +7,7 @@
 ## 架构
 
 ```
-┌──────────────────┐   HTTP (9980)   ┌──────────────────┐   MCP    ┌──────────────┐
+┌──────────────────┐   HTTP (9981)   ┌──────────────────┐   MCP    ┌──────────────┐
 │  TouchDesigner   │ ◄──────────────►│  MCP Server      │ ◄───────►│  Claude Code │
 │  WebServer DAT   │                 │  (npx / uvx)     │          │              │
 │  + callbacks.py  │                 │  touchdesigner-  │          │              │
@@ -23,7 +23,7 @@
 1. 打开你的 .toe 工程
 2. 按 TAB → 搜索 `WebServer` → 拖入
 3. 设置 WebServer DAT 参数：
-   - Port: `9980`
+   - Port: `9981`
    - Active: `On`
 4. 下载 `touchdesigner-mcp` 仓库中的 `td_mcp_callbacks.py`
 5. 在 WebServer DAT 的 Callbacks 页签中加载该脚本
@@ -42,7 +42,7 @@
       "args": ["-y", "touchdesigner-mcp-server@latest", "--stdio"],
       "env": {
         "TD_HOST": "127.0.0.1",
-        "TD_PORT": "9980"
+        "TD_PORT": "9981"
       }
     }
   }
@@ -63,7 +63,7 @@ claude mcp add touchdesigner -- npx -y touchdesigner-mcp-server@latest --stdio
       "args": ["touchdesigner-mcp-server"],
       "env": {
         "TD_HOST": "127.0.0.1",
-        "TD_PORT": "9980"
+        "TD_PORT": "9981"
       }
     }
   }

@@ -40,7 +40,19 @@
 
 | 工具 | 版本 | MCP 方案 | 状态 |
 |------|------|----------|:----:|
-| TouchDesigner | D:\TouchDesigner\bin\TouchDesigner.exe | 8beeeaaat/touchdesigner-mcp v1.4.7 | ⬜ 待配 MCP |
-| Unity | 6000.4.9f1 @ D:\UnityEngine\6000.4.9f1 | CoplayDev/unity-mcp v9.7.0 | ⬜ 待配 MCP |
+| TouchDesigner | D:\TouchDesigner\bin\TouchDesigner.exe | 8beeeaaat/touchdesigner-mcp v1.4.7 | ✅ 已打开，WebServer `9981` |
+| Unity | 6000.4.9f1 @ D:\UnityEngine\6000.4.9f1 | CoplayDev/unity-mcp v9.7.x | ✅ 已打开，MCP HTTP `8083` |
 | Python | 3.11+ (~/.hermes-venv) | MCP CLI 客户端 | ✅ |
 | Node.js | ~/.hermes/node/ | npx 运行 MCP server | ✅ |
+
+## 2026-06-22 当前实况
+
+| 项 | 状态 | 说明 |
+|---|:--:|---|
+| TouchDesigner 工程 | ✅ | 已打开 `02-技术研发/03-TouchDesigner/呼吸引导.toe` |
+| TD MCP WebServer | ✅ | `127.0.0.1:9981` 可达；GET `/` 返回 NOT_FOUND 属正常路由响应 |
+| Unity 工程 | ✅ | 已打开 `02-技术研发/04-Unity视觉/SRP-Weather-Visual` |
+| Unity MCP HTTP | ✅ | `127.0.0.1:8083/health` 返回 healthy；MCP 路径为 `/mcp` |
+| 项目 `.mcp.json` | ✅ | TD 指向 `9981`，Unity 指向 `http://127.0.0.1:8083/mcp` |
+| 运行时 UDP | ⬜ | `5005/5006` 当前未监听；需进入 TD/Unity Play/运行态后再发 mock 数据 |
+| Unity MCP 路径状态 | 🟡 | MCPForUnity 运行状态目录出现在乱码路径下，仅含 `Library/MCPForUnity/RunState`，需后续清理或重配 |
