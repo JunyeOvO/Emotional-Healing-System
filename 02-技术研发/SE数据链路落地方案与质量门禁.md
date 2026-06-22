@@ -1,4 +1,4 @@
-# SE 数据采集与传输链路落地方案
+﻿# SE 数据采集与传输链路落地方案
 
 > 负责人范围：可穿戴设备数据收集、信号处理、评分模型、UDP/OSC/CSV、TD/Unity 数据传输链路。
 
@@ -60,7 +60,7 @@ CSVLogger → experiment logs
 
 | 任务 | 操作 | 验收 |
 |---|---|---|
-| Python 版本 | 建立 Python 3.11 `.venv` | `python --version` 输出 3.11.x |
+| Python 版本 | 建立 Python 3.14 `.venv` | `python --version` 输出 3.14.x |
 | 依赖安装 | `pip install -r 02-技术研发/requirements.txt` | 无安装失败 |
 | 测试工具 | `pip install pytest` | `python -m pytest --version` 可用 |
 | 锁定依赖 | `pip freeze > requirements-lock.txt` | 锁文件入库或归档 |
@@ -69,7 +69,7 @@ CSVLogger → experiment logs
 
 ```powershell
 cd C:\Users\fujunye\Desktop\Agent\03-SRP
-py -3.11 -m venv .venv
+py -3.14 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r 02-技术研发\requirements.txt
@@ -213,7 +213,7 @@ Unity 验收时你要确认：
 
 | 检查项 | 类型 | 通过标准 |
 |---|---|---|
-| Python 版本 | Blocker | 3.11.x |
+| Python 版本 | Blocker | 3.14.x |
 | 依赖安装 | Blocker | requirements 安装成功 |
 | pytest 可用 | Blocker | `python -m pytest --version` 成功 |
 | Git 状态 | Advisory | 开始联调前工作区清楚 |
@@ -340,7 +340,7 @@ python main.py --weather storm --duration 60
 
 ## 10. 当前最高优先级
 
-1. 恢复 Python 3.11 + pytest 环境。
+1. 恢复 Python 3.14 + pytest 环境。
 2. 补 UDP payload 和 CSV 字段测试。
 3. 修复/确认 `WeatherController` 接收 v1.2 字段后的响应链。
 4. 完成 60 秒 Python → TD → Unity → CSV 闭环记录。

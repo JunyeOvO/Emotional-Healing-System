@@ -11,6 +11,7 @@ import csv
 import os
 import time
 from datetime import datetime
+from pathlib import Path
 from typing import Optional, TextIO
 import logging
 
@@ -53,12 +54,9 @@ class CSVLogger:
             prefix: File prefix ("sim" for simulated, "P01" for real participants)
         """
         if output_dir is None:
-            # Default: project root's experiment data dir
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            output_dir = os.path.join(
-                script_dir, "..", "..", "..", "03-测试与实验", "实验数据"
-            )
-        self.output_dir = os.path.abspath(output_dir)
+            project_root = Path(__file__).resolve().parents[2]
+            output_dir = project_root / "03-测试与实验" / "实验数据"
+        self.output_dir = os.path.abspath(os.fspath(output_dir))
         os.makedirs(self.output_dir, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

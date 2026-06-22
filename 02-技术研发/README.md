@@ -1,7 +1,7 @@
-# SRP SE — 数据管道与实时桥接 (v1.2)
+﻿# SRP SE — 数据管道与实时桥接 (v1.2)
 
 > 负责: 生理数据采集 → 信号处理 → 评分模型 → UDP通信 → 系统集成
-> 技术栈: Python 3.11 + NeuroKit2 + BioSPPy + bleak + UDP JSON/OSC
+> 技术栈: Python 3.14 + NeuroKit2 + BioSPPy + bleak + UDP JSON/OSC
 
 ## 快速启动
 

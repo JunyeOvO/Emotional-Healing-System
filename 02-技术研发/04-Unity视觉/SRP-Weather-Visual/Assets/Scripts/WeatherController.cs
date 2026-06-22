@@ -139,16 +139,18 @@ public class WeatherController : MonoBehaviour
 
     public void ApplyData(SRPDataV12 data)
     {
+        string nextWeather = NormalizeWeatherType(data.weather.type);
+
         CalmIndex = data.calm_index;
-        CurrentWeather = data.weather.type;
         CurrentIntensity = Mathf.Clamp01(data.weather.intensity);
 
         if (data.breath != null)
             CurrentBreathPhase = data.breath.phase;
 
-        SwitchWeather(data.weather.type);
-        UpdateBackground(data.weather.type, CurrentIntensity);
-        UpdateParticles(data.weather.type, CurrentIntensity);
+        SwitchWeather(nextWeather);
+        CurrentWeather = nextWeather;
+        UpdateBackground(nextWeather, CurrentIntensity);
+        UpdateParticles(nextWeather, CurrentIntensity);
 
         if (data.guidance != null && !string.IsNullOrEmpty(data.guidance.prompt)
             && data.guidance.prompt != _lastPrompt)
@@ -187,6 +189,18 @@ public class WeatherController : MonoBehaviour
                 if (colorSparkles) colorSparkles.gameObject.SetActive(true);
                 break;
         }
+    }
+
+    string NormalizeWeatherType(string type)
+    {
+        return type switch
+        {
+            "storm" => "storm",
+            "heat" => "heat",
+            "snow" => "snow",
+            "fade" => "fade",
+            _ => "storm"
+        };
     }
 
     void UpdateBackground(string type, float intensity)

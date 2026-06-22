@@ -1,4 +1,4 @@
-# MCP 配置指南
+﻿# MCP 配置指南
 
 > Claude Code 中配置 TouchDesigner + Unity MCP 服务器的完整指南
 
@@ -9,7 +9,7 @@
 | TouchDesigner | `D:\TouchDesigner\bin\TouchDesigner.exe` | 最新稳定版 |
 | Unity | `D:\UnityEngine\6000.4.9f1\Editor\Unity.exe` | 6000.4.9f1 |
 | Node.js | `~/.hermes/node/` | ✅ |
-| Python | `~/.hermes-venv` | 3.11+ |
+| Python | `~/.hermes-venv` | 3.14 |
 
 ## 当前项目端口
 

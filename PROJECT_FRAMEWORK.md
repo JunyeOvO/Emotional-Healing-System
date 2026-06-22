@@ -1,4 +1,4 @@
-# SRP 企业级项目框架
+﻿# SRP 企业级项目框架
 
 > **项目名称**: 基于生理数据的大学生情绪天气交互疗愈系统  
 > **项目周期**: 2026/5/20 — 2026/6/30（6周）  
@@ -248,7 +248,7 @@
    - 理解6个子系统的关系
 
 3. **环境搭建** (按角色)
-   - SE: Python 3.11 + NeuroKit2 + Polar BLE SDK
+   - SE: Python 3.14 + NeuroKit2 + Polar BLE SDK
    - 交互设计: TouchDesigner 安装
    - 数字媒体: Unity/UE 安装
 
@@ -260,7 +260,7 @@
 
 | 工具 | 版本要求 | 备注 |
 |------|----------|------|
-| Python | 3.11+ | venv: ~/.hermes-venv |
+| Python | 3.14 | venv: ~/.hermes-venv |
 | TouchDesigner | 最新稳定版 | D:\TouchDesigner\bin\TouchDesigner.exe |
 | Unity | 6000.4.9f1 | D:\UnityEngine\6000.4.9f1\Editor\Unity.exe |
 | Git | 2.x | WSL 环境 |

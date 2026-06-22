@@ -1,4 +1,4 @@
-# SRP v2.1 最小闭环运行手册
+﻿# SRP v2.1 最小闭环运行手册
 
 > 目标：把系统收敛为可重复、可验收、可写入结题材料的最小闭环原型。
 
@@ -8,7 +8,7 @@
 
 | 项 | 要求 |
 |---|---|
-| Python | 3.11，独立虚拟环境 |
+| Python | 3.14，独立虚拟环境 |
 | TouchDesigner | 正式版，接收 UDP `5005` |
 | Unity | Unity 6000.4.9f1，D3D11/12 |
 | Spout | 同机 Windows，NVIDIA/AMD，固定 Sender 名称 |
@@ -22,14 +22,14 @@ git status -sb
 ```
 
 目标结果：
-- Python 为 3.11.x。
+- Python 为 3.14.x。
 - Git 工作区干净或仅有本次明确修改。
 
 ## Python 环境
 
 ```powershell
 cd C:\Users\fujunye\Desktop\Agent\03-SRP
-py -3.11 -m venv .venv
+py -3.14 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r 02-技术研发\requirements.txt

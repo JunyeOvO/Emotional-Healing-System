@@ -1,4 +1,4 @@
-# MCP 开发桥接 — Claude Code 操控 TD / Unity
+﻿# MCP 开发桥接 — Claude Code 操控 TD / Unity
 
 > AI 通过 MCP 协议直接操控 TouchDesigner 和 Unity 编辑器，替代手动搭建节点和场景。
 > MCP 是**开发时工具**（搭建工程），UDP JSON 是**运行时通信**（Polar H10 → TD/Unity）。两者互补，不替代。
@@ -42,7 +42,7 @@
 |------|------|----------|:----:|
 | TouchDesigner | D:\TouchDesigner\bin\TouchDesigner.exe | 8beeeaaat/touchdesigner-mcp v1.4.7 | ✅ 已打开，WebServer `9981` |
 | Unity | 6000.4.9f1 @ D:\UnityEngine\6000.4.9f1 | CoplayDev/unity-mcp v9.7.x | ✅ 已打开，MCP HTTP `8083` |
-| Python | 3.11+ (~/.hermes-venv) | MCP CLI 客户端 | ✅ |
+| Python | 3.14 (~/.hermes-venv) | MCP CLI 客户端 | ✅ |
 | Node.js | ~/.hermes/node/ | npx 运行 MCP server | ✅ |
 
 ## 2026-06-22 当前实况

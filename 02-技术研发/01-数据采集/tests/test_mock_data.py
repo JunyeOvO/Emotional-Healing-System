@@ -11,7 +11,7 @@ class TestMockConfig:
     def test_defaults(self):
         cfg = mock.MockConfig()
         assert cfg.breath_rate_hz == 0.2
-        assert cfg.hr_bpm == 72.0
+        assert cfg.hr_bpm == 80.0
         assert cfg.frame_rate == 10.0
 
     def test_custom_weather(self):
@@ -62,7 +62,7 @@ class TestWeatherBreathingConfig:
         assert cfg.inhale_duration == 3.0
         assert cfg.exhale_duration == 6.0
         assert cfg.hold_duration == 0.0
-        assert cfg.hr_bpm == 80.0
+        assert cfg.hr_bpm == 82.5
 
     def test_for_weather_unknown_falls_back(self):
         cfg = mock.MockConfig.for_weather("nonexistent")
