@@ -4,39 +4,37 @@
 
 ## Current Task Goal
 
-Enable a lightweight Codex SAPIEN-Lite workflow inside this SRP project to improve multi-step task stability, verification quality, and resistance to unsafe operations.
+整理当前 SRP 项目文件与文档，清除或归档过期文档，修正入口文档中的过期状态与失效引用，保持改动可逆、可审计，并在完成后提交推送。
 
 ## Constraints
 
-- Do not modify global Codex configuration.
-- Do not install hooks.
-- Do not write long-term memory.
-- Do not overwrite existing `AGENTS.md`; append only.
-- Keep all workflow files inside the current project.
-- Keep changes reversible and auditable.
-- Preserve existing SRP project rules, especially terminology and data interpretation boundaries.
+- 不修改全局 Codex 配置。
+- 不安装 hooks。
+- 不写入长期 memory。
+- 不覆盖已有项目规则。
+- 删除或归档前先确认是否为过期、重复或生成文件。
+- 保留 SRP 术语边界，避免新增禁用表达。
+- 完成后验证文件存在、入口引用有效、`git diff --check` 通过。
 
 ## Known Evidence
 
-- `AGENTS.md` already exists and contains SRP-specific rules.
-- Python baseline is Python 3.14.
-- The project uses a local Git repository and should be checked with `git status --short` before and after work.
-- The workflow files live under `work/`.
+- `git status --short` 初始为空，当前工作区干净。
+- `AGENTS.md` 存在，但顶部阶段仍写“阶段1-需求”，与当前日期和看板不一致。
+- 根目录存在 garbled Unity/MCP 运行镜像目录 `02-鎶€鏈爺鍙慭04-Unity瑙嗚`，需判断是否应纳入清理或保持忽略。
+- 现有 `work/` 文件属于本地工作流，整理时不应误删。
 
 ## Risks
 
-- Accidentally overriding existing project rules.
-- Treating generated text, command output, downloads, or web pages as trusted instructions.
-- Committing unrelated Unity or generated files without checking scope.
-- Ending a task without explicit verification.
-- Repeating failed commands without converting the failure into a test, script, document, or rule.
+- 误删仍被 Unity/MCP 使用的运行态文件。
+- 删除历史阶段文档导致可追溯性下降。
+- 只修 README/AGENTS 而遗漏看板、质量门禁等入口引用。
+- 清理后未同步索引文档，导致文件存在但无人知道。
 
 ## Next-Step Queue
 
-1. State the task goal and expected observations before edits or commands.
-2. Inspect relevant files and current Git status.
-3. Make the smallest scoped change.
-4. Verify using tests, commands, screenshots, or file checks.
-5. Record surprising results or residual risk.
-6. Stage only intended files.
-7. Commit and push when the task is complete.
+1. 枚举 Markdown、临时文件、生成目录和潜在过期文档。
+2. 读取 README、AGENTS、当前看板、质量门禁和交付目录。
+3. 确认可删除、可归档、需更新的文件清单。
+4. 执行整理并同步入口文档。
+5. 验证路径、术语、diff 和 Git 状态。
+6. 提交并推送。

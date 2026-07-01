@@ -1,6 +1,6 @@
 """UDP->TD Bridge v1.1: receives UDP JSON on port 5005, forwards to TD via HTTP API.
 
-4-dimension scoring model. See scoring_model.py and UDP协议定义.md.
+4-dimension scoring model. See scoring_model.py and UDP字段冻结_v1.2.md.
 """
 
 import socket

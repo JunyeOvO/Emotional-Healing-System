@@ -16,6 +16,16 @@
 
 ## Entries
 
+### 2026-07-01 Project File and Document Cleanup
+
+| Field | Notes |
+|---|---|
+| Expected Observation | Outdated entry docs are updated, ignored temporary artifacts are removed, authoritative protocol references point to `UDP字段冻结_v1.2.md`, and Python tests still pass. |
+| Actual Result | Updated AGENTS, CLAUDE, README, current board, development plan, UDP docs, TD bridge comment, cleanup record, data README, and blackboard. Removed caches, old zip backups, mock CSV, duplicate reference zip, and garbled Unity/MCP runtime mirror. Python 3.14.4 tests passed: 42 passed. |
+| Deviation / Surprise | The previous `.hermes-venv` interpreter no longer exists; `py -3.14` is the current valid Python entry. |
+| Verification Command | `py -3.14 -m pytest '02-技术研发/01-数据采集/tests' '02-技术研发/02-信号处理/tests' '02-技术研发/05-通信协议/tests' '02-技术研发/tests' -q`; `rg` consistency scans; `git diff --check`; targeted `Test-Path` checks for removed artifacts. |
+| Residual Risk | Unity generated cache directories remain intentionally preserved to avoid slow reimport; stage 6/7 evidence materials still need to be populated under `04-成果与交付/`. |
+
 ### 2026-06-24 Enable SAPIEN-Lite Workflow
 
 | Field | Notes |

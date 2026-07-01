@@ -53,6 +53,7 @@ pip install -r 02-技术研发/requirements.txt
    ```
    python visualizer.py
    ```
+   该步骤是可选监控面板；最小闭环验收以 `README_run.md` 和 UDP/CSV 输出为准。
 
 3. **打开 TouchDesigner 工程**
    - 打开 `02-技术研发/03-TouchDesigner/呼吸引导.toe`
@@ -109,6 +110,7 @@ pip install -r 02-技术研发/requirements.txt
 | V0.2 | 2026/5/25 | 阶段1完成：需求文档、天气方案、系统框架 |
 | V0.3 | 2026/5/27 | 阶段2 SE侧完成：数据管道、4天气评分配置、全链路压测(600帧/0错误)、29/29测试通过 |
 | V1.2 | 2026/6/22 | 同步 UDP v1.2、Unity 多场景工程、项目清理与 Git 发布状态 |
+| V1.3 | 2026/7/1 | 项目文件与文档整理：修正入口状态、清理临时生成物、同步权威协议入口 |
 
 ---
 
