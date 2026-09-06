@@ -72,19 +72,26 @@ def verify(root: Path = ROOT) -> list[str]:
         "contract_validation": "PASS",
     }:
         errors.append("PROBABILITY_REPORT")
-    expected_strata = [
-        {
-            "stage": "stage_1",
-            "stratum": stratum,
-            "assigned_count": 96,
-            "complete_count": 76,
-            "incomplete_count": 20,
-            "arm_counts": {"abstract_pacer": 48, "scene_native": 48},
-            "balanced_by_assignment": True,
-            "reason_code": "BALANCED_BY_ASSIGNMENT",
-        }
-        for stratum in ("synthetic_stratum_a", "synthetic_stratum_b")
-    ]
+    stage_1_by_stratum: dict[str, list[object]] = {}
+    for record in plans["stage_1"].records:
+        stage_1_by_stratum.setdefault(record.stratum, []).append(record)
+    expected_strata = []
+    for stratum, records in sorted(stage_1_by_stratum.items()):
+        assigned_count = len(records)
+        incomplete_count = sum(1 for index in range(assigned_count) if index % 5 == 0)
+        arm_counts = dict(Counter(record.arm for record in records))
+        expected_strata.append(
+            {
+                "stage": "stage_1",
+                "stratum": stratum,
+                "assigned_count": assigned_count,
+                "complete_count": assigned_count - incomplete_count,
+                "incomplete_count": incomplete_count,
+                "arm_counts": arm_counts,
+                "balanced_by_assignment": len(set(arm_counts.values())) == 1,
+                "reason_code": "BALANCED_BY_ASSIGNMENT",
+            }
+        )
     balance = _read(root / "evidence/balance_report_v1.json")
     if balance != {
         "evidence_status": "SYNTHETIC_ONLY",

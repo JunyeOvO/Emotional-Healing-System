@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import hashlib
 import json
 import shutil
 import sys
@@ -38,3 +39,25 @@ def test_verifier_rejects_probability_and_empty_balance_false_pass(tmp_path) -> 
     assert "PROBABILITY_REPORT" in errors
     assert "BALANCE_REPORT" in errors
     assert "SUMMARY_REPORT" in errors
+
+
+def test_verifier_binds_balance_strata_to_the_actual_list(tmp_path) -> None:
+    copied = tmp_path / "x01"
+    shutil.copytree(ROOT, copied)
+    list_path = copied / "fixtures/synthetic/stage_1_list_v1.json"
+    plan = json.loads(list_path.read_text(encoding="utf-8"))
+    for record in plan["records"]:
+        record["stratum"] = f"renamed_{record['stratum']}"
+    unsigned = {key: value for key, value in plan.items() if key != "list_hash"}
+    encoded = json.dumps(
+        unsigned, ensure_ascii=True, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    plan["list_hash"] = f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    list_path.write_text(json.dumps(plan), encoding="utf-8")
+
+    summary_path = copied / "evidence/x01_validation_report_v1.json"
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["stage_1"]["list_hash"] = plan["list_hash"]
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+    assert "BALANCE_REPORT" in verify(copied)
