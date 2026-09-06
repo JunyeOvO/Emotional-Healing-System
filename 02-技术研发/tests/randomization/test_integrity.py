@@ -14,6 +14,7 @@ from srp_randomization import (
     GateEvidence,
     RandomizationError,
     RandomizationStore,
+    SnapshotGateEvidenceVerifier,
     gate_evidence_from_dedup,
     generate_list,
     load_plan,
@@ -40,7 +41,7 @@ def test_sealed_file_round_trip_and_tamper_detection(tmp_path) -> None:
     payload = json.loads(path.read_text(encoding="utf-8"))
     payload["records"][0]["arm"] = "tampered"
     path.write_text(json.dumps(payload), encoding="utf-8")
-    with pytest.raises(RandomizationError, match="LIST_HASH_MISMATCH"):
+    with pytest.raises(RandomizationError, match="LIST_FILE_INVALID"):
         load_plan(path)
 
 
@@ -59,7 +60,10 @@ def test_recomputed_hash_cannot_hide_invalid_arm_probability() -> None:
 
 
 def test_two_concurrent_requests_receive_distinct_rows(tmp_path) -> None:
-    store = RandomizationStore(tmp_path / "concurrent.sqlite")
+    store = RandomizationStore(
+        tmp_path / "concurrent.sqlite",
+        evidence_verifier=SnapshotGateEvidenceVerifier(),
+    )
     store.import_list(
         generate_list("stage_1", ("all",), 1, b"concurrent-seed-01"),
         actor_role="custodian",
@@ -80,7 +84,7 @@ def test_two_concurrent_requests_receive_distinct_rows(tmp_path) -> None:
 
 def test_audit_tail_deletion_is_detected(tmp_path) -> None:
     database = tmp_path / "audit.sqlite"
-    store = RandomizationStore(database)
+    store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
     store.import_list(
         generate_list("stage_1", ("all",), 1, b"audit-chain-seed-01"),
         actor_role="custodian",
@@ -94,13 +98,28 @@ def test_audit_tail_deletion_is_detected(tmp_path) -> None:
 
 def test_stored_list_tamper_blocks_reveal(tmp_path) -> None:
     database = tmp_path / "tampered.sqlite"
-    store = RandomizationStore(database)
+    store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
     plan = generate_list("stage_1", ("all",), 1, b"stored-tamper-seed-01")
     store.import_list(plan, actor_role="custodian")
     with sqlite3.connect(database) as connection:
         connection.execute(
             "UPDATE allocation_records SET arm = 'tampered' WHERE allocation_index = 1"
         )
+
+
+def test_idempotent_replay_rechecks_the_stored_list(tmp_path) -> None:
+    database = tmp_path / "idempotent-tamper.sqlite"
+    store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
+    plan = generate_list("stage_1", ("all",), 1, b"idempotent-tamper-seed-01")
+    store.import_list(plan, actor_role="custodian")
+    request = AllocationRequest("REQ-T", "stage_1", "all", "RES-T", "1.0")
+    store.allocate_and_reveal(request, _evidence("RES-T"), actor_role="allocator")
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "UPDATE allocation_records SET arm = 'tampered' WHERE allocation_index = 2"
+        )
+    with pytest.raises(RandomizationError, match="LIST_HASH_MISMATCH"):
+        store.allocate_and_reveal(request, _evidence("RES-T"), actor_role="allocator")
     with pytest.raises(RandomizationError, match="LIST_HASH_MISMATCH"):
         store.allocate_and_reveal(
             AllocationRequest("REQ-T", "stage_1", "all", "RES-T", "1.0"),
@@ -109,6 +128,57 @@ def test_stored_list_tamper_blocks_reveal(tmp_path) -> None:
         )
 
 
+def test_unknown_fields_are_rejected_before_plan_reconstruction(tmp_path) -> None:
+    plan = generate_list("stage_1", ("all",), 1, b"unknown-field-seed-01")
+    path = tmp_path / "list.json"
+    payload = plan.to_dict()
+    payload["email"] = "must-not-be-ignored@example.invalid"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(RandomizationError, match="LIST_FILE_INVALID"):
+        load_plan(path)
+
+    payload = plan.to_dict()
+    payload["records"][0]["subject_token"] = "must-not-be-ignored"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(RandomizationError, match="LIST_FILE_INVALID"):
+        load_plan(path)
+
+
+def test_assignment_state_tamper_and_internal_audit_tamper_block_reveal(tmp_path) -> None:
+    database = tmp_path / "state-audit.sqlite"
+    store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
+    store.import_list(
+        generate_list("stage_1", ("all",), 1, b"state-audit-seed-01"),
+        actor_role="custodian",
+    )
+    first_request = AllocationRequest("REQ-1", "stage_1", "all", "RES-1", "1.0")
+    store.allocate_and_reveal(first_request, _evidence("RES-1"), actor_role="allocator")
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "UPDATE allocation_records SET request_id=NULL, reservation_id=NULL, "
+            "permit_id=NULL, assigned_at_utc=NULL WHERE allocation_index=1"
+        )
+    with pytest.raises(RandomizationError, match="ALLOCATION_AUDIT_MISMATCH"):
+        store.allocate_and_reveal(
+            AllocationRequest("REQ-2", "stage_1", "all", "RES-2", "1.0"),
+            _evidence("RES-2"),
+            actor_role="allocator",
+        )
+
+    database2 = tmp_path / "internal-audit.sqlite"
+    store2 = RandomizationStore(database2, evidence_verifier=SnapshotGateEvidenceVerifier())
+    store2.import_list(
+        generate_list("stage_1", ("all",), 1, b"internal-audit-seed-01"),
+        actor_role="custodian",
+    )
+    with sqlite3.connect(database2) as connection:
+        connection.execute("UPDATE audit_events SET reason_code='TAMPERED' WHERE sequence=1")
+    with pytest.raises(RandomizationError, match="AUDIT_CHAIN_INVALID"):
+        store2.allocate_and_reveal(
+            AllocationRequest("REQ-3", "stage_1", "all", "RES-3", "1.0"),
+            _evidence("RES-3"),
+            actor_role="allocator",
+        )
 def test_g02_adapter_exports_only_opaque_receipt_fields() -> None:
     evidence = gate_evidence_from_dedup(
         SimpleNamespace(

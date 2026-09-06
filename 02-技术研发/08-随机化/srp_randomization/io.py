@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import jsonschema
+
 from .errors import RandomizationError
 from .generator import verify_plan
 from .models import AllocationRecord, RandomizationPlan
@@ -23,6 +25,12 @@ def write_plan(plan: RandomizationPlan, path: Path) -> None:
 def load_plan(path: Path) -> RandomizationPlan:
     try:
         payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        schema_path = (
+            Path(__file__).resolve().parents[1]
+            / "contracts/randomization-list-v1.schema.json"
+        )
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        jsonschema.Draft202012Validator(schema).validate(payload)
         records = tuple(
             AllocationRecord(
                 allocation_index=item["allocation_index"],
@@ -48,7 +56,13 @@ def load_plan(path: Path) -> RandomizationPlan:
             records=records,
             list_hash=payload["list_hash"],
         )
-    except (OSError, json.JSONDecodeError, KeyError, TypeError) as error:
+    except (
+        OSError,
+        json.JSONDecodeError,
+        jsonschema.ValidationError,
+        KeyError,
+        TypeError,
+    ) as error:
         raise RandomizationError("LIST_FILE_INVALID") from error
     verify_plan(plan)
     return plan

@@ -1,4 +1,9 @@
 from .errors import RandomizationError
+from .adapters import (
+    CurrentGateEvidenceVerifier,
+    SnapshotGateEvidenceVerifier,
+    gate_evidence_from_dedup,
+)
 from .gate import X01AssignmentGate
 from .generator import generate_list, policy_decisions, verify_plan
 from .io import load_plan, write_plan
@@ -19,10 +24,12 @@ __all__ = [
     "AllocationRequest",
     "AuditIntegrity",
     "BalanceAudit",
+    "CurrentGateEvidenceVerifier",
     "GateEvidence",
     "RandomizationError",
     "RandomizationPlan",
     "RandomizationStore",
+    "SnapshotGateEvidenceVerifier",
     "X01AssignmentGate",
     "generate_list",
     "gate_evidence_from_dedup",
@@ -31,4 +38,3 @@ __all__ = [
     "verify_plan",
     "write_plan",
 ]
-from .adapters import gate_evidence_from_dedup

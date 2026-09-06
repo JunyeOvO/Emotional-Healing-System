@@ -33,21 +33,25 @@ def _forbidden_keys(payload: object) -> set[str]:
     return found
 
 
-def verify() -> list[str]:
+def verify(root: Path = ROOT) -> list[str]:
     errors: list[str] = []
-    list_schema = _read(ROOT / "contracts/randomization-list-v1.schema.json")
+    list_schema = _read(root / "contracts/randomization-list-v1.schema.json")
+    raw_plans = {
+        stage: _read(root / f"fixtures/synthetic/{stage}_list_v1.json")
+        for stage in ("stage_1", "stage_3")
+    }
     plans = {
-        "stage_1": load_plan(ROOT / "fixtures/synthetic/stage_1_list_v1.json"),
-        "stage_3": load_plan(ROOT / "fixtures/synthetic/stage_3_list_v1.json"),
+        stage: load_plan(root / f"fixtures/synthetic/{stage}_list_v1.json")
+        for stage in raw_plans
     }
     for stage, plan in plans.items():
         try:
-            jsonschema.Draft202012Validator(list_schema).validate(plan.to_dict())
+            jsonschema.Draft202012Validator(list_schema).validate(raw_plans[stage])
         except jsonschema.ValidationError as error:
             errors.append(f"{stage}:SCHEMA:{error.json_path}")
         if plan.stage != stage or len(plan.records) != 192:
             errors.append(f"{stage}:SHAPE")
-        if _forbidden_keys(plan.to_dict()):
+        if _forbidden_keys(raw_plans[stage]):
             errors.append(f"{stage}:FORBIDDEN_KEYS")
 
     stage_1_counts = Counter(record.arm for record in plans["stage_1"].records)
@@ -57,20 +61,51 @@ def verify() -> list[str]:
     if stage_3_counts != {"frozen_policy": 96, "balanced_random": 96}:
         errors.append("stage_3:ARM_COUNTS")
 
-    probability = _read(ROOT / "evidence/probability_report_v1.json")
-    if probability.get("checked_sequences") != 24 or probability.get(
-        "contract_validation"
-    ) != "PASS":
+    probability = _read(root / "evidence/probability_report_v1.json")
+    expected_vector = [0.25, 1 / 3, 0.5, 1.0]
+    if probability != {
+        "evidence_status": "SYNTHETIC_ONLY",
+        "randomization_version": "1.0",
+        "checked_sequences": 24,
+        "unique_probability_vectors": [expected_vector],
+        "expected_probability_vector": expected_vector,
+        "contract_validation": "PASS",
+    }:
         errors.append("PROBABILITY_REPORT")
-    balance = _read(ROOT / "evidence/balance_report_v1.json")
-    if balance.get("balance_basis") != "assigned" or not all(
-        item.get("balanced_by_assignment") for item in balance.get("strata", [])
-    ):
+    expected_strata = [
+        {
+            "stage": "stage_1",
+            "stratum": stratum,
+            "assigned_count": 96,
+            "complete_count": 76,
+            "incomplete_count": 20,
+            "arm_counts": {"abstract_pacer": 48, "scene_native": 48},
+            "balanced_by_assignment": True,
+            "reason_code": "BALANCED_BY_ASSIGNMENT",
+        }
+        for stratum in ("synthetic_stratum_a", "synthetic_stratum_b")
+    ]
+    balance = _read(root / "evidence/balance_report_v1.json")
+    if balance != {
+        "evidence_status": "SYNTHETIC_ONLY",
+        "balance_basis": "assigned",
+        "strata": expected_strata,
+    }:
         errors.append("BALANCE_REPORT")
-    duplicate = _read(ROOT / "fixtures/synthetic/duplicate_audit_fixture_v1.json")
-    if not duplicate.get("same_allocation") or not duplicate.get("audit", {}).get("valid"):
+    duplicate = _read(root / "fixtures/synthetic/duplicate_audit_fixture_v1.json")
+    if duplicate != {
+        "evidence_status": "SYNTHETIC_ONLY",
+        "same_allocation": True,
+        "allocation_index": 1,
+        "audit": {
+            "valid": True,
+            "checked_events": 3,
+            "reason_code": "AUDIT_CHAIN_VALID",
+        },
+        "expected_conflict_code_for_new_request_same_reservation": "RESERVATION_ALREADY_ALLOCATED",
+    }:
         errors.append("DUPLICATE_AUDIT")
-    summary = _read(ROOT / "evidence/x01_validation_report_v1.json")
+    summary = _read(root / "evidence/x01_validation_report_v1.json")
     for stage, plan in plans.items():
         if summary.get(stage, {}).get("list_hash") != plan.list_hash:
             errors.append(f"{stage}:SUMMARY_HASH")

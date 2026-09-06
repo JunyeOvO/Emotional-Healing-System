@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import json
+import sqlite3
 
 import pytest
 
 from srp_randomization import (
     AllocationRequest,
     GateEvidence,
+    CurrentGateEvidenceVerifier,
     RandomizationError,
     RandomizationStore,
+    SnapshotGateEvidenceVerifier,
     generate_list,
 )
 
@@ -33,7 +37,10 @@ def _request(index: int = 1, *, reservation_id: str = "RES-X01-1") -> Allocation
 
 
 def _store(tmp_path) -> RandomizationStore:
-    store = RandomizationStore(tmp_path / "x01.sqlite", formal_capable=True)
+    store = RandomizationStore(
+        tmp_path / "x01.sqlite",
+        evidence_verifier=SnapshotGateEvidenceVerifier(),
+    )
     store.import_list(
         generate_list("stage_1", ("all",), 1, b"store-test-seed-01"),
         actor_role="custodian",
@@ -73,6 +80,14 @@ def test_reveal_requires_allocator_role_and_all_three_prechecks(tmp_path) -> Non
     assert receipt.weather_sequence is not None
     assert receipt.arm_behavior_probability == 0.5
     assert len(receipt.policy_decisions("S-X01-0001", 100)) == 4
+    with sqlite3.connect(store.database_path) as connection:
+        refs = json.loads(
+            connection.execute(
+                "SELECT evidence_refs_json FROM audit_events "
+                "WHERE event_type='ASSIGNMENT_REVEALED'"
+            ).fetchone()[0]
+        )
+    assert refs == {item.gate: item.evidence_id for item in evidence}
 
 
 def test_same_request_is_idempotent_but_reservation_cannot_receive_twice(tmp_path) -> None:
@@ -91,6 +106,57 @@ def test_same_request_is_idempotent_but_reservation_cannot_receive_twice(tmp_pat
         store.allocate_and_reveal(
             replace(request, request_id="REQ-X01-DIFFERENT"),
             evidence,
+            actor_role="allocator",
+        )
+
+
+@pytest.mark.parametrize("field", ["stage", "stratum", "expected_randomization_version"])
+def test_idempotent_replay_requires_the_complete_original_request(tmp_path, field) -> None:
+    store = _store(tmp_path)
+    request = _request()
+    evidence = tuple(
+        _evidence(gate, request.reservation_id)
+        for gate in ("eligibility", "device_readiness", "dedup_reservation")
+    )
+    store.allocate_and_reveal(request, evidence, actor_role="allocator")
+    replacements = {
+        "stage": "stage_3",
+        "stratum": "other",
+        "expected_randomization_version": "9.9",
+    }
+    with pytest.raises(RandomizationError, match="REQUEST_ID_CONFLICT"):
+        store.allocate_and_reveal(
+            replace(request, **{field: replacements[field]}),
+            evidence,
+            actor_role="allocator",
+        )
+
+
+def test_new_reveal_requires_current_gate_state_and_strict_boolean(tmp_path) -> None:
+    current = {gate: True for gate in ("eligibility", "device_readiness", "dedup_reservation")}
+    verifier = CurrentGateEvidenceVerifier(
+        {gate: (lambda _request, _evidence, gate=gate: current[gate]) for gate in current},
+        formal_capable=True,
+    )
+    store = RandomizationStore(
+        tmp_path / "x01.sqlite", evidence_verifier=verifier, formal_capable=True
+    )
+    store.import_list(
+        generate_list("stage_1", ("all",), 1, b"current-gate-seed-01"),
+        actor_role="custodian",
+    )
+    request = _request()
+    evidence = tuple(
+        _evidence(gate, request.reservation_id)
+        for gate in ("eligibility", "device_readiness", "dedup_reservation")
+    )
+    current["dedup_reservation"] = False
+    with pytest.raises(RandomizationError, match="GATE_NO_LONGER_VALID"):
+        store.allocate_and_reveal(request, evidence, actor_role="allocator")
+    with pytest.raises(RandomizationError, match="GATE_REJECTED"):
+        store.allocate_and_reveal(
+            request,
+            (*evidence[:2], replace(evidence[2], passed="false")),  # type: ignore[arg-type]
             actor_role="allocator",
         )
 

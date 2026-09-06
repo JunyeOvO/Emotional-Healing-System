@@ -19,6 +19,7 @@ from srp_randomization import (  # noqa: E402
     AllocationRequest,
     GateEvidence,
     RandomizationStore,
+    SnapshotGateEvidenceVerifier,
     generate_list,
     policy_decisions,
 )
@@ -71,7 +72,10 @@ def main() -> int:
     _write(ROOT / "evidence/probability_report_v1.json", probability_report)
 
     with TemporaryDirectory(prefix="srp-x01-") as temporary:
-        store = RandomizationStore(Path(temporary) / "x01.sqlite")
+        store = RandomizationStore(
+            Path(temporary) / "x01.sqlite",
+            evidence_verifier=SnapshotGateEvidenceVerifier(),
+        )
         store.import_list(stage_1, actor_role="custodian")
         for stratum in STRATA:
             for index in range(96):
@@ -105,7 +109,10 @@ def main() -> int:
         )
 
     with TemporaryDirectory(prefix="srp-x01-duplicate-") as temporary:
-        store = RandomizationStore(Path(temporary) / "x01.sqlite")
+        store = RandomizationStore(
+            Path(temporary) / "x01.sqlite",
+            evidence_verifier=SnapshotGateEvidenceVerifier(),
+        )
         one_block = generate_list("stage_1", ("synthetic",), 1, b"x01-duplicate-fixture-seed")
         store.import_list(one_block, actor_role="custodian")
         request = AllocationRequest("REQ-DUP", "stage_1", "synthetic", "RES-DUP", "1.0")

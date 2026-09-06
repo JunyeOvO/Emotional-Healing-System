@@ -6,7 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import sqlite3
-from typing import Iterable
+from typing import Any, Iterable
 
 from .errors import RandomizationError
 from .generator import verify_plan
@@ -21,7 +21,7 @@ from .models import (
 )
 
 
-_REQUIRED_GATES = {"eligibility", "device_readiness", "dedup_reservation"}
+_REQUIRED_GATES = ("eligibility", "device_readiness", "dedup_reservation")
 _OUTCOMES = {"COMPLETE", "INCOMPLETE", "ABORTED"}
 
 
@@ -48,11 +48,15 @@ class RandomizationStore:
         self,
         database_path: Path,
         *,
+        evidence_verifier: object | None = None,
         formal_capable: bool = False,
         timeout_seconds: float = 10.0,
     ) -> None:
         self.database_path = Path(database_path)
-        self.formal_capable = formal_capable
+        self.evidence_verifier = evidence_verifier
+        self.formal_capable = bool(
+            formal_capable and getattr(evidence_verifier, "formal_capable", False)
+        )
         self.timeout_seconds = timeout_seconds
 
     @staticmethod
@@ -98,12 +102,15 @@ class RandomizationStore:
                 PRIMARY KEY(list_hash, allocation_index),
                 UNIQUE(list_hash, request_id)
             );
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_allocation_request_id
+                ON allocation_records(request_id) WHERE request_id IS NOT NULL;
             CREATE TABLE IF NOT EXISTS audit_events (
                 sequence INTEGER PRIMARY KEY AUTOINCREMENT,
                 event_type TEXT NOT NULL,
                 object_id TEXT NOT NULL,
                 result TEXT NOT NULL,
                 reason_code TEXT NOT NULL,
+                evidence_refs_json TEXT NOT NULL DEFAULT '{}',
                 previous_hash TEXT NOT NULL,
                 current_hash TEXT NOT NULL UNIQUE
             );
@@ -125,6 +132,7 @@ class RandomizationStore:
         object_id: str,
         result: str,
         reason_code: str,
+        evidence_refs: dict[str, str] | None = None,
     ) -> str:
         previous = connection.execute(
             "SELECT current_hash FROM audit_events ORDER BY sequence DESC LIMIT 1"
@@ -141,22 +149,123 @@ class RandomizationStore:
             "object_id": object_id,
             "result": result,
             "reason_code": reason_code,
+            "evidence_refs": evidence_refs or {},
             "previous_hash": previous_hash,
         }
         current_hash = _event_hash(payload)
         connection.execute(
             """
             INSERT INTO audit_events(
-                event_type, object_id, result, reason_code, previous_hash, current_hash
-            ) VALUES (?, ?, ?, ?, ?, ?)
+                event_type, object_id, result, reason_code, evidence_refs_json,
+                previous_hash, current_hash
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (*payload.values(), current_hash),
+            (
+                event_type,
+                object_id,
+                result,
+                reason_code,
+                json.dumps(evidence_refs or {}, sort_keys=True, separators=(",", ":")),
+                previous_hash,
+                current_hash,
+            ),
         )
         connection.execute(
             "UPDATE audit_anchor SET event_count = ?, tail_hash = ? WHERE id = 1",
             (event_count + 1, current_hash),
         )
         return current_hash
+
+    @staticmethod
+    def _audit_integrity(connection: sqlite3.Connection) -> AuditIntegrity:
+        rows = connection.execute("SELECT * FROM audit_events ORDER BY sequence").fetchall()
+        anchor = connection.execute(
+            "SELECT event_count, tail_hash FROM audit_anchor WHERE id = 1"
+        ).fetchone()
+        previous = "GENESIS"
+        for row in rows:
+            try:
+                evidence_refs = json.loads(row["evidence_refs_json"])
+            except (json.JSONDecodeError, TypeError):
+                return AuditIntegrity(False, row["sequence"] - 1, "AUDIT_CHAIN_INVALID")
+            payload: dict[str, object] = {
+                "event_type": row["event_type"],
+                "object_id": row["object_id"],
+                "result": row["result"],
+                "reason_code": row["reason_code"],
+                "evidence_refs": evidence_refs,
+                "previous_hash": previous,
+            }
+            if row["previous_hash"] != previous or row["current_hash"] != _event_hash(payload):
+                return AuditIntegrity(False, row["sequence"] - 1, "AUDIT_CHAIN_INVALID")
+            previous = row["current_hash"]
+        if anchor["event_count"] != len(rows) or anchor["tail_hash"] != previous:
+            return AuditIntegrity(False, len(rows), "AUDIT_ANCHOR_MISMATCH")
+        return AuditIntegrity(True, len(rows), "AUDIT_CHAIN_VALID")
+
+    @staticmethod
+    def _verify_assignment_audit(connection: sqlite3.Connection) -> None:
+        rows = connection.execute("SELECT * FROM allocation_records").fetchall()
+        events = connection.execute("SELECT * FROM audit_events ORDER BY sequence").fetchall()
+        reveals: dict[str, list[sqlite3.Row]] = {}
+        outcomes: dict[str, list[sqlite3.Row]] = {}
+        for event in events:
+            if event["event_type"] == "ASSIGNMENT_REVEALED":
+                reveals.setdefault(event["object_id"], []).append(event)
+            elif event["event_type"] == "OUTCOME_RECORDED":
+                outcomes.setdefault(event["object_id"], []).append(event)
+
+        expected_permits: set[str] = set()
+        expected_outcomes: set[str] = set()
+        for row in rows:
+            mutable = (
+                row["request_id"],
+                row["reservation_id"],
+                row["permit_id"],
+                row["assigned_at_utc"],
+            )
+            if any(value is not None for value in mutable) and not all(
+                value is not None for value in mutable
+            ):
+                raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+            if row["request_id"] is None:
+                if row["outcome"] is not None:
+                    raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+                continue
+            permit = _opaque(
+                "PERMIT", row["list_hash"], row["allocation_index"], row["request_id"]
+            )
+            if row["permit_id"] != permit or len(reveals.get(permit, ())) != 1:
+                raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+            reveal = reveals[permit][0]
+            try:
+                refs = json.loads(reveal["evidence_refs_json"])
+            except (json.JSONDecodeError, TypeError) as error:
+                raise RandomizationError("ALLOCATION_AUDIT_MISMATCH") from error
+            if set(refs) != set(_REQUIRED_GATES) or not all(
+                isinstance(value, str) and value for value in refs.values()
+            ):
+                raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+            expected_permits.add(permit)
+
+            outcome_id = _opaque("ALLOC", row["list_hash"], row["allocation_index"])
+            outcome_events = outcomes.get(outcome_id, ())
+            if row["outcome"] is None:
+                if outcome_events:
+                    raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+            elif len(outcome_events) != 1 or outcome_events[0]["reason_code"] != row["outcome"]:
+                raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+            else:
+                expected_outcomes.add(outcome_id)
+        if set(reveals) != expected_permits or set(outcomes) != expected_outcomes:
+            raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
+
+    @classmethod
+    def _verify_runtime_integrity(cls, connection: sqlite3.Connection) -> None:
+        report = cls._audit_integrity(connection)
+        if not report.valid:
+            raise RandomizationError(report.reason_code)
+        cls._verify_assignment_audit(connection)
 
     @staticmethod
     def _verify_stored_list(connection: sqlite3.Connection, list_hash: str) -> None:
@@ -257,28 +366,29 @@ class RandomizationStore:
                 return event_hash
         except sqlite3.IntegrityError as error:
             raise RandomizationError("LIST_ALREADY_IMPORTED") from error
-        except sqlite3.Error as error:
+        except (OSError, sqlite3.Error) as error:
             raise RandomizationError("STORE_UNAVAILABLE") from error
 
     @staticmethod
     def _validate_evidence(
         request: AllocationRequest, evidence: Iterable[GateEvidence]
-    ) -> None:
+    ) -> tuple[GateEvidence, ...]:
         evidence_tuple = tuple(evidence)
         by_gate = {item.gate: item for item in evidence_tuple}
         if len(by_gate) != len(evidence_tuple):
             raise RandomizationError("GATE_EVIDENCE_DUPLICATED")
-        missing = _REQUIRED_GATES - set(by_gate)
+        missing = set(_REQUIRED_GATES) - set(by_gate)
         if missing:
             raise RandomizationError("REQUIRED_GATE_MISSING")
         for gate in _REQUIRED_GATES:
             item = by_gate[gate]
-            if not item.passed:
+            if item.passed is not True:
                 raise RandomizationError("GATE_REJECTED", gate)
             if item.reservation_id != request.reservation_id:
                 raise RandomizationError("GATE_RESERVATION_MISMATCH", gate)
             if not item.evidence_id:
                 raise RandomizationError("GATE_EVIDENCE_MISSING", gate)
+        return tuple(by_gate[gate] for gate in _REQUIRED_GATES)
 
     @staticmethod
     def _receipt(row: sqlite3.Row) -> AllocationReceipt:
@@ -316,10 +426,11 @@ class RandomizationStore:
             or not request.expected_randomization_version
         ):
             raise RandomizationError("ALLOCATION_REQUEST_INVALID")
-        self._validate_evidence(request, evidence)
+        evidence_tuple = self._validate_evidence(request, evidence)
         try:
             with closing(self._connect()) as connection:
                 connection.execute("BEGIN IMMEDIATE")
+                self._verify_runtime_integrity(connection)
                 existing = connection.execute(
                     """
                     SELECT r.*, l.randomization_version
@@ -330,7 +441,14 @@ class RandomizationStore:
                     (request.request_id,),
                 ).fetchone()
                 if existing is not None:
-                    if existing["reservation_id"] != request.reservation_id:
+                    self._verify_stored_list(connection, existing["list_hash"])
+                    if (
+                        existing["reservation_id"] != request.reservation_id
+                        or existing["stage"] != request.stage
+                        or existing["stratum"] != request.stratum
+                        or existing["randomization_version"]
+                        != request.expected_randomization_version
+                    ):
                         raise RandomizationError("REQUEST_ID_CONFLICT")
                     self._append_event(
                         connection,
@@ -357,6 +475,12 @@ class RandomizationStore:
                 if list_row is None:
                     raise RandomizationError("RANDOMIZATION_VERSION_UNAVAILABLE")
                 self._verify_stored_list(connection, list_row["list_hash"])
+                if self.evidence_verifier is None:
+                    raise RandomizationError("GATE_VERIFIER_UNAVAILABLE")
+                try:
+                    self.evidence_verifier.verify_current(request, evidence_tuple)
+                except AttributeError as error:
+                    raise RandomizationError("GATE_VERIFIER_INVALID") from error
                 row = connection.execute(
                     """
                     SELECT r.*, l.randomization_version
@@ -394,6 +518,7 @@ class RandomizationStore:
                     permit_id,
                     "PASS",
                     "ALL_GATES_PASS",
+                    {item.gate: item.evidence_id for item in evidence_tuple},
                 )
                 assigned = connection.execute(
                     """
@@ -408,7 +533,7 @@ class RandomizationStore:
                 return self._receipt(assigned)
         except RandomizationError:
             raise
-        except sqlite3.Error as error:
+        except (OSError, sqlite3.Error) as error:
             raise RandomizationError("STORE_UNAVAILABLE") from error
 
     def record_outcome(
@@ -422,26 +547,45 @@ class RandomizationStore:
         self._authorize(actor_role, "auditor")
         if outcome not in _OUTCOMES:
             raise RandomizationError("OUTCOME_INVALID")
-        with closing(self._connect()) as connection:
-            connection.execute("BEGIN IMMEDIATE")
-            self._verify_stored_list(connection, list_hash)
-            updated = connection.execute(
-                """
-                UPDATE allocation_records SET outcome = ?
-                WHERE list_hash = ? AND allocation_index = ? AND request_id IS NOT NULL
-                """,
-                (outcome, list_hash, allocation_index),
-            ).rowcount
-            if updated != 1:
-                raise RandomizationError("ALLOCATION_NOT_FOUND")
-            self._append_event(
-                connection,
-                "OUTCOME_RECORDED",
-                _opaque("ALLOC", list_hash, allocation_index),
-                "PASS",
-                outcome,
-            )
-            connection.commit()
+        try:
+            with closing(self._connect()) as connection:
+                connection.execute("BEGIN IMMEDIATE")
+                self._verify_runtime_integrity(connection)
+                self._verify_stored_list(connection, list_hash)
+                current = connection.execute(
+                    "SELECT outcome FROM allocation_records WHERE list_hash=? AND allocation_index=? "
+                    "AND request_id IS NOT NULL",
+                    (list_hash, allocation_index),
+                ).fetchone()
+                if current is None:
+                    raise RandomizationError("ALLOCATION_NOT_FOUND")
+                if current["outcome"] == outcome:
+                    connection.rollback()
+                    return
+                if current["outcome"] is not None:
+                    raise RandomizationError("OUTCOME_CONFLICT")
+                updated = connection.execute(
+                    """
+                    UPDATE allocation_records SET outcome = ?
+                    WHERE list_hash = ? AND allocation_index = ? AND request_id IS NOT NULL
+                      AND outcome IS NULL
+                    """,
+                    (outcome, list_hash, allocation_index),
+                ).rowcount
+                if updated != 1:
+                    raise RandomizationError("ALLOCATION_NOT_FOUND")
+                self._append_event(
+                    connection,
+                    "OUTCOME_RECORDED",
+                    _opaque("ALLOC", list_hash, allocation_index),
+                    "PASS",
+                    outcome,
+                )
+                connection.commit()
+        except RandomizationError:
+            raise
+        except (OSError, sqlite3.Error) as error:
+            raise RandomizationError("STORE_UNAVAILABLE") from error
 
     def audit_balance(
         self, stage: str, stratum: str, *, actor_role: str
@@ -485,47 +629,38 @@ class RandomizationStore:
     def verify_audit_chain(self, *, actor_role: str) -> AuditIntegrity:
         self._authorize(actor_role, "auditor")
         with closing(self._connect()) as connection:
-            rows = connection.execute(
-                "SELECT * FROM audit_events ORDER BY sequence"
-            ).fetchall()
-            anchor = connection.execute(
-                "SELECT event_count, tail_hash FROM audit_anchor WHERE id = 1"
-            ).fetchone()
-        previous = "GENESIS"
-        for row in rows:
-            payload: dict[str, object] = {
-                "event_type": row["event_type"],
-                "object_id": row["object_id"],
-                "result": row["result"],
-                "reason_code": row["reason_code"],
-                "previous_hash": previous,
-            }
-            if row["previous_hash"] != previous or row["current_hash"] != _event_hash(payload):
-                return AuditIntegrity(False, row["sequence"] - 1, "AUDIT_CHAIN_INVALID")
-            previous = row["current_hash"]
-        if anchor["event_count"] != len(rows) or anchor["tail_hash"] != previous:
-            return AuditIntegrity(False, len(rows), "AUDIT_ANCHOR_MISMATCH")
-        return AuditIntegrity(True, len(rows), "AUDIT_CHAIN_VALID")
+            report = self._audit_integrity(connection)
+            if not report.valid:
+                return report
+            try:
+                self._verify_assignment_audit(connection)
+            except RandomizationError as error:
+                return AuditIntegrity(False, report.checked_events, error.code)
+            return report
 
     def validate_assignment(self, manifest: dict, assignment: object) -> str:
         list_hash = str(manifest["randomization_list_hash"])
         allocation_index = int(manifest["allocation_index"])
-        with closing(self._connect()) as connection:
-            try:
+        try:
+            with closing(self._connect()) as connection:
+                self._verify_runtime_integrity(connection)
                 self._verify_stored_list(connection, list_hash)
-            except RandomizationError as error:
-                if error.code == "LIST_NOT_FOUND":
-                    raise RandomizationError("ASSIGNMENT_LIST_HASH_MISMATCH") from error
-                raise
-            row = connection.execute(
-                """
-                SELECT r.*, l.randomization_version
-                FROM allocation_records r
-                JOIN randomization_lists l USING(list_hash)
-                WHERE r.list_hash = ? AND r.allocation_index = ? AND r.request_id IS NOT NULL
-                """,
-                (list_hash, allocation_index),
-            ).fetchone()
+                row = connection.execute(
+                    """
+                    SELECT r.*, l.randomization_version
+                    FROM allocation_records r
+                    JOIN randomization_lists l USING(list_hash)
+                    WHERE r.list_hash = ? AND r.allocation_index = ?
+                      AND r.request_id IS NOT NULL
+                    """,
+                    (list_hash, allocation_index),
+                ).fetchone()
+        except RandomizationError as error:
+            if error.code == "LIST_NOT_FOUND":
+                raise RandomizationError("ASSIGNMENT_LIST_HASH_MISMATCH") from error
+            raise
+        except (OSError, sqlite3.Error) as error:
+            raise RandomizationError("STORE_UNAVAILABLE") from error
         if row is None:
             raise RandomizationError("ASSIGNMENT_LIST_HASH_MISMATCH")
         expected = self._receipt(row)

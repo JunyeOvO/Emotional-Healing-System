@@ -22,12 +22,20 @@ def test_generated_lists_match_machine_schema() -> None:
 
 
 def test_allocation_receipt_matches_machine_schema(tmp_path) -> None:
-    from srp_randomization import AllocationRequest, GateEvidence, RandomizationStore
+    from srp_randomization import (
+        AllocationRequest,
+        GateEvidence,
+        RandomizationStore,
+        SnapshotGateEvidenceVerifier,
+    )
 
     schema = json.loads(
         (ROOT / "contracts/allocation-receipt-v1.schema.json").read_text(encoding="utf-8")
     )
-    store = RandomizationStore(tmp_path / "contract.sqlite")
+    store = RandomizationStore(
+        tmp_path / "contract.sqlite",
+        evidence_verifier=SnapshotGateEvidenceVerifier(),
+    )
     store.import_list(
         generate_list("stage_1", ("all",), 1, b"receipt-contract-seed"),
         actor_role="custodian",

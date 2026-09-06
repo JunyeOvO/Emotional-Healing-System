@@ -9,6 +9,7 @@ from srp_randomization import (
     GateEvidence,
     RandomizationError,
     RandomizationStore,
+    CurrentGateEvidenceVerifier,
     X01AssignmentGate,
     generate_list,
 )
@@ -17,7 +18,16 @@ from srp_session_core.errors import SessionCoreError
 
 
 def test_p01_gate_accepts_exact_revealed_assignment_and_rejects_drift(tmp_path) -> None:
-    store = RandomizationStore(tmp_path / "x01.sqlite", formal_capable=True)
+    verifier = CurrentGateEvidenceVerifier(
+        {
+            gate: (lambda _request, _evidence: True)
+            for gate in ("eligibility", "device_readiness", "dedup_reservation")
+        },
+        formal_capable=True,
+    )
+    store = RandomizationStore(
+        tmp_path / "x01.sqlite", evidence_verifier=verifier, formal_capable=True
+    )
     plan = generate_list("stage_1", ("all",), 1, b"gate-test-seed-01")
     store.import_list(plan, actor_role="custodian")
     request = AllocationRequest("REQ-1", "stage_1", "all", "RES-1", "1.0")
@@ -52,5 +62,25 @@ def test_p01_gate_accepts_exact_revealed_assignment_and_rejects_drift(tmp_path) 
         gate.check(
             {**manifest, "randomization_list_hash": "sha256:wrong"},
             replace(assignment, randomization_list_hash="sha256:wrong"),
+            "sha256:config",
+        )
+
+
+def test_p01_gate_converts_store_failures_to_session_core_error(tmp_path) -> None:
+    verifier = CurrentGateEvidenceVerifier(
+        {
+            gate: (lambda _request, _evidence: True)
+            for gate in ("eligibility", "device_readiness", "dedup_reservation")
+        }
+    )
+    database = tmp_path / "not-a-database"
+    database.mkdir()
+    store = RandomizationStore(database, evidence_verifier=verifier)
+    gate = X01AssignmentGate(store)
+    assignment = AssignmentBundle(1, "sha256:missing", ("storm", "heat", "snow", "fade"))
+    with pytest.raises(SessionCoreError, match="STORE_UNAVAILABLE"):
+        gate.check(
+            {"randomization_list_hash": "sha256:missing", "allocation_index": 1},
+            assignment,
             "sha256:config",
         )
