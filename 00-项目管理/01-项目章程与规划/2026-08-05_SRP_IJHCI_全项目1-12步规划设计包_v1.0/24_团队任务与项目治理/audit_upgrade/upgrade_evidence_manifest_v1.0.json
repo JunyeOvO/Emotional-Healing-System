@@ -18,7 +18,7 @@
       },
       {
         "reference": "governance:07_validate_task_packages.py",
-        "byte_sha256": "CA420C7CF442D96F3C2F6DCEBF99AA07E4AF91125AEB5EF0F32D57A125838660"
+        "byte_sha256": "218D95E08898B4D8E73A10C8DAB86AB874EBCF725DF39DA9EC72EBAD04E3E6FE"
       }
     ],
     "UP-03": [
@@ -40,7 +40,7 @@
     "UP-05": [
       {
         "reference": "audit:task_milestones_v1.0.json",
-        "byte_sha256": "FC2B11065C55C13548EC5610B82E40248186BE590E2E1BB0DA4A9FA2B94CD391"
+        "byte_sha256": "285173B311500DB71B94CF6BD6A901154EF5A0BE57253671748EF593EA0171F3"
       }
     ],
     "UP-06": [

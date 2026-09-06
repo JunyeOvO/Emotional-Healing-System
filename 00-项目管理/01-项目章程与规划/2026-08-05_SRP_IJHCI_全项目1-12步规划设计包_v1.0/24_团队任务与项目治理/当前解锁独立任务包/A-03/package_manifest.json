@@ -4,9 +4,9 @@
   "task_id": "A-03",
   "status": "READY",
   "registry_sha256": "C15FC3E72DBF8EDD667753347D41AD85DB124B14DAE23F1C1B6822F80345BB27",
-  "input_snapshot_id": "63824FC9089A20EB794F287ABE0071CBD00131570DE69D1CBEC9D0F46505E4CF",
+  "input_snapshot_id": "570E00EC295CE4ABDBB1C1EF2C19FDFB3FADD6CEF7B63BDAE2CCF0F929E64309",
   "previous_input_snapshot_id": "63824FC9089A20EB794F287ABE0071CBD00131570DE69D1CBEC9D0F46505E4CF",
-  "input_changed": false,
+  "input_changed": true,
   "candidate_identity": null,
   "source_files": [
     {
@@ -36,8 +36,8 @@
     {
       "source_path": "00-项目管理/01-项目章程与规划/2026-08-05_SRP_IJHCI_全项目1-12步规划设计包_v1.0/24_团队任务与项目治理/audit_upgrade/task_milestones_v1.0.json",
       "package_path": "inputs/05_task_milestones_v1.0.json",
-      "sha256": "FC2B11065C55C13548EC5610B82E40248186BE590E2E1BB0DA4A9FA2B94CD391",
-      "size_bytes": 840
+      "sha256": "285173B311500DB71B94CF6BD6A901154EF5A0BE57253671748EF593EA0171F3",
+      "size_bytes": 759
     },
     {
       "source_path": "02-技术研发/02-信号处理/评分模型设计.md",

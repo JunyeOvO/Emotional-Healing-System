@@ -17,6 +17,7 @@ PACKAGE_MAP = ROOT / "12_独立任务包文件映射_v1.0.json"
 PACKAGE_OUTPUT = ROOT / "当前解锁独立任务包"
 RELEASE_ROUTES = ROOT / "audit_upgrade" / "release_routes_v1.0.json"
 MILESTONE_CONTRACT = ROOT / "audit_upgrade" / "task_milestones_v1.0.json"
+MILESTONE_STATUS = ROOT / "audit_upgrade" / "task_milestone_status_v1.0.json"
 VALID_STATUSES = {
     "READY", "IN_PROGRESS", "IN_REVIEW", "DONE",
     "WAIT_DEP", "WAIT_DEP_EXTERNAL", "BLOCKED_EXTERNAL",
@@ -151,11 +152,13 @@ def main() -> int:
     known = set(ids)
     rows_by_id = {row["task_id"]: row for row in rows}
     milestone_contract = json.loads(MILESTONE_CONTRACT.read_text(encoding="utf-8"))
+    milestone_status = json.loads(MILESTONE_STATUS.read_text(encoding="utf-8"))
     milestones = milestone_contract.get("milestones", [])
     milestone_ids = {str(item.get("id", "")) for item in milestones}
+    milestone_statuses = milestone_status.get("statuses", {})
     known_nodes = known | milestone_ids
     node_status = {task_id: row["status"] for task_id, row in rows_by_id.items()}
-    node_status.update({str(item.get("id", "")): str(item.get("status", "")) for item in milestones})
+    node_status.update({str(key): str(value) for key, value in milestone_statuses.items()})
     node_wave = {task_id: row["wave"] for task_id, row in rows_by_id.items()}
     node_wave.update({milestone_id: rows_by_id["A-03"]["wave"] for milestone_id in milestone_ids})
     if len(rows) != 59:
@@ -285,9 +288,11 @@ def main() -> int:
 
     if milestone_ids != {"A-03-SPEC", "A-03-REAL", "A-03-CAL"}:
         errors.append("A-03 milestone set is invalid")
+    if set(milestone_statuses) != milestone_ids:
+        errors.append("A-03 milestone status set is invalid")
     for item in milestones:
         milestone_id = str(item.get("id", ""))
-        status = str(item.get("status", ""))
+        status = str(milestone_statuses.get(milestone_id, ""))
         dependencies = {str(value) for value in item.get("depends_on", [])}
         missing_dependencies = unknown_dependencies(dependencies, known_nodes)
         if missing_dependencies:

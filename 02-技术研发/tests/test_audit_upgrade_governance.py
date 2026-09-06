@@ -152,6 +152,18 @@ def test_task_milestone_completion_cycle_is_detected():
     assert validator.dependency_cycle_nodes(graph)
 
 
+def test_milestone_definition_is_separate_from_lifecycle_status():
+    contract = json.loads(
+        (UPGRADE / "task_milestones_v1.0.json").read_text(encoding="utf-8")
+    )
+    status = json.loads(
+        (UPGRADE / "task_milestone_status_v1.0.json").read_text(encoding="utf-8")
+    )
+    milestone_ids = {item["id"] for item in contract["milestones"]}
+    assert all("status" not in item for item in contract["milestones"])
+    assert set(status["statuses"]) == milestone_ids
+
+
 def test_a06_fake_candidate_and_missing_signed_report_are_rejected():
     validator = load_governance_script("15_validate_audit_upgrade.py")
     errors = validator.validate_a06_receipt(

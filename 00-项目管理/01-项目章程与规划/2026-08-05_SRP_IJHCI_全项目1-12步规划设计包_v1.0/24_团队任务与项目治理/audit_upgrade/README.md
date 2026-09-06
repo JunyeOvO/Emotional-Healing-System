@@ -26,7 +26,8 @@
 - `upgrade_evidence_manifest_v1.0.json`：12项子交付证据引用的确定性字节哈希；由`build_upgrade_evidence_manifest.py`生成。
 - `release_routes_v1.0.json`：两条论文收尾路线和条件依赖。
 - `a06_route_closure_v1.schema.json`：A-06真实范围回执、阶段三活动事实和结果族的关闭格式；未关闭前不存在实例文件。
-- `task_milestones_v1.0.json`：A-03提前规格、真实接入和盲态校准里程碑。
+- `task_milestones_v1.0.json`：A-03提前规格、真实接入和盲态校准的稳定定义。
+- `task_milestone_status_v1.0.json`：A-03三个里程碑的可变生命周期状态；不进入任务输入快照。
 - `external_capability_matrix_v1.0.csv`：G-05按活动拆分的资格需求。
 - `evidence_record_v1.schema.json`：任务签收和资格证据最小字段。
 

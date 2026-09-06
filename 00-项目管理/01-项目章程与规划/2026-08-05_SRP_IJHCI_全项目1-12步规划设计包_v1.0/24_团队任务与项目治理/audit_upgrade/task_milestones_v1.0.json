@@ -4,21 +4,18 @@
   "milestones": [
     {
       "id": "A-03-SPEC",
-      "status": "READY",
       "depends_on": ["F-02"],
       "consumers": ["X-01"],
       "deliverables": ["scoring_spec", "estimand_table", "joint_simulation_spec", "synthetic_boundary_report"]
     },
     {
       "id": "A-03-REAL",
-      "status": "WAIT_DEP",
       "depends_on": ["A-03-SPEC", "A-01"],
       "consumers": ["Q-03"],
       "deliverables": ["real_data_scoring_adapter", "blind_parameter_input"]
     },
     {
       "id": "A-03-CAL",
-      "status": "WAIT_DEP",
       "depends_on": ["A-03-REAL", "E-03"],
       "consumers": ["G-03"],
       "deliverables": ["blind_calibration_receipt", "frozen_analysis_config"]

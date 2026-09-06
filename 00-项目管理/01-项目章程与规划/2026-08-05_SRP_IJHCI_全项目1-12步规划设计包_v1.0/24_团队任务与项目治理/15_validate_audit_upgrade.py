@@ -164,10 +164,15 @@ def main() -> int:
         errors.append("STAGE3_ACTIVITY_SOURCES_INVALID")
 
     milestones = json.loads((UPGRADE / "task_milestones_v1.0.json").read_text(encoding="utf-8"))
+    milestone_status = json.loads(
+        (UPGRADE / "task_milestone_status_v1.0.json").read_text(encoding="utf-8")
+    )
     milestone_rows = milestones.get("milestones", [])
     milestone_ids = {item["id"] for item in milestone_rows}
     if milestone_ids != {"A-03-SPEC", "A-03-REAL", "A-03-CAL"}:
         errors.append("A03_MILESTONES_INVALID")
+    if set(milestone_status.get("statuses", {})) != milestone_ids:
+        errors.append("A03_MILESTONE_STATUSES_INVALID")
     expected_milestone_consumers = {
         "A-03-SPEC": ["X-01"],
         "A-03-REAL": ["Q-03"],
