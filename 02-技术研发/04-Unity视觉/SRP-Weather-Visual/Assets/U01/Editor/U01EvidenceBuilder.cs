@@ -26,7 +26,7 @@ namespace SRP.U01.Editor
             var envelope = new TraceEnvelope { evidence_type = "U01_STATE_MIRROR_TRACE" };
             var acks = new List<AckDto>();
             var receipts = new List<RenderReceiptDto>();
-            var receiptGate = new RenderReceiptGate();
+            var receiptGate = new RenderReceiptGate("U01-EVIDENCE");
             foreach (var value in trace.control_events)
             {
                 var raw = JsonUtility.ToJson(value);

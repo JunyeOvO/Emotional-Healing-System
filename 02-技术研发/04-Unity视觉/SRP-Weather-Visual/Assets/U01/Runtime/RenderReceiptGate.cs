@@ -4,9 +4,17 @@ namespace SRP.U01
 {
     public sealed class RenderReceiptGate
     {
+        private readonly string clientInstanceId;
         private readonly Dictionary<string, RenderState> states = new();
         private readonly Dictionary<long, TelemetryIdentity> telemetryFrames = new();
         private long lastObservedTelemetryFrameSeq = -1;
+
+        public RenderReceiptGate(string clientInstanceId)
+        {
+            if (string.IsNullOrEmpty(clientInstanceId))
+                throw new System.ArgumentException("Client instance identity is required", nameof(clientInstanceId));
+            this.clientInstanceId = clientInstanceId;
+        }
 
         public void Register(ControlEventDto message, ApplyResult result, SessionMirror mirror)
         {
@@ -51,7 +59,7 @@ namespace SRP.U01
                 receipt = value.Receipt;
                 return true;
             }
-            receipt = DeliveryFactory.CreateReceipt(value.Message, value.ModuleId, value.Segment, telemetryFrameSeq,
+            receipt = DeliveryFactory.CreateReceipt(value.Message, clientInstanceId, value.ModuleId, value.Segment, telemetryFrameSeq,
                 unityFrame, renderedNs, result, errorCode);
             value.Receipt = receipt;
             return true;

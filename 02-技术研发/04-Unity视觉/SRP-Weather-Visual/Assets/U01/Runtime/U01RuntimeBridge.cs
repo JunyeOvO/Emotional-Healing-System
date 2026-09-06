@@ -13,7 +13,7 @@ namespace SRP.U01
         private ReliableControlClient control;
         private TelemetryReceiver telemetry;
         private SessionMirror mirror;
-        private readonly RenderReceiptGate receiptGate = new();
+        private RenderReceiptGate receiptGate;
         private string clientInstanceId;
         private int observedConnectionGeneration;
 
@@ -24,6 +24,7 @@ namespace SRP.U01
         {
             mirror ??= new SessionMirror(schemaVersion);
             clientInstanceId ??= "unity-" + Guid.NewGuid().ToString("N");
+            receiptGate ??= new RenderReceiptGate(clientInstanceId);
             observedConnectionGeneration = 0;
             control = new ReliableControlClient(schemaVersion, clientInstanceId, controlPort);
             telemetry = new TelemetryReceiver(telemetryPort);

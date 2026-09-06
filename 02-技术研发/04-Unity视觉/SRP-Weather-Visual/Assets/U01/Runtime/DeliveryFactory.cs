@@ -21,6 +21,7 @@ namespace SRP.U01
 
         public static RenderReceiptDto CreateReceipt(
             ControlEventDto message,
+            string clientInstanceId,
             string moduleId,
             string segment,
             long telemetryFrameSeq,
@@ -29,6 +30,8 @@ namespace SRP.U01
             string result,
             string errorCode = null)
         {
+            if (string.IsNullOrEmpty(clientInstanceId))
+                throw new ArgumentException("Client instance identity is required", nameof(clientInstanceId));
             if (result != "rendered" && result != "skipped" && result != "failed")
                 throw new ArgumentException("Invalid receipt result", nameof(result));
             if (result == "failed" && string.IsNullOrEmpty(errorCode))
@@ -37,7 +40,7 @@ namespace SRP.U01
             return new RenderReceiptDto
             {
                 schema_version = message.schema_version,
-                receipt_id = "RR-" + message.event_id,
+                receipt_id = "RR-" + clientInstanceId + "-" + message.event_id,
                 session_id = message.session_id,
                 event_id = message.event_id,
                 frame_seq = Math.Max(0, telemetryFrameSeq),

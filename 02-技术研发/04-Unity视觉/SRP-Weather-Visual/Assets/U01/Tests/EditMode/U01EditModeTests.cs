@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -212,14 +213,55 @@ namespace SRP.U01.Tests
             var result = mirror.ApplyControl(message, segment);
             var ack = DeliveryFactory.CreateAck(message, result, 10, 11, 12);
             var receipt = DeliveryFactory.CreateReceipt(
-                message, mirror.ModuleId, mirror.Segment, mirror.LastTelemetrySeq, 12, 13, "rendered");
+                message, "unity-a", mirror.ModuleId, mirror.Segment, mirror.LastTelemetrySeq, 12, 13, "rendered");
+            var sameInstance = DeliveryFactory.CreateReceipt(
+                message, "unity-a", mirror.ModuleId, mirror.Segment, mirror.LastTelemetrySeq, 12, 13, "rendered");
+            var otherInstance = DeliveryFactory.CreateReceipt(
+                message, "unity-b", mirror.ModuleId, mirror.Segment, mirror.LastTelemetrySeq, 12, 13, "rendered");
 
             Assert.That(ack.event_id, Is.EqualTo(message.event_id));
             Assert.That(receipt.event_id, Is.EqualTo(message.event_id));
             Assert.That(receipt.session_id, Is.EqualTo(message.session_id));
             Assert.That(receipt.module_id, Is.EqualTo("storm"));
+            Assert.That(sameInstance.receipt_id, Is.EqualTo(receipt.receipt_id));
+            Assert.That(otherInstance.receipt_id, Is.Not.EqualTo(receipt.receipt_id));
             Assert.Throws<ArgumentException>(() => DeliveryFactory.CreateReceipt(
-                message, mirror.ModuleId, mirror.Segment, mirror.LastTelemetrySeq, 12, 13, "failed"));
+                message, "unity-a", mirror.ModuleId, mirror.Segment, mirror.LastTelemetrySeq, 12, 13, "failed"));
+        }
+
+        [Test]
+        public void FailedConnectionAlwaysDisposesCapturedSocket()
+        {
+            using var client = new ReliableControlClient("2.2", "U01-TEST");
+            var captured = new TcpClient(AddressFamily.InterNetwork);
+            var method = typeof(ReliableControlClient).GetMethod(
+                "FailConnection", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            method.Invoke(client, new object[] { captured, 99L, "CONTROL_SEND_FAILED" });
+
+            Assert.Throws<ObjectDisposedException>(() => captured.Connect(IPAddress.Loopback, 1));
+        }
+
+        [Test]
+        public void IncomingFrameLimitIncludesLineFeed()
+        {
+            var method = typeof(ReliableControlClient).GetMethod(
+                "ReadBoundedLine",
+                BindingFlags.Static | BindingFlags.NonPublic,
+                null,
+                new[] { typeof(StreamReader) },
+                null);
+            string Read(int bodyBytes)
+            {
+                var bytes = Encoding.UTF8.GetBytes(new string('a', bodyBytes) + "\n");
+                using var stream = new MemoryStream(bytes);
+                using var reader = new StreamReader(stream, new UTF8Encoding(false, true));
+                try { return (string)method.Invoke(null, new object[] { reader }); }
+                catch (TargetInvocationException error) { throw error.InnerException; }
+            }
+
+            Assert.That(Read(1024 * 1024 - 1).Length, Is.EqualTo(1024 * 1024 - 1));
+            Assert.Throws<InvalidDataException>(() => Read(1024 * 1024));
         }
 
         [Test]
@@ -348,7 +390,7 @@ namespace SRP.U01.Tests
             var demoJson = Control("2.2", 4, "segment", "{\"module_id\":\"storm\",\"module_position\":0,\"segment\":\"demo\"}");
             Assert.That(ProtocolCodec.TryParseControl(demoJson, "2.2", out var demo, out _), Is.True);
             var applied = mirror.ApplyControl(demo, demoJson);
-            var gate = new RenderReceiptGate();
+            var gate = new RenderReceiptGate("unity-test");
             gate.Register(demo, applied, mirror);
             gate.ObserveTelemetry(Telemetry(demo, 8), new ApplyResult("applied"));
             Assert.That(gate.TryConfirm(demo.event_id, 8, 9, 10, "rendered", null, out var original), Is.True);

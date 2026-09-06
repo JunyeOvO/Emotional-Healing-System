@@ -17,8 +17,10 @@ EXPECTED_TESTS = {
         "SRP.U01.Tests.U01EditModeTests.DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt",
         "SRP.U01.Tests.U01EditModeTests.DisposeDoesNotWaitForABlockedSendLock",
         "SRP.U01.Tests.U01EditModeTests.ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected",
+        "SRP.U01.Tests.U01EditModeTests.FailedConnectionAlwaysDisposesCapturedSocket",
         "SRP.U01.Tests.U01EditModeTests.FormalV21AndWrongHandshakeFailClosed",
         "SRP.U01.Tests.U01EditModeTests.GoldenControlTraceIsMirroredWithoutLocalSequencing",
+        "SRP.U01.Tests.U01EditModeTests.IncomingFrameLimitIncludesLineFeed",
         "SRP.U01.Tests.U01EditModeTests.NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected",
         "SRP.U01.Tests.U01EditModeTests.ReliableClientReconnectsAndKeepsTheSameIdentity",
         "SRP.U01.Tests.U01EditModeTests.StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame",
@@ -125,7 +127,7 @@ def main() -> int:
         {
             "schema_version": item["schema_version"],
             "message_type": "render_receipt",
-            "receipt_id": f"RR-{item['event_id']}",
+            "receipt_id": f"RR-U01-EVIDENCE-{item['event_id']}",
             "session_id": item["session_id"],
             "event_id": item["event_id"],
             "frame_seq": item["control_seq"],
@@ -164,7 +166,7 @@ def main() -> int:
 
     require(deliveries.get("evidence_scope") == "contract_golden_fixture", "delivery evidence scope is missing")
 
-    print("U01_EVIDENCE_VERIFIED editmode=12 playmode=3 controls=19 acks=19 receipts=12 network=3")
+    print("U01_EVIDENCE_VERIFIED editmode=14 playmode=3 controls=19 acks=19 receipts=12 network=3")
     return 0
 
 

@@ -35,7 +35,7 @@ namespace SRP.U01.Tests
             var json = Control(4, "segment", "{\"module_id\":\"storm\",\"module_position\":0,\"segment\":\"demo\"}");
             Assert.That(ProtocolCodec.TryParseControl(json, "2.2", out var message, out _), Is.True);
             var result = mirror.ApplyControl(message, json);
-            var gate = new RenderReceiptGate();
+            var gate = new RenderReceiptGate("unity-playmode");
             gate.Register(message, result, mirror);
 
             Assert.That(gate.TryConfirm(message.event_id, -1, Time.frameCount, 0, "rendered", null, out _), Is.False);

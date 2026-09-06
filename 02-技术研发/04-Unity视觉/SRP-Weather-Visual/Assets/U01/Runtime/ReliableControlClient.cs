@@ -121,8 +121,8 @@ namespace SRP.U01
 
         private void FailConnection(TcpClient expectedClient, long expectedGeneration, string error)
         {
-            if (!UpdateState(expectedGeneration, 0, error)) return;
             try { expectedClient?.Dispose(); } catch (SocketException) { }
+            UpdateState(expectedGeneration, 0, error);
         }
 
         private bool MarkSendTimeout(long expectedGeneration)
@@ -242,6 +242,7 @@ namespace SRP.U01
                 if (read == 0) return count == 0 ? null : Decode(bytes, count);
                 if (bytes[count] == (byte)'\n')
                 {
+                    if (count + 1 > MaxFrameBytes) throw new InvalidDataException();
                     if (count > 0 && bytes[count - 1] == (byte)'\r') count--;
                     return Decode(bytes, count);
                 }
@@ -268,6 +269,7 @@ namespace SRP.U01
                 var current = (char)next;
                 if (current == '\n')
                 {
+                    if (byteCount + 1 > MaxFrameBytes) throw new InvalidDataException();
                     if (line.Length > 0 && line[line.Length - 1] == '\r') line.Length--;
                     return line.ToString();
                 }
