@@ -239,8 +239,11 @@ namespace SRP.U01.Tests
                 listener.Start();
                 var port = ((IPEndPoint)listener.LocalEndpoint).Port;
                 var active = new TcpClient(AddressFamily.InterNetwork);
+                var accept = Task.Run(listener.AcceptTcpClient);
                 active.Connect(IPAddress.Loopback, port);
-                using var peer = listener.AcceptTcpClient();
+                Assert.That(accept.Wait(2_000), Is.True);
+                using var peer = accept.Result;
+                peer.ReceiveTimeout = 2_000;
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;
                 typeof(ReliableControlClient).GetField("client", flags).SetValue(client, active);
                 var stateType = typeof(ReliableControlClient).GetNestedType("ConnectionState", BindingFlags.NonPublic);
@@ -282,18 +285,22 @@ namespace SRP.U01.Tests
             string ReadRaw(int bodyBytes)
             {
                 var listener = new TcpListener(IPAddress.Loopback, 0);
+                TcpClient receiver = null;
+                Task sender = null;
                 try
                 {
                     listener.Start();
                     var port = ((IPEndPoint)listener.LocalEndpoint).Port;
                     var payload = Encoding.UTF8.GetBytes(new string('a', bodyBytes) + "\n");
-                    var sender = Task.Run(() =>
+                    var accept = Task.Run(listener.AcceptTcpClient);
+                    sender = Task.Run(() =>
                     {
                         using var socket = new TcpClient(AddressFamily.InterNetwork);
                         socket.Connect(IPAddress.Loopback, port);
                         socket.GetStream().Write(payload, 0, payload.Length);
                     });
-                    using var receiver = listener.AcceptTcpClient();
+                    if (!accept.Wait(2_000)) throw new TimeoutException("TCP accept timed out");
+                    receiver = accept.Result;
                     var rawMethod = typeof(ReliableControlClient).GetMethod(
                         "ReadBoundedLine",
                         BindingFlags.Static | BindingFlags.NonPublic,
@@ -306,9 +313,14 @@ namespace SRP.U01.Tests
                             null, new object[] { receiver.GetStream(), receiver, 30_000 });
                     }
                     catch (TargetInvocationException error) { throw error.InnerException; }
-                    finally { sender.Wait(); }
                 }
-                finally { listener.Stop(); }
+                finally
+                {
+                    receiver?.Dispose();
+                    listener.Stop();
+                    if (sender != null && !sender.Wait(2_000))
+                        throw new TimeoutException("TCP sender did not stop");
+                }
             }
 
             Assert.That(Read(1024 * 1024 - 1).Length, Is.EqualTo(1024 * 1024 - 1));
