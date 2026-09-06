@@ -106,9 +106,22 @@ def verify(root: Path = ROOT) -> list[str]:
     }:
         errors.append("DUPLICATE_AUDIT")
     summary = _read(root / "evidence/x01_validation_report_v1.json")
+    expected_summary: dict[str, object] = {
+        "evidence_status": "SYNTHETIC_ONLY",
+        "formal_strata_and_cutpoints": "PENDING_PREREGISTRATION",
+        "formal_machine_and_acl": "G-05_OPEN",
+    }
     for stage, plan in plans.items():
-        if summary.get(stage, {}).get("list_hash") != plan.list_hash:
-            errors.append(f"{stage}:SUMMARY_HASH")
+        expected_summary[stage] = {
+            "list_hash": plan.list_hash,
+            "record_count": len(plan.records),
+            "arm_counts": dict(Counter(record.arm for record in plan.records)),
+            "complete_blocks": len(
+                {(record.stratum, record.block) for record in plan.records}
+            ),
+        }
+    if summary != expected_summary:
+        errors.append("SUMMARY_REPORT")
     return errors
 
 

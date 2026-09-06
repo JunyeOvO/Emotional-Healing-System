@@ -623,6 +623,7 @@ class RandomizationStore:
     ) -> BalanceAudit:
         self._authorize(actor_role, "auditor")
         with closing(self._connect()) as connection:
+            connection.execute("BEGIN")
             self._verify_runtime_integrity(connection)
             list_row = connection.execute(
                 "SELECT list_hash FROM randomization_lists WHERE stage = ?",
@@ -661,6 +662,7 @@ class RandomizationStore:
     def verify_audit_chain(self, *, actor_role: str) -> AuditIntegrity:
         self._authorize(actor_role, "auditor")
         with closing(self._connect()) as connection:
+            connection.execute("BEGIN")
             report = self._audit_integrity(connection)
             if not report.valid:
                 return report
@@ -675,6 +677,7 @@ class RandomizationStore:
         allocation_index = int(manifest["allocation_index"])
         try:
             with closing(self._connect()) as connection:
+                connection.execute("BEGIN")
                 self._verify_runtime_integrity(connection)
                 self._verify_stored_list(connection, list_hash)
                 row = connection.execute(

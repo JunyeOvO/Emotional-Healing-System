@@ -87,7 +87,8 @@ def test_reveal_requires_allocator_role_and_all_three_prechecks(tmp_path) -> Non
                 "WHERE event_type='ASSIGNMENT_REVEALED'"
             ).fetchone()[0]
         )
-    assert {gate: refs[gate] for gate in ("eligibility", "device_readiness", "dedup_reservation")} == {
+    gates = ("eligibility", "device_readiness", "dedup_reservation")
+    assert {gate: refs[gate] for gate in gates} == {
         item.gate: item.evidence_id for item in evidence
     }
     assert refs["allocation_binding"].startswith("BIND-")

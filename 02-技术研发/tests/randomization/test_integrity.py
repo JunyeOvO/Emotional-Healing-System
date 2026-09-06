@@ -179,6 +179,8 @@ def test_assignment_state_tamper_and_internal_audit_tamper_block_reveal(tmp_path
             _evidence("RES-3"),
             actor_role="allocator",
         )
+
+
 def test_reservation_tamper_is_bound_to_the_reveal_audit(tmp_path) -> None:
     database = tmp_path / "reservation-audit.sqlite"
     store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
@@ -216,6 +218,50 @@ def test_balance_audit_rejects_unlogged_assignment_state(tmp_path) -> None:
         )
     with pytest.raises(RandomizationError, match="ALLOCATION_AUDIT_MISMATCH"):
         store.audit_balance("stage_1", "all", actor_role="auditor")
+
+
+def test_read_side_integrity_checks_run_inside_one_sqlite_snapshot(
+    tmp_path, monkeypatch
+) -> None:
+    store = RandomizationStore(
+        tmp_path / "read-snapshot.sqlite",
+        evidence_verifier=SnapshotGateEvidenceVerifier(),
+    )
+    store.import_list(
+        generate_list("stage_1", ("all",), 1, b"read-snapshot-seed-01"),
+        actor_role="custodian",
+    )
+    request = AllocationRequest("REQ-1", "stage_1", "all", "RES-1", "1.0")
+    receipt = store.allocate_and_reveal(
+        request, _evidence("RES-1"), actor_role="allocator"
+    )
+    observed: list[bool] = []
+    original = RandomizationStore._audit_integrity
+
+    def require_transaction(connection):
+        observed.append(connection.in_transaction)
+        return original(connection)
+
+    monkeypatch.setattr(
+        RandomizationStore, "_audit_integrity", staticmethod(require_transaction)
+    )
+    store.verify_audit_chain(actor_role="auditor")
+    store.audit_balance("stage_1", "all", actor_role="auditor")
+    store.validate_assignment(
+        {
+            "randomization_list_hash": receipt.randomization_list_hash,
+            "allocation_index": receipt.allocation_index,
+            "study_stage": receipt.stage,
+            "randomization_stratum": receipt.stratum,
+            "randomization_block": receipt.block,
+            "assignment_arm": receipt.arm,
+            "cue_mode": receipt.arm,
+            "randomization_version": receipt.randomization_version,
+            "weather_sequence": list(receipt.weather_sequence or ()),
+        },
+        receipt.to_assignment_bundle("S-X01-SNAPSHOT", 0),
+    )
+    assert observed == [True, True, True]
 
 
 def test_g02_adapter_exports_only_opaque_receipt_fields() -> None:

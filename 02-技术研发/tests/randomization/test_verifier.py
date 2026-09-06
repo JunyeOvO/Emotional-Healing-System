@@ -28,6 +28,13 @@ def test_verifier_rejects_probability_and_empty_balance_false_pass(tmp_path) -> 
     balance = json.loads(balance_path.read_text(encoding="utf-8"))
     balance["strata"] = []
     balance_path.write_text(json.dumps(balance), encoding="utf-8")
+    summary_path = copied / "evidence/x01_validation_report_v1.json"
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    summary["stage_1"]["record_count"] = 0
+    summary["stage_1"]["complete_blocks"] = 0
+    summary["stage_1"]["arm_counts"] = {}
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
     errors = verify(copied)
     assert "PROBABILITY_REPORT" in errors
     assert "BALANCE_REPORT" in errors
+    assert "SUMMARY_REPORT" in errors
