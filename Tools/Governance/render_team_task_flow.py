@@ -95,7 +95,7 @@ def main() -> None:
         "</defs>",
         '<rect width="100%" height="100%" fill="#f8fafc"/>',
         '<text x="70" y="68" font-family="Microsoft YaHei, sans-serif" font-size="38" font-weight="700" fill="#0f172a">SRP 团队任务分工、依赖与门禁</text>',
-        '<text x="70" y="108" font-family="Microsoft YaHei, sans-serif" font-size="19" fill="#475569">状态快照 · 2026-09-04 · G-01 / G-02 DONE，外部准入责任迁移至第58项 G-05</text>',
+        '<text x="70" y="108" font-family="Microsoft YaHei, sans-serif" font-size="19" fill="#475569">状态快照 · 2026-09-06 · A-03-SPEC DONE，X-01 已解锁；G-05 继续承接外部准入</text>',
     ]
 
     counts = Counter(row["status"] for row in rows)
@@ -113,7 +113,7 @@ def main() -> None:
     gates = [
         ("治理设计门", "G-01 / G-02 DONE → 候选实现可继续", "#dcfce7", "#166534"),
         ("外部准入门", "G-05 EXT-WAIT → 正式研究链保持阻断", "#fee2e2", "#991b1b"),
-        ("当前可领取", "T-02 / U-01 / U-02 READY", "#dbeafe", "#1d4ed8"),
+        ("当前可领取", "X-01 / T-02 / U-01 / U-02 READY", "#dbeafe", "#1d4ed8"),
         ("设备外部门", "D-01 / D-02 仍等待真实设备", "#fee2e2", "#991b1b"),
     ]
     gate_y, gate_w = 196, (width - 140 - 3 * 18) / 4

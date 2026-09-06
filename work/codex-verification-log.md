@@ -1534,3 +1534,18 @@
 | Full Regression | `py -3.14 -m pytest -q`：`531 passed in 43.10s`。 |
 | Governance And Protocol | 任务注册表、4个独立包、审计升级合同与协议权威均为`PASS`；仓库隐私扫描为`G02_REPOSITORY_PRIVACY_PASS violations=0`。 |
 | Independent Repair Review | 新Agent `01a07669-16c2-7152-a9de-2df1fb79a8e9`复审`4071c84bc03ab9d80f7ce5997034fe27737e5d51`及治理提交`e78c6e93e967cd907fb193b4f390383a72c71083`，返回`A03_SPEC_REVIEW_PASS_NO_OPEN_P0_P3`；附加69种Schema `null`变异、9个未知字段层级和每条件10,000次缺失分布核验。 |
+
+### 2026-09-06 A-03-SPEC真实第二人签收
+
+| Check | Result |
+|---|---|
+| Human Signoff | 傅钧烨以团队总监、独立第二人复核人身份签收精确候选`4071c84bc03ab9d80f7ce5997034fe27737e5d51`；结论`PASS`，无未关闭P0-P3。 |
+| Signoff Commit | 首次签署提交为`1f5f81b3d34ef9c90ddc30f9ec507ef28048525f`。 |
+| Scope | 仅关闭A-03-SPEC；A-03整体、A-03-REAL、A-03-CAL、三个合成`NO_GO`、外部准入和研究执行门不变。 |
+| Full Regression | `py -3.14 -m pytest -q`：`531 passed in 43.73s`。 |
+| Registry | `PASS`：59项、56固定任务、3模板；固定任务`DONE=16`，`READY=T-02/U-01/U-02/X-01`，A-03保持`IN_PROGRESS`。 |
+| Dispatch Packages | `PASS`：5个可分发包、60份冻结输入快照；任务为`A-03/T-02/U-01/U-02/X-01`。 |
+| Audit And Protocol | 审计升级批次0-1合同与协议权威v1.1均为`PASS`。 |
+| Privacy And Wording | 仓库隐私扫描`violations=0`；新增行未出现项目禁用表述。 |
+| PDF | 三份PDF可打开；本次更新的固定任务概要为9页，SHA-256 `BA3F58D966BE93AAF70934A18C58E353350A35F8A5D05B6AFD3E0A2D7530B766`。 |
+| Diff | `git diff --check`通过，仅有既有Windows换行提示。 |

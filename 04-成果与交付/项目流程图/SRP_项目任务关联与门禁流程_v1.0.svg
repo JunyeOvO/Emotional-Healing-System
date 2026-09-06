@@ -25,15 +25,15 @@
     <text x="52" y="66" class="title">SRP v2.1｜59 项任务关联与门禁流程</text>
     <text x="52" y="101" class="subtitle">顺序规范不代表当前通过状态；附件仅作视觉参考，状态来自项目任务注册表、协议权威与独立分支证据。</text>
     <rect x="52" y="126" width="2296" height="54" rx="10" fill="#edf4fa" stroke="#6d94b8" stroke-width="1.5"/>
-    <text x="76" y="160" class="snapshot">当前工作面：16 项 DONE ｜ G-05 EXT-WAIT ｜ A-06 WAIT ｜ A-03 / T-02 / U-01 / U-02 READY</text>
+    <text x="76" y="160" class="snapshot">当前工作面：A-03 IN_PROGRESS ｜ X-01 / T-02 / U-01 / U-02 READY ｜ G-05 EXT-WAIT ｜ A-06 WAIT</text>
     <rect x="52" y="196" width="2296" height="54" rx="10" fill="#fff0ee" stroke="#cf4d43" stroke-width="1.5"/>
     <text x="76" y="230" class="snapshot">设计权威：REJECT_AND_RESUBMIT_DESIGN ｜ 证据：PLANNED_NOT_OBSERVED ｜ 工程完成不得扩大为 LIVE_E2E 或外部放行</text>
     <text x="52" y="286" class="subtitle">状态</text>
     <circle cx="116" cy="281" r="7" fill="#2f8a57"/><text x="130" y="286" class="legend-text">DONE 16</text>
-    <circle cx="251" cy="281" r="7" fill="#2f75b5"/><text x="265" y="286" class="legend-text">DOING 0</text>
+    <circle cx="251" cy="281" r="7" fill="#2f75b5"/><text x="265" y="286" class="legend-text">DOING 1</text>
     <circle cx="406" cy="281" r="7" fill="#c47a1b"/><text x="420" y="286" class="legend-text">REVIEW 0</text>
     <circle cx="541" cy="281" r="7" fill="#7b56b6"/><text x="555" y="286" class="legend-text">READY 4</text>
-    <circle cx="676" cy="281" r="7" fill="#7d8790"/><text x="690" y="286" class="legend-text">WAIT 21</text>
+    <circle cx="676" cy="281" r="7" fill="#7d8790"/><text x="690" y="286" class="legend-text">WAIT 20</text>
     <circle cx="811" cy="281" r="7" fill="#d9822b"/><text x="825" y="286" class="legend-text">EXT-WAIT 5</text>
     <circle cx="966" cy="281" r="7" fill="#c64d4d"/><text x="980" y="286" class="legend-text">LOCK 13</text>
     <text x="1220" y="286" class="subtitle">线条</text>
@@ -84,7 +84,7 @@
     <text x="121" y="1782" class="wave-code" text-anchor="middle">W2</text>
     <text x="121" y="1814" class="wave-name" text-anchor="middle">灰盒与纵向实现</text>
     <text x="121" y="1846" class="wave-count" text-anchor="middle">16 项</text>
-    <text x="52" y="1880" class="wave-count">DONE 1 · READY 2 · WAIT 11 · EXT-WAIT 2</text>
+    <text x="52" y="1880" class="wave-count">DONE 1 · DOING 1 · READY 1 · WAIT 11 · EXT-WAIT 2</text>
     <line x1="655" y1="1748" x2="655" y2="2578" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
     <line x1="1083" y1="1748" x2="1083" y2="2578" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
     <line x1="1511" y1="1748" x2="1511" y2="2578" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
@@ -94,7 +94,7 @@
     <text x="121" y="2782" class="wave-code" text-anchor="middle">W3</text>
     <text x="121" y="2814" class="wave-name" text-anchor="middle">集成与研究工具</text>
     <text x="121" y="2846" class="wave-count" text-anchor="middle">9 项</text>
-    <text x="52" y="2880" class="wave-count">WAIT 6 · EXT-WAIT 3</text>
+    <text x="52" y="2880" class="wave-count">READY 1 · WAIT 5 · EXT-WAIT 3</text>
     <line x1="655" y1="2748" x2="655" y2="3146" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
     <line x1="1083" y1="2748" x2="1083" y2="3146" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
     <line x1="1511" y1="2748" x2="1511" y2="3146" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
@@ -513,12 +513,12 @@
       <text x="585" y="2373" class="status-text">WAIT</text>
       <text x="259" y="2402" class="task-title">Gate1双分析集插补与模型</text>
     </g>
-    <g id="task-A-03" data-task-id="A-03" data-wave="W2" data-type="data" data-status="READY" data-depends-on="F-02">
-      <title>【统计实现】Gate2联合测量估计目标与Monte Carlo样本模拟 | status=READY | depends_on=F-02 | completion=A-03-SPEC|A-03-REAL|A-03-CAL</title>
+    <g id="task-A-03" data-task-id="A-03" data-wave="W2" data-type="data" data-status="IN_PROGRESS" data-depends-on="F-02">
+      <title>【统计实现】Gate2联合测量估计目标与Monte Carlo样本模拟 | status=IN_PROGRESS | depends_on=F-02 | completion=A-03-SPEC|A-03-REAL|A-03-CAL</title>
       <rect x="244" y="2454" width="394" height="92" rx="11" fill="#edf5ec" stroke="#71966c" stroke-width="1.6"/>
       <text x="259" y="2483" class="task-id">A-03</text>
-      <rect x="546" y="2464" width="78" height="25" rx="12.5" fill="#7b56b6"/>
-      <text x="585" y="2481" class="status-text">READY</text>
+      <rect x="546" y="2464" width="78" height="25" rx="12.5" fill="#2f75b5"/>
+      <text x="585" y="2481" class="status-text">DOING</text>
       <text x="259" y="2510" class="task-title">Gate2联合测量估计目标与Monte</text>
       <text x="259" y="2532" class="task-title">Carlo样本模拟</text>
     </g>
@@ -564,12 +564,12 @@
       <text x="1869" y="3049" class="status-text">EXT-WAIT</text>
       <text x="1543" y="3078" class="task-title">Level C采集标注与阈值冻结工具</text>
     </g>
-    <g id="task-X-01" data-task-id="X-01" data-wave="W3" data-type="data" data-status="WAIT_DEP" data-depends-on="P-01|A-03-SPEC|G-02">
-      <title>【随机化】阶段一三清单分层隐藏概率与重复防护 | status=WAIT_DEP | depends_on=P-01|A-03-SPEC|G-02</title>
+    <g id="task-X-01" data-task-id="X-01" data-wave="W3" data-type="data" data-status="READY" data-depends-on="P-01|A-03-SPEC|G-02">
+      <title>【随机化】阶段一三清单分层隐藏概率与重复防护 | status=READY | depends_on=P-01|A-03-SPEC|G-02</title>
       <rect x="244" y="2806" width="394" height="92" rx="11" fill="#edf5ec" stroke="#71966c" stroke-width="1.6"/>
       <text x="259" y="2835" class="task-id">X-01</text>
-      <rect x="546" y="2816" width="78" height="25" rx="12.5" fill="#7d8790"/>
-      <text x="585" y="2833" class="status-text">WAIT</text>
+      <rect x="546" y="2816" width="78" height="25" rx="12.5" fill="#7b56b6"/>
+      <text x="585" y="2833" class="status-text">READY</text>
       <text x="259" y="2862" class="task-title">阶段一三清单分层隐藏概率与重复防护</text>
     </g>
     <g id="task-X-02" data-task-id="X-02" data-wave="W3" data-type="data" data-status="WAIT_DEP" data-depends-on="A-03">
@@ -756,7 +756,7 @@
       <rect x="236" y="1592" width="2118" height="94" rx="11" class="gate-current"/>
       <rect x="252" y="1609" width="82" height="28" rx="7" fill="#5d8fb9"/>
       <text x="293" y="1628" class="gate-label">CURRENT</text>
-    <text x="352" y="1628" class="gate-text">当前工作面：16项DONE；G-01/G-02已完成；A-03/T-02/U-01/U-02 READY。</text>
+    <text x="352" y="1628" class="gate-text">当前工作面：A-03进行中；A-03-SPEC已签收；X-01/T-02/U-01/U-02 READY。</text>
     <text x="352" y="1660" class="gate-note">外部配置、机构路径、许可清零与U8实地证据统一由第58项G-05承接。</text>
     </g>
     <g id="gate-W2">

@@ -1424,3 +1424,9 @@ Run separate read-only Agent reviews against the fixed G-02, P-01 and P-02 imple
 - 1000次固定种子重算后，目标场景共同通过概率为24/组`0.072`、85/组`0.646`、96/组`0.721`，三点均为合成`NO_GO`；旧候选的`SYNTHETIC_UPPER_CAP_FEASIBLE`已撤销。
 - A-03-SPEC继续保持`IN_REVIEW`。下一硬门是修复候选完整回归及新的独立Agent复审；真实第二人签收仍未发生。
 - 新独立Agent `01a07669-16c2-7152-a9de-2df1fb79a8e9`对实现候选`4071c84bc03ab9d80f7ce5997034fe27737e5d51`及治理提交`e78c6e93e967cd907fb193b4f390383a72c71083`返回`A03_SPEC_REVIEW_PASS_NO_OPEN_P0_P3`；下一硬门收束为真实第二人审阅并签署待签署报告。
+
+### 2026-09-06 A-03-SPEC真实第二人签收
+
+- 傅钧烨以团队总监、独立第二人复核人身份签收实现候选`4071c84bc03ab9d80f7ce5997034fe27737e5d51`，结论`PASS`，无未关闭P0-P3；首次签署提交为`1f5f81b3d34ef9c90ddc30f9ec507ef28048525f`。
+- A-03-SPEC由`IN_REVIEW`迁移为`DONE`，X-01依赖闭合并由`WAIT_DEP`转为`READY`；A-03整体保持`IN_PROGRESS`，A-03-REAL与A-03-CAL仍为`WAIT_DEP`。
+- 三个合成`NO_GO`不因签收而改变；本次签收关闭规格与合成验证里程碑，不解除研究设计、新颖性、外部准入或研究执行门。
