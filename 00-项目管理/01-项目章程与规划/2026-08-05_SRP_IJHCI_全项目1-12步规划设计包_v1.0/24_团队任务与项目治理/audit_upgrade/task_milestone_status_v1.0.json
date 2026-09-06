@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "task": "A-03",
   "statuses": {
-    "A-03-SPEC": "READY",
+    "A-03-SPEC": "IN_PROGRESS",
     "A-03-REAL": "WAIT_DEP",
     "A-03-CAL": "WAIT_DEP"
   }

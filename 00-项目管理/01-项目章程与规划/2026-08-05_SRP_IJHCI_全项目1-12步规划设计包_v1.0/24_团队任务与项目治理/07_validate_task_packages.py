@@ -24,7 +24,9 @@ VALID_STATUSES = {
 }
 PACKAGE_STATUSES = {"READY", "IN_PROGRESS", "IN_REVIEW"}
 VALID_KINDS = {"FIXED", "TEMPLATE"}
-VALID_MILESTONE_STATUSES = {"READY", "WAIT_DEP", "DONE"}
+VALID_MILESTONE_STATUSES = {
+    "READY", "IN_PROGRESS", "IN_REVIEW", "WAIT_DEP", "DONE"
+}
 VALID_PROFILES = {
     "P-DESIGN",
     "P-DEV",
@@ -300,7 +302,7 @@ def main() -> int:
         if status not in VALID_MILESTONE_STATUSES:
             errors.append(f"{milestone_id}: invalid status {status!r}")
         incomplete = {dependency for dependency in dependencies if node_status.get(dependency) != "DONE"}
-        if status in {"READY", "DONE"} and incomplete:
+        if status in {"READY", "IN_PROGRESS", "IN_REVIEW", "DONE"} and incomplete:
             errors.append(f"{milestone_id}: status {status} has incomplete dependencies {sorted(incomplete)}")
         if status == "WAIT_DEP" and dependencies and not incomplete:
             errors.append(f"{milestone_id}: WAIT_DEP is stale because all dependencies are DONE")

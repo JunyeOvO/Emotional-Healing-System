@@ -173,6 +173,14 @@ def main() -> int:
         errors.append("A03_MILESTONES_INVALID")
     if set(milestone_status.get("statuses", {})) != milestone_ids:
         errors.append("A03_MILESTONE_STATUSES_INVALID")
+    allowed_milestone_statuses = {
+        "READY", "IN_PROGRESS", "IN_REVIEW", "WAIT_DEP", "DONE"
+    }
+    if any(
+        value not in allowed_milestone_statuses
+        for value in milestone_status.get("statuses", {}).values()
+    ):
+        errors.append("A03_MILESTONE_STATUS_VALUE_INVALID")
     expected_milestone_consumers = {
         "A-03-SPEC": ["X-01"],
         "A-03-REAL": ["Q-03"],

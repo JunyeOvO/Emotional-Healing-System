@@ -18,7 +18,7 @@
       },
       {
         "reference": "governance:07_validate_task_packages.py",
-        "byte_sha256": "218D95E08898B4D8E73A10C8DAB86AB874EBCF725DF39DA9EC72EBAD04E3E6FE"
+        "byte_sha256": "2984674D4B187085DDA3C5931D1466B005591DCEC8F53A1FE6ACE5FB35F3FBE3"
       }
     ],
     "UP-03": [
@@ -46,19 +46,19 @@
     "UP-06": [
       {
         "reference": "governance:05_可领取任务包.csv",
-        "byte_sha256": "ACE2BF62D2471B577A8E5F3A0250C42E015F1C241FB2E27A05AA486F8053E3A7"
+        "byte_sha256": "F3F26C51A712E813C8A61C355EF2D46931EB63F74A9A445914FB30471538146E"
       }
     ],
     "UP-07": [
       {
         "reference": "governance:05_可领取任务包.csv",
-        "byte_sha256": "ACE2BF62D2471B577A8E5F3A0250C42E015F1C241FB2E27A05AA486F8053E3A7"
+        "byte_sha256": "F3F26C51A712E813C8A61C355EF2D46931EB63F74A9A445914FB30471538146E"
       }
     ],
     "UP-08": [
       {
         "reference": "governance:05_可领取任务包.csv",
-        "byte_sha256": "ACE2BF62D2471B577A8E5F3A0250C42E015F1C241FB2E27A05AA486F8053E3A7"
+        "byte_sha256": "F3F26C51A712E813C8A61C355EF2D46931EB63F74A9A445914FB30471538146E"
       }
     ],
     "UP-09": [
