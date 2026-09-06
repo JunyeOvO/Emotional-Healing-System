@@ -2,7 +2,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2640" viewBox="0 0 2400 2640" role="img" aria-labelledby="title desc">
   <title id="title">SRP v2.1 任务状态与门禁解释清单</title>
   <desc id="desc">解释 SRP 任务注册表的七种任务状态、三种门禁、五类任务颜色和依赖线含义。快照日期为 2026-09-06。</desc>
-  <metadata>snapshot=2026-09-06; tasks=59; done=16; in_progress=1; in_review=1; ready=3; wait_dep=20; wait_dep_external=5; blocked_external=13; status_basis=task-registry; transition=x01-candidate-in-review</metadata>
+  <metadata>snapshot=2026-09-06; tasks=59; done=17; in_progress=1; in_review=0; ready=3; wait_dep=20; wait_dep_external=5; blocked_external=13; status_basis=task-registry; transition=x01-human-signoff-done</metadata>
 
   <style>
     text { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; fill: #1d2732; }
@@ -31,10 +31,10 @@
     <text x="60" y="112" class="subtitle">任务框颜色表示职责类型；右上状态角标表示进度。顺序与工程结果均不得扩大为项目整体通过。</text>
 
     <rect x="60" y="142" width="2280" height="66" rx="11" fill="#edf4fa" stroke="#6d94b8" stroke-width="1.6"/>
-    <text x="86" y="184" class="summary">当前快照：59 项｜DONE 16｜DOING 1｜REVIEW 1｜READY 3｜WAIT 20｜EXT-WAIT 5｜LOCK 13</text>
+    <text x="86" y="184" class="summary">当前快照：59 项｜DONE 17｜DOING 1｜REVIEW 0｜READY 3｜WAIT 20｜EXT-WAIT 5｜LOCK 13</text>
 
     <rect x="60" y="226" width="2280" height="66" rx="11" fill="#fff0ee" stroke="#cf4d43" stroke-width="1.6"/>
-    <text x="86" y="268" class="summary">当前工作面：A-03 DOING｜X-01 REVIEW｜T-02 / U-01 / U-02 READY｜G-05 EXT-WAIT</text>
+    <text x="86" y="268" class="summary">当前工作面：A-03 DOING｜X-01 DONE｜T-02 / U-01 / U-02 READY｜G-05 EXT-WAIT</text>
   </g>
 
   <g id="task-status-checklist">
@@ -47,12 +47,12 @@
     <text x="1288" y="424" class="column-title" text-anchor="middle">准确含义</text>
     <text x="2050" y="424" class="column-title" text-anchor="middle">下一状态条件</text>
 
-    <g id="status-DONE" data-status="DONE" data-count="16">
+    <g id="status-DONE" data-status="DONE" data-count="17">
       <rect x="60" y="452" width="2280" height="148" fill="#ffffff" stroke="#d4dce3"/>
       <rect x="96" y="495" width="240" height="62" rx="31" fill="#2f8a57"/>
       <text x="216" y="535" class="status-name">DONE</text>
       <text x="544" y="528" class="registry-name" text-anchor="middle">DONE</text>
-      <text x="770" y="536" class="count" fill="#2f8a57">16</text>
+      <text x="770" y="536" class="count" fill="#2f8a57">17</text>
       <text x="892" y="505" class="body">
         <tspan x="892" dy="0">任务自身 AC、证据与复核已经闭合。</tspan>
         <tspan x="892" dy="32">不代表下游、LIVE_E2E、伦理或发布完成。</tspan>
@@ -79,12 +79,12 @@
       </text>
     </g>
 
-    <g id="status-IN_REVIEW" data-status="IN_REVIEW" data-count="1">
+    <g id="status-IN_REVIEW" data-status="IN_REVIEW" data-count="0">
       <rect x="60" y="748" width="2280" height="148" fill="#ffffff" stroke="#d4dce3"/>
       <rect x="96" y="791" width="240" height="62" rx="31" fill="#c47a1b"/>
       <text x="216" y="831" class="status-name">REVIEW</text>
       <text x="544" y="824" class="registry-name" text-anchor="middle">IN_REVIEW</text>
-      <text x="770" y="832" class="count" fill="#c47a1b">1</text>
+      <text x="770" y="832" class="count" fill="#c47a1b">0</text>
       <text x="892" y="801" class="body">
         <tspan x="892" dy="0">候选已形成，可能等待第二人、外部门或治理裁定。</tspan>
         <tspan x="892" dy="32">不是失败，也不等于已经通过。</tspan>

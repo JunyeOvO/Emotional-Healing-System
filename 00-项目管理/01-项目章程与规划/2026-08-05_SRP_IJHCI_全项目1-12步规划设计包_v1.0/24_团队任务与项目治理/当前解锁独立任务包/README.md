@@ -9,4 +9,3 @@
 | T-02 | READY | 【TouchDesigner】人工标记中止请求与告警 | 3人日 | [T-02/TASK.md](T-02/TASK.md) |
 | U-01 | READY | 【Unity】可靠控制技术探针与渲染回执 | 4人日 | [U-01/TASK.md](U-01/TASK.md) |
 | U-02 | READY | 【Unity】四层SceneAdapter实现与降级 | 3人日 | [U-02/TASK.md](U-02/TASK.md) |
-| X-01 | IN_REVIEW | 【随机化】阶段一三清单分层隐藏概率与重复防护 | 4人日 | [X-01/TASK.md](X-01/TASK.md) |
