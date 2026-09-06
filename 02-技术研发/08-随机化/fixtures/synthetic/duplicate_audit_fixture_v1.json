@@ -1,0 +1,11 @@
+{
+  "allocation_index": 1,
+  "audit": {
+    "checked_events": 3,
+    "reason_code": "AUDIT_CHAIN_VALID",
+    "valid": true
+  },
+  "evidence_status": "SYNTHETIC_ONLY",
+  "expected_conflict_code_for_new_request_same_reservation": "RESERVATION_ALREADY_ALLOCATED",
+  "same_allocation": true
+}

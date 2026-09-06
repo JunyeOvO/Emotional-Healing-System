@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://srp.local/contracts/allocation-receipt-v1.schema.json",
+  "title": "SRP X-01 Allocation Receipt",
+  "type": "object",
+  "required": [
+    "allocation_index",
+    "stage",
+    "stratum",
+    "block",
+    "arm",
+    "weather_sequence",
+    "arm_behavior_probability",
+    "randomization_list_hash",
+    "randomization_version",
+    "permit_id",
+    "reservation_id",
+    "evidence_id"
+  ],
+  "properties": {
+    "allocation_index": {"type": "integer", "minimum": 1},
+    "stage": {"enum": ["stage_1", "stage_3"]},
+    "stratum": {"type": "string", "minLength": 1},
+    "block": {"type": "integer", "minimum": 1},
+    "arm": {"type": "string", "minLength": 1},
+    "weather_sequence": {
+      "oneOf": [
+        {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"enum": ["storm", "heat", "snow", "fade"]}
+        },
+        {"type": "null"}
+      ]
+    },
+    "arm_behavior_probability": {"const": 0.5},
+    "randomization_list_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "randomization_version": {"const": "1.0"},
+    "permit_id": {"type": "string", "minLength": 1},
+    "reservation_id": {"type": "string", "minLength": 1},
+    "evidence_id": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

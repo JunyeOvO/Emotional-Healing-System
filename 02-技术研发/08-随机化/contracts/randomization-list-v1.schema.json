@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://srp.local/contracts/randomization-list-v1.schema.json",
+  "title": "SRP X-01 Randomization List",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "randomization_version",
+    "stage",
+    "block_size",
+    "seed_commitment",
+    "records",
+    "list_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "randomization_version": {"const": "1.0"},
+    "stage": {"enum": ["stage_1", "stage_3"]},
+    "block_size": {"const": 48},
+    "seed_commitment": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "list_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "records": {
+      "type": "array",
+      "minItems": 48,
+      "items": {
+        "type": "object",
+        "required": [
+          "allocation_index",
+          "stage",
+          "stratum",
+          "block",
+          "arm",
+          "weather_sequence",
+          "arm_behavior_probability"
+        ],
+        "properties": {
+          "allocation_index": {"type": "integer", "minimum": 1},
+          "stage": {"enum": ["stage_1", "stage_3"]},
+          "stratum": {"type": "string", "minLength": 1},
+          "block": {"type": "integer", "minimum": 1},
+          "arm": {
+            "enum": ["scene_native", "abstract_pacer", "frozen_policy", "balanced_random"]
+          },
+          "weather_sequence": {
+            "oneOf": [
+              {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "uniqueItems": true,
+                "items": {"enum": ["storm", "heat", "snow", "fade"]}
+              },
+              {"type": "null"}
+            ]
+          },
+          "arm_behavior_probability": {"const": 0.5}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

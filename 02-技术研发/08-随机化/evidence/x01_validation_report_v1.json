@@ -1,0 +1,23 @@
+{
+  "evidence_status": "SYNTHETIC_ONLY",
+  "formal_machine_and_acl": "G-05_OPEN",
+  "formal_strata_and_cutpoints": "PENDING_PREREGISTRATION",
+  "stage_1": {
+    "arm_counts": {
+      "abstract_pacer": 96,
+      "scene_native": 96
+    },
+    "complete_blocks": 4,
+    "list_hash": "sha256:ef0d5734f5578647f83f0fef91629243cf8a042596d8a7d7596769d641af2efb",
+    "record_count": 192
+  },
+  "stage_3": {
+    "arm_counts": {
+      "balanced_random": 96,
+      "frozen_policy": 96
+    },
+    "complete_blocks": 4,
+    "list_hash": "sha256:0b2d442b2c8b9f83a2296decd9f5c4f5d2940b29a8be062edf840b6f25952a4a",
+    "record_count": 192
+  }
+}

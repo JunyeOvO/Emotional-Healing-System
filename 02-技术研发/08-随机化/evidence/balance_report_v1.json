@@ -1,0 +1,32 @@
+{
+  "balance_basis": "assigned",
+  "evidence_status": "SYNTHETIC_ONLY",
+  "strata": [
+    {
+      "arm_counts": {
+        "abstract_pacer": 48,
+        "scene_native": 48
+      },
+      "assigned_count": 96,
+      "balanced_by_assignment": true,
+      "complete_count": 76,
+      "incomplete_count": 20,
+      "reason_code": "BALANCED_BY_ASSIGNMENT",
+      "stage": "stage_1",
+      "stratum": "synthetic_stratum_a"
+    },
+    {
+      "arm_counts": {
+        "abstract_pacer": 48,
+        "scene_native": 48
+      },
+      "assigned_count": 96,
+      "balanced_by_assignment": true,
+      "complete_count": 76,
+      "incomplete_count": 20,
+      "reason_code": "BALANCED_BY_ASSIGNMENT",
+      "stage": "stage_1",
+      "stratum": "synthetic_stratum_b"
+    }
+  ]
+}

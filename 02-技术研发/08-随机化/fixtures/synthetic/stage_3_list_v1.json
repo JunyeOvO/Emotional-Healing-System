@@ -1,0 +1,2218 @@
+{
+  "block_size": 48,
+  "list_hash": "sha256:0b2d442b2c8b9f83a2296decd9f5c4f5d2940b29a8be062edf840b6f25952a4a",
+  "randomization_version": "1.0",
+  "records": [
+    {
+      "allocation_index": 1,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 2,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 3,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 4,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 5,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 6,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 7,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 8,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 9,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 10,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 11,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 12,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 13,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 14,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 15,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 16,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 17,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 18,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 19,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 20,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 21,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 22,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 23,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 24,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 25,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 26,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 27,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 28,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 29,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 30,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 31,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 32,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 33,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 34,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 35,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 36,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 37,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 38,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 39,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 40,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 41,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 42,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 43,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 44,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 45,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 46,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 47,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 48,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 49,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 50,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 51,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 52,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 53,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 54,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 55,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 56,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 57,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 58,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 59,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 60,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 61,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 62,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 63,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 64,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 65,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 66,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 67,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 68,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 69,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 70,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 71,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 72,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 73,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 74,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 75,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 76,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 77,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 78,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 79,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 80,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 81,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 82,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 83,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 84,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 85,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 86,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 87,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 88,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 89,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 90,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 91,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 92,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 93,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 94,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 95,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 96,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_a",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 97,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 98,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 99,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 100,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 101,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 102,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 103,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 104,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 105,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 106,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 107,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 108,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 109,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 110,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 111,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 112,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 113,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 114,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 115,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 116,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 117,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 118,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 119,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 120,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 121,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 122,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 123,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 124,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 125,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 126,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 127,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 128,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 129,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 130,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 131,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 132,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 133,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 134,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 135,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 136,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 137,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 138,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 139,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 140,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 141,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 142,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 143,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 144,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 1,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 145,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 146,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 147,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 148,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 149,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "snow",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 150,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 151,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 152,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "fade",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 153,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 154,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "snow",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 155,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 156,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 157,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 158,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "storm",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 159,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 160,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 161,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "storm",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 162,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "heat",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 163,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "snow",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 164,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "storm",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 165,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 166,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 167,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 168,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "fade",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 169,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 170,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 171,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 172,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 173,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "heat",
+        "storm",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 174,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 175,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 176,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "fade",
+        "heat",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 177,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 178,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "storm",
+        "heat",
+        "fade",
+        "snow"
+      ]
+    },
+    {
+      "allocation_index": 179,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 180,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 181,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 182,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 183,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "snow",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 184,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 185,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "fade",
+        "heat",
+        "snow",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 186,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "heat",
+        "storm",
+        "snow",
+        "fade"
+      ]
+    },
+    {
+      "allocation_index": 187,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "storm",
+        "fade",
+        "heat"
+      ]
+    },
+    {
+      "allocation_index": 188,
+      "arm": "balanced_random",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": [
+        "snow",
+        "fade",
+        "heat",
+        "storm"
+      ]
+    },
+    {
+      "allocation_index": 189,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 190,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 191,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    },
+    {
+      "allocation_index": 192,
+      "arm": "frozen_policy",
+      "arm_behavior_probability": 0.5,
+      "block": 2,
+      "stage": "stage_3",
+      "stratum": "synthetic_stratum_b",
+      "weather_sequence": null
+    }
+  ],
+  "schema_version": "1.0",
+  "seed_commitment": "sha256:7f89f79bd5e6095d1b117f9df4824d601692a0f7f6b5eecce3c833aa7523e759",
+  "stage": "stage_3"
+}

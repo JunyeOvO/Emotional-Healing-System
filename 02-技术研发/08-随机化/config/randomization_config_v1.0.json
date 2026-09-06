@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "randomization_version": "1.0",
+  "weather_ids": ["storm", "heat", "snow", "fade"],
+  "allocation_block_size": 48,
+  "stages": {
+    "stage_1": {
+      "arms": ["scene_native", "abstract_pacer"],
+      "arm_probability": 0.5,
+      "sequence_rule": "each_permutation_once_per_arm_per_complete_block"
+    },
+    "stage_3": {
+      "arms": ["frozen_policy", "balanced_random"],
+      "arm_probability": 0.5,
+      "balanced_random_sequence_rule": "each_permutation_once_per_complete_block",
+      "frozen_policy_sequence_source": "X-03"
+    }
+  },
+  "required_reveal_gates": [
+    "eligibility",
+    "device_readiness",
+    "dedup_reservation"
+  ],
+  "roles": {
+    "custodian": ["import_list"],
+    "allocator": ["allocate_and_reveal"],
+    "auditor": ["record_outcome", "audit_balance", "verify_audit_chain"]
+  },
+  "seed": {
+    "minimum_bytes": 16,
+    "derivation": "HMAC-SHA-256_domain_separated",
+    "stored_in_list": false,
+    "artifact_field": "seed_commitment"
+  },
+  "stratification": {
+    "labels_and_cutpoints": "PENDING_PREREGISTRATION",
+    "rule": "freeze_before_formal_list_generation"
+  },
+  "formal_storage": {
+    "repository_allowed": false,
+    "os_acl_and_machine_qualification_owner": "G-05"
+  }
+}
