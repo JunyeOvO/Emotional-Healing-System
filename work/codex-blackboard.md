@@ -1405,3 +1405,12 @@ Run separate read-only Agent reviews against the fixed G-02, P-01 and P-02 imple
 - 四包说明改为紧凑段落；首次四条项目符号版本触发第10页过稀门后未采用，最终PDF恢复为9页并通过内容验证。
 - 最终候选`3f6576d8de9f27ae9dc1127bae287dfb452531a7`经独立Agent快速复审为`EFFECT_PASS_NO_OPEN_P0_P3`；傅钧烨随后按当前对话明确授权，以团队总监、真实团队第二人复核身份签收批次0至1。
 - 签收只关闭批次0至1治理升级，不改变`REJECT_AND_RESUBMIT_DESIGN`、G-05、真实设备链、研究执行、统计可行性或投稿状态；当前工作面仍为A-03、T-02、U-01、U-02。
+
+### 2026-09-06 A-03-SPEC实施候选
+
+- A-03已由Codex领取，任务状态为`IN_PROGRESS`；`A-03-SPEC`正在实施，`A-03-REAL`和`A-03-CAL`继续等待依赖。
+- 里程碑稳定定义与可变生命周期状态已拆分，领取快照保持`570E00EC295CE4ABDBB1C1EF2C19FDFB3FADD6CEF7B63BDAE2CCF0F929E64309`不漂移。
+- 已实现PANAS配置驱动计分、SCCI操纵检查计分、四层理解、心智努力、阶段错误汇总、FDR及非补偿有序门。
+- 合成Monte Carlo使用Beta、伯努利和有序离散生成，不使用正态锚点；固定种子为`20260906`，同时运行保守与完整案例分析集。
+- 每条件24人的敏感性点联合通过概率为0.287/0.290，结论为`SYNTHETIC_SENSITIVITY_POINT_NO_GO`；既有每组85规划锚点为0.934/0.942，结论为`SYNTHETIC_UPPER_CAP_FEASIBLE`。
+- 上述结果不冻结正式Gate2界限、关键层、缺失规则或样本量；下一硬门是完整回归、候选提交、独立Agent复核和真实第二人签收。

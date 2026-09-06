@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "evidence_class": "A03_SPEC_CANDIDATE",
+  "conditions": ["scene_native", "abstract_pacer"],
+  "constructs": {
+    "panas": {
+      "dimensions": ["positive", "negative"],
+      "combined_total": false,
+      "role": "GATE3_OUTCOME_AND_STAGE1_CONTEXT",
+      "version_and_scoring": "PENDING_LEVEL_C_FREEZE"
+    },
+    "scci": {"items": 4, "range": [1, 5], "role": "MANIPULATION_CHECK_ONLY"},
+    "comprehension": {
+      "items": 8,
+      "range": [0, 8],
+      "layers": ["target", "actual", "cumulative", "degraded"],
+      "items_per_layer": 2,
+      "role": "FUNCTIONAL_FLOOR"
+    },
+    "mental_effort": {"items": 1, "range": [1, 9], "direction": "LOWER_IS_LESS_EFFORT", "role": "FUNCTIONAL_FLOOR"},
+    "stage_error": {"direction": "LOWER_IS_BETTER", "role": "OBJECTIVE_SAFEGUARD"}
+  },
+  "response_statuses": ["RESPONDED", "SKIPPED", "TIMEOUT", "TECH_UNPRESENTED"],
+  "ordered_gate": [
+    "tool_applicability",
+    "scci_direction",
+    "comprehension_total_noninferiority",
+    "comprehension_critical_layers_noninferiority",
+    "mental_effort_noninferiority",
+    "stage_error_safeguard"
+  ],
+  "models": {
+    "required_fixed_effects": ["cue_mode", "centered_na_pre", "randomization_strata"],
+    "scci_item_function": "cumulative_logit_candidate",
+    "secondary_family_adjustment": "BENJAMINI_HOCHBERG_FDR"
+  },
+  "analysis_sets": ["PRIMARY_CONSERVATIVE", "OBSERVED_CASE"],
+  "formal_parameters": {
+    "noninferiority_margins": null,
+    "critical_layers": null,
+    "missing_data_rule": null,
+    "sample_size": null,
+    "freeze_reason": "PENDING_LEVEL_B_AND_BLIND_CALIBRATION"
+  },
+  "prohibited_claims": [
+    "SCCI_PROVES_FUNCTIONAL_VALUE",
+    "SYNTHETIC_OUTPUT_IS_REAL_CALIBRATION",
+    "SYNTHETIC_THRESHOLDS_ARE_FORMAL_MARGINS"
+  ]
+}

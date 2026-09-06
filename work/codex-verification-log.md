@@ -1500,3 +1500,19 @@
 | Final Effect Review | 独立Agent对候选`3f6576d8de9f27ae9dc1127bae287dfb452531a7`返回`EFFECT_PASS_NO_OPEN_P0_P3`；确认四包PDF、A-03修复、4个独立包与50份快照，未发现新P0-P3。 |
 | Human Signoff | 傅钧烨依据独立效果复审和已有验证证据，以团队总监、真实团队第二人复核身份签收；未表述为本人重新运行测试，且不关闭研究设计与外部门。 |
 | Signoff Commit | 签收内容首个落盘提交为`a55dffd2c8613685f0446f5999987bd492d62c4a`，已写回签署报告。 |
+
+### 2026-09-06 A-03-SPEC候选验证
+
+| Check | Result |
+|---|---|
+| Focused Tests | `py -3.14 -m pytest -q 02-技术研发/tests/a03_spec`：`14 passed`（最终复跑待提交前记录）。 |
+| Spec Schema | `gate2_spec_v1.0.json`通过Draft 2020-12 schema校验。 |
+| Small Sensitivity Point | 固定种子、1000次、每条件24；目标场景联合通过概率0.287/0.290，`SYNTHETIC_SENSITIVITY_POINT_NO_GO`。 |
+| Existing Upper Planning Anchor | 固定种子、1000次、每条件85；目标场景联合通过概率0.934/0.942，`SYNTHETIC_UPPER_CAP_FEASIBLE`。 |
+| Evidence Boundary | 两份报告均为`SYNTHETIC_ONLY`，正式界限、缺失规则和样本量为空；不替代A-03-REAL或A-03-CAL。 |
+| Deterministic Replay | 相同种子与参数双跑生成相同SHA-256：`7D71CB917DFC2D5963886732EC2DDCB606FEE1FBA2896C0D128FA196C0CDBC35`。 |
+| Governance And Protocol | 任务注册表、4个独立包、审计升级合同及协议权威校验均为`PASS`。 |
+| Repository Privacy | 首次调用遗漏必需`--repo-root`，脚本未执行扫描；纠正为`--repo-root .`后`G02_REPOSITORY_PRIVACY_PASS violations=0`。 |
+| Full Regression | `py -3.14 -m pytest -q`：`514 passed in 36.36s`。 |
+| Wording And Diff | A-03新增文件未出现项目禁用表述；`git diff --check`通过，仅有Windows换行提示。 |
+| Generated Reports | 小规模点SHA-256 `A678350D5D74A77D66C5F14FE36B4A1EBF3E79E107FBADD772F68D916FEA243D`；规划上限SHA-256 `7C40DB6465D8293BEB8AEC8CE06618D4EE462D49C252F77A1FAC67FD232E865E`。 |

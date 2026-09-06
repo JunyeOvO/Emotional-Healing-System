@@ -1,0 +1,147 @@
+{
+  "schema_version": "1.0",
+  "evidence_class": "SYNTHETIC_ONLY",
+  "seed": 20260906,
+  "replications": 1000,
+  "decision_scope": "upper_cap",
+  "participants_per_condition": 85,
+  "total_participants_per_replication": 170,
+  "planning_anchor_source": "CONTROL_BASELINE_GATE1_85_COMPLETE_FOUR_MODULE_RESULTS_PER_GROUP",
+  "formal_margins": null,
+  "formal_sample_size": null,
+  "synthetic_sensitivity_thresholds": {
+    "scci_min_difference": 0.35,
+    "comprehension_min_difference": -0.75,
+    "critical_layer_min_difference": -1.25,
+    "effort_max_difference": 1.0,
+    "stage_error_max_difference": 0.08
+  },
+  "scenarios": {
+    "target": {
+      "PRIMARY_CONSERVATIVE": {
+        "pass_probability": {
+          "scci": 1.0,
+          "comprehension": 0.94,
+          "critical_layers": 1.0,
+          "effort": 0.994,
+          "stage_error": 1.0,
+          "joint": 0.934
+        },
+        "joint_mc_standard_error": 0.007851369307324675
+      },
+      "OBSERVED_CASE": {
+        "pass_probability": {
+          "scci": 1.0,
+          "comprehension": 0.951,
+          "critical_layers": 1.0,
+          "effort": 0.991,
+          "stage_error": 1.0,
+          "joint": 0.942
+        },
+        "joint_mc_standard_error": 0.007391616873188169
+      }
+    },
+    "null_manipulation": {
+      "PRIMARY_CONSERVATIVE": {
+        "pass_probability": {
+          "scci": 0.0,
+          "comprehension": 0.934,
+          "critical_layers": 1.0,
+          "effort": 0.991,
+          "stage_error": 1.0,
+          "joint": 0.0
+        },
+        "joint_mc_standard_error": 0.0
+      },
+      "OBSERVED_CASE": {
+        "pass_probability": {
+          "scci": 0.0,
+          "comprehension": 0.944,
+          "critical_layers": 1.0,
+          "effort": 0.992,
+          "stage_error": 1.0,
+          "joint": 0.0
+        },
+        "joint_mc_standard_error": 0.0
+      }
+    },
+    "ceiling": {
+      "PRIMARY_CONSERVATIVE": {
+        "pass_probability": {
+          "scci": 1.0,
+          "comprehension": 0.999,
+          "critical_layers": 1.0,
+          "effort": 1.0,
+          "stage_error": 1.0,
+          "joint": 0.999
+        },
+        "joint_mc_standard_error": 0.0009994998749374613
+      },
+      "OBSERVED_CASE": {
+        "pass_probability": {
+          "scci": 0.999,
+          "comprehension": 1.0,
+          "critical_layers": 1.0,
+          "effort": 0.999,
+          "stage_error": 1.0,
+          "joint": 0.998
+        },
+        "joint_mc_standard_error": 0.0014127986409959495
+      }
+    },
+    "differential_missing": {
+      "PRIMARY_CONSERVATIVE": {
+        "pass_probability": {
+          "scci": 1.0,
+          "comprehension": 0.641,
+          "critical_layers": 1.0,
+          "effort": 0.767,
+          "stage_error": 0.999,
+          "joint": 0.481
+        },
+        "joint_mc_standard_error": 0.01579996835439869
+      },
+      "OBSERVED_CASE": {
+        "pass_probability": {
+          "scci": 1.0,
+          "comprehension": 0.636,
+          "critical_layers": 1.0,
+          "effort": 0.764,
+          "stage_error": 0.997,
+          "joint": 0.484
+        },
+        "joint_mc_standard_error": 0.015803290796539814
+      }
+    },
+    "item_shift": {
+      "PRIMARY_CONSERVATIVE": {
+        "pass_probability": {
+          "scci": 0.0,
+          "comprehension": 0.935,
+          "critical_layers": 1.0,
+          "effort": 0.988,
+          "stage_error": 1.0,
+          "joint": 0.0
+        },
+        "joint_mc_standard_error": 0.0
+      },
+      "OBSERVED_CASE": {
+        "pass_probability": {
+          "scci": 0.0,
+          "comprehension": 0.94,
+          "critical_layers": 1.0,
+          "effort": 0.994,
+          "stage_error": 1.0,
+          "joint": 0.0
+        },
+        "joint_mc_standard_error": 0.0
+      }
+    }
+  },
+  "decision": "SYNTHETIC_UPPER_CAP_FEASIBLE",
+  "limitations": [
+    "SYNTHETIC_PARAMETERS_ARE_NOT_REAL_CALIBRATION",
+    "LEVEL_A_B_AND_C_EVIDENCE_NOT_PRESENT",
+    "FORMAL_MARGINS_AND_SAMPLE_SIZE_NOT_FROZEN"
+  ]
+}

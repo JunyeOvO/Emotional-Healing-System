@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "evidence_class", "conditions", "constructs", "response_statuses", "ordered_gate", "models", "analysis_sets", "formal_parameters", "prohibited_claims"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "evidence_class": {"const": "A03_SPEC_CANDIDATE"},
+    "conditions": {"const": ["scene_native", "abstract_pacer"]},
+    "response_statuses": {"const": ["RESPONDED", "SKIPPED", "TIMEOUT", "TECH_UNPRESENTED"]},
+    "analysis_sets": {"const": ["PRIMARY_CONSERVATIVE", "OBSERVED_CASE"]},
+    "formal_parameters": {
+      "type": "object",
+      "required": ["noninferiority_margins", "critical_layers", "missing_data_rule", "sample_size", "freeze_reason"],
+      "properties": {
+        "noninferiority_margins": {"type": "null"},
+        "critical_layers": {"type": "null"},
+        "missing_data_rule": {"type": "null"},
+        "sample_size": {"type": "null"},
+        "freeze_reason": {"const": "PENDING_LEVEL_B_AND_BLIND_CALIBRATION"}
+      }
+    }
+  }
+}
