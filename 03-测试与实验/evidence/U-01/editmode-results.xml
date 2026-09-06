@@ -1,103 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test-run id="2" testcasecount="14" result="Passed" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.4382139">
-  <test-suite type="TestSuite" id="1000" name="SRP-Weather-Visual" fullname="SRP-Weather-Visual" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.438214" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+<test-run id="2" testcasecount="14" result="Passed" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.9005018">
+  <test-suite type="TestSuite" id="1000" name="SRP-Weather-Visual" fullname="SRP-Weather-Visual" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.900502" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
     <properties>
       <property name="platform" value="EditMode" />
     </properties>
-    <test-suite type="Assembly" id="1025" name="SRP.U01.EditModeTests.dll" fullname="D:/Agent/03-SRP/02-技术研发/04-Unity视觉/SRP-Weather-Visual/Library/ScriptAssemblies/SRP.U01.EditModeTests.dll" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.433725" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <test-suite type="Assembly" id="1025" name="SRP.U01.EditModeTests.dll" fullname="D:/Agent/03-SRP/02-技术研发/04-Unity视觉/SRP-Weather-Visual/Library/ScriptAssemblies/SRP.U01.EditModeTests.dll" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.896078" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
       <properties>
-        <property name="_PID" value="14644" />
+        <property name="_PID" value="63440" />
         <property name="_APPDOMAIN" value="Unity Child Domain" />
         <property name="platform" value="EditMode" />
         <property name="EditorOnly" value="True" />
       </properties>
-      <test-suite type="TestSuite" id="1026" name="SRP" fullname="SRP" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.433407" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestSuite" id="1026" name="SRP" fullname="SRP" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.895751" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
         <properties />
-        <test-suite type="TestSuite" id="1027" name="U01" fullname="SRP.U01" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.433203" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestSuite" id="1027" name="U01" fullname="SRP.U01" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.895551" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
           <properties />
-          <test-suite type="TestSuite" id="1028" name="Tests" fullname="SRP.U01.Tests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.433016" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <test-suite type="TestSuite" id="1028" name="Tests" fullname="SRP.U01.Tests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.895368" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
             <properties />
-            <test-suite type="TestFixture" id="1010" name="U01EditModeTests" fullname="SRP.U01.Tests.U01EditModeTests" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:51Z" duration="4.432245" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <test-suite type="TestFixture" id="1010" name="U01EditModeTests" fullname="SRP.U01.Tests.U01EditModeTests" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:54Z" duration="6.894571" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
               <properties />
-              <test-case id="1021" name="AckSerializationKeepsPythonContractNullSemantics" fullname="SRP.U01.Tests.U01EditModeTests.AckSerializationKeepsPythonContractNullSemantics" methodname="AckSerializationKeepsPythonContractNullSemantics" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1941983129" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:46Z" duration="0.013492" asserts="0">
+              <test-case id="1021" name="AckSerializationKeepsPythonContractNullSemantics" fullname="SRP.U01.Tests.U01EditModeTests.AckSerializationKeepsPythonContractNullSemantics" methodname="AckSerializationKeepsPythonContractNullSemantics" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="183621060" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:47Z" duration="0.014012" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1024" name="ConfirmedReceiptSurvivesDuplicateControlWithoutMirrorDrift" fullname="SRP.U01.Tests.U01EditModeTests.ConfirmedReceiptSurvivesDuplicateControlWithoutMirrorDrift" methodname="ConfirmedReceiptSurvivesDuplicateControlWithoutMirrorDrift" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1423267496" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:46Z" duration="0.003564" asserts="0">
+              <test-case id="1024" name="ConfirmedReceiptSurvivesDuplicateControlWithoutMirrorDrift" fullname="SRP.U01.Tests.U01EditModeTests.ConfirmedReceiptSurvivesDuplicateControlWithoutMirrorDrift" methodname="ConfirmedReceiptSurvivesDuplicateControlWithoutMirrorDrift" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="711458369" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:47Z" duration="0.003015" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1017" name="DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt" fullname="SRP.U01.Tests.U01EditModeTests.DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt" methodname="DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1217173606" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:46Z" duration="0.002007" asserts="0">
+              <test-case id="1017" name="DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt" fullname="SRP.U01.Tests.U01EditModeTests.DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt" methodname="DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1196277455" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:47Z" duration="0.001802" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1016" name="DisposeDoesNotWaitForABlockedSendLock" fullname="SRP.U01.Tests.U01EditModeTests.DisposeDoesNotWaitForABlockedSendLock" methodname="DisposeDoesNotWaitForABlockedSendLock" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="529314890" result="Passed" start-time="2026-09-06 17:52:46Z" end-time="2026-09-06 17:52:49Z" duration="2.417818" asserts="0">
+              <test-case id="1016" name="DisposeDoesNotWaitForABlockedSendLock" fullname="SRP.U01.Tests.U01EditModeTests.DisposeDoesNotWaitForABlockedSendLock" methodname="DisposeDoesNotWaitForABlockedSendLock" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="836000048" result="Passed" start-time="2026-09-06 18:03:47Z" end-time="2026-09-06 18:03:50Z" duration="2.419392" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1012" name="ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected" fullname="SRP.U01.Tests.U01EditModeTests.ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected" methodname="ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="323298711" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:49Z" duration="0.000811" asserts="0">
+              <test-case id="1012" name="ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected" fullname="SRP.U01.Tests.U01EditModeTests.ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected" methodname="ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="759365261" result="Passed" start-time="2026-09-06 18:03:50Z" end-time="2026-09-06 18:03:50Z" duration="0.000884" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1018" name="FailedConnectionAlwaysDisposesCapturedSocket" fullname="SRP.U01.Tests.U01EditModeTests.FailedConnectionAlwaysDisposesCapturedSocket" methodname="FailedConnectionAlwaysDisposesCapturedSocket" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="857813019" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:49Z" duration="0.001430" asserts="0">
+              <test-case id="1018" name="FailedOldConnectionIsDisposedWithoutTouchingNewGeneration" fullname="SRP.U01.Tests.U01EditModeTests.FailedOldConnectionIsDisposedWithoutTouchingNewGeneration" methodname="FailedOldConnectionIsDisposedWithoutTouchingNewGeneration" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="200027319" result="Passed" start-time="2026-09-06 18:03:50Z" end-time="2026-09-06 18:03:50Z" duration="0.005591" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1014" name="FormalV21AndWrongHandshakeFailClosed" fullname="SRP.U01.Tests.U01EditModeTests.FormalV21AndWrongHandshakeFailClosed" methodname="FormalV21AndWrongHandshakeFailClosed" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="837084404" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:49Z" duration="0.000466" asserts="0">
+              <test-case id="1014" name="FormalV21AndWrongHandshakeFailClosed" fullname="SRP.U01.Tests.U01EditModeTests.FormalV21AndWrongHandshakeFailClosed" methodname="FormalV21AndWrongHandshakeFailClosed" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="391247316" result="Passed" start-time="2026-09-06 18:03:50Z" end-time="2026-09-06 18:03:50Z" duration="0.000400" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1011" name="GoldenControlTraceIsMirroredWithoutLocalSequencing" fullname="SRP.U01.Tests.U01EditModeTests.GoldenControlTraceIsMirroredWithoutLocalSequencing" methodname="GoldenControlTraceIsMirroredWithoutLocalSequencing" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1396235895" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:49Z" duration="0.002900" asserts="0">
+              <test-case id="1011" name="GoldenControlTraceIsMirroredWithoutLocalSequencing" fullname="SRP.U01.Tests.U01EditModeTests.GoldenControlTraceIsMirroredWithoutLocalSequencing" methodname="GoldenControlTraceIsMirroredWithoutLocalSequencing" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="83821031" result="Passed" start-time="2026-09-06 18:03:50Z" end-time="2026-09-06 18:03:50Z" duration="0.002612" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1019" name="IncomingFrameLimitIncludesLineFeed" fullname="SRP.U01.Tests.U01EditModeTests.IncomingFrameLimitIncludesLineFeed" methodname="IncomingFrameLimitIncludesLineFeed" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1191722092" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:49Z" duration="0.019085" asserts="0">
+              <test-case id="1019" name="IncomingFrameLimitIncludesLineFeed" fullname="SRP.U01.Tests.U01EditModeTests.IncomingFrameLimitIncludesLineFeed" methodname="IncomingFrameLimitIncludesLineFeed" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="487129309" result="Passed" start-time="2026-09-06 18:03:50Z" end-time="2026-09-06 18:03:52Z" duration="2.456259" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1022" name="NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected" fullname="SRP.U01.Tests.U01EditModeTests.NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected" methodname="NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="218624968" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:49Z" duration="0.004357" asserts="0">
+              <test-case id="1022" name="NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected" fullname="SRP.U01.Tests.U01EditModeTests.NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected" methodname="NullableCycleIdentityIsPreservedAndNegativeCycleIsRejected" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1159644157" result="Passed" start-time="2026-09-06 18:03:52Z" end-time="2026-09-06 18:03:52Z" duration="0.008059" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1015" name="ReliableClientReconnectsAndKeepsTheSameIdentity" fullname="SRP.U01.Tests.U01EditModeTests.ReliableClientReconnectsAndKeepsTheSameIdentity" methodname="ReliableClientReconnectsAndKeepsTheSameIdentity" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1556029917" result="Passed" start-time="2026-09-06 17:52:49Z" end-time="2026-09-06 17:52:50Z" duration="1.912365" asserts="0">
+              <test-case id="1015" name="ReliableClientReconnectsAndKeepsTheSameIdentity" fullname="SRP.U01.Tests.U01EditModeTests.ReliableClientReconnectsAndKeepsTheSameIdentity" methodname="ReliableClientReconnectsAndKeepsTheSameIdentity" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="2033908953" result="Passed" start-time="2026-09-06 18:03:52Z" end-time="2026-09-06 18:03:54Z" duration="1.927136" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1013" name="StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame" fullname="SRP.U01.Tests.U01EditModeTests.StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame" methodname="StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="473456334" result="Passed" start-time="2026-09-06 17:52:50Z" end-time="2026-09-06 17:52:51Z" duration="0.003003" asserts="0">
+              <test-case id="1013" name="StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame" fullname="SRP.U01.Tests.U01EditModeTests.StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame" methodname="StaleAndMismatchedTelemetryCannotOverwriteLatestMirrorFrame" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="753313581" result="Passed" start-time="2026-09-06 18:03:54Z" end-time="2026-09-06 18:03:54Z" duration="0.003577" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1023" name="V21TelemetryAndSharedStateRulesMatchTheAuthoritativeContract" fullname="SRP.U01.Tests.U01EditModeTests.V21TelemetryAndSharedStateRulesMatchTheAuthoritativeContract" methodname="V21TelemetryAndSharedStateRulesMatchTheAuthoritativeContract" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1855717673" result="Passed" start-time="2026-09-06 17:52:51Z" end-time="2026-09-06 17:52:51Z" duration="0.006518" asserts="0">
+              <test-case id="1023" name="V21TelemetryAndSharedStateRulesMatchTheAuthoritativeContract" fullname="SRP.U01.Tests.U01EditModeTests.V21TelemetryAndSharedStateRulesMatchTheAuthoritativeContract" methodname="V21TelemetryAndSharedStateRulesMatchTheAuthoritativeContract" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1520760078" result="Passed" start-time="2026-09-06 18:03:54Z" end-time="2026-09-06 18:03:54Z" duration="0.006770" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1020" name="V22TelemetryFixturesMatchTheAuthoritativeContract" fullname="SRP.U01.Tests.U01EditModeTests.V22TelemetryFixturesMatchTheAuthoritativeContract" methodname="V22TelemetryFixturesMatchTheAuthoritativeContract" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="1891847277" result="Passed" start-time="2026-09-06 17:52:51Z" end-time="2026-09-06 17:52:51Z" duration="0.034934" asserts="0">
+              <test-case id="1020" name="V22TelemetryFixturesMatchTheAuthoritativeContract" fullname="SRP.U01.Tests.U01EditModeTests.V22TelemetryFixturesMatchTheAuthoritativeContract" methodname="V22TelemetryFixturesMatchTheAuthoritativeContract" classname="SRP.U01.Tests.U01EditModeTests" runstate="Runnable" seed="2060339567" result="Passed" start-time="2026-09-06 18:03:54Z" end-time="2026-09-06 18:03:54Z" duration="0.035275" asserts="0">
                 <properties>
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />

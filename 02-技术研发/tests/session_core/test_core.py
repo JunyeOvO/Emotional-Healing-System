@@ -343,6 +343,44 @@ def test_render_receipt_requires_acknowledged_control(
     assert not update.session_events
 
 
+def test_unity_receipt_identity_is_idempotent_per_instance_and_distinct_across_instances(
+    manifest_factory, assignment_factory
+) -> None:
+    manifest = manifest_factory()
+    core = SessionCore()
+    core.prepare(manifest, assignment_factory(manifest), 0)
+    segment = core.apply_operator_request(
+        OperatorRequest("REQ-START", "start"), 0
+    ).control_events[2]
+    core.confirm_delivery(ack_for(segment, now_ns=1), 1)
+
+    def receipt(instance: str) -> dict:
+        return {
+            "schema_version": "2.1",
+            "message_type": "render_receipt",
+            "receipt_id": f"RR-{instance}-{segment['event_id']}",
+            "session_id": manifest["session_id"],
+            "event_id": segment["event_id"],
+            "frame_seq": 1,
+            "unity_frame": 1,
+            "rendered_monotonic_ns": 2,
+            "module_id": segment["payload"]["module_id"],
+            "segment": segment["payload"]["segment"],
+            "result": "rendered",
+            "error_code": None,
+        }
+
+    first = core.confirm_delivery(receipt("unity-a"), 2)
+    duplicate = core.confirm_delivery(receipt("unity-a"), 3)
+    second_instance = core.confirm_delivery(receipt("unity-b"), 4)
+
+    assert len(first.session_events) == 1
+    assert not duplicate.session_events
+    assert duplicate.audit_records[0].reason_code == "DUPLICATE_RENDER_RECEIPT"
+    assert len(second_instance.session_events) == 1
+    assert second_instance.audit_records[0].result == "applied"
+
+
 def test_session_events_validate_against_machine_schema(
     manifest_factory, assignment_factory
 ) -> None:

@@ -230,22 +230,42 @@ namespace SRP.U01.Tests
         }
 
         [Test]
-        public void FailedConnectionAlwaysDisposesCapturedSocket()
+        public void FailedOldConnectionIsDisposedWithoutTouchingNewGeneration()
         {
             using var client = new ReliableControlClient("2.2", "U01-TEST");
-            var captured = new TcpClient(AddressFamily.InterNetwork);
-            var method = typeof(ReliableControlClient).GetMethod(
-                "FailConnection", BindingFlags.Instance | BindingFlags.NonPublic);
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            try
+            {
+                listener.Start();
+                var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+                var active = new TcpClient(AddressFamily.InterNetwork);
+                active.Connect(IPAddress.Loopback, port);
+                using var peer = listener.AcceptTcpClient();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                typeof(ReliableControlClient).GetField("client", flags).SetValue(client, active);
+                var stateType = typeof(ReliableControlClient).GetNestedType("ConnectionState", BindingFlags.NonPublic);
+                var activeState = Activator.CreateInstance(stateType, new object[] { 2L, null });
+                typeof(ReliableControlClient).GetField("connectionState", flags).SetValue(client, activeState);
+                var captured = new TcpClient(AddressFamily.InterNetwork);
+                var method = typeof(ReliableControlClient).GetMethod("FailConnection", flags);
 
-            method.Invoke(client, new object[] { captured, 99L, "CONTROL_SEND_FAILED" });
+                method.Invoke(client, new object[] { captured, 1L, "CONTROL_SEND_FAILED" });
 
-            Assert.Throws<ObjectDisposedException>(() => captured.Connect(IPAddress.Loopback, 1));
+                Assert.Throws<ObjectDisposedException>(() => captured.Connect(IPAddress.Loopback, 1));
+                Assert.That(client.Connected, Is.True);
+                Assert.That(typeof(ReliableControlClient).GetField("client", flags).GetValue(client), Is.SameAs(active));
+                Assert.That(active.Client.Send(new byte[] { 7 }), Is.EqualTo(1));
+                var received = new byte[1];
+                Assert.That(peer.Client.Receive(received), Is.EqualTo(1));
+                Assert.That(received[0], Is.EqualTo(7));
+            }
+            finally { listener.Stop(); }
         }
 
         [Test]
         public void IncomingFrameLimitIncludesLineFeed()
         {
-            var method = typeof(ReliableControlClient).GetMethod(
+            var readerMethod = typeof(ReliableControlClient).GetMethod(
                 "ReadBoundedLine",
                 BindingFlags.Static | BindingFlags.NonPublic,
                 null,
@@ -256,12 +276,45 @@ namespace SRP.U01.Tests
                 var bytes = Encoding.UTF8.GetBytes(new string('a', bodyBytes) + "\n");
                 using var stream = new MemoryStream(bytes);
                 using var reader = new StreamReader(stream, new UTF8Encoding(false, true));
-                try { return (string)method.Invoke(null, new object[] { reader }); }
+                try { return (string)readerMethod.Invoke(null, new object[] { reader }); }
                 catch (TargetInvocationException error) { throw error.InnerException; }
+            }
+            string ReadRaw(int bodyBytes)
+            {
+                var listener = new TcpListener(IPAddress.Loopback, 0);
+                try
+                {
+                    listener.Start();
+                    var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+                    var payload = Encoding.UTF8.GetBytes(new string('a', bodyBytes) + "\n");
+                    var sender = Task.Run(() =>
+                    {
+                        using var socket = new TcpClient(AddressFamily.InterNetwork);
+                        socket.Connect(IPAddress.Loopback, port);
+                        socket.GetStream().Write(payload, 0, payload.Length);
+                    });
+                    using var receiver = listener.AcceptTcpClient();
+                    var rawMethod = typeof(ReliableControlClient).GetMethod(
+                        "ReadBoundedLine",
+                        BindingFlags.Static | BindingFlags.NonPublic,
+                        null,
+                        new[] { typeof(NetworkStream), typeof(TcpClient), typeof(int) },
+                        null);
+                    try
+                    {
+                        return (string)rawMethod.Invoke(
+                            null, new object[] { receiver.GetStream(), receiver, 30_000 });
+                    }
+                    catch (TargetInvocationException error) { throw error.InnerException; }
+                    finally { sender.Wait(); }
+                }
+                finally { listener.Stop(); }
             }
 
             Assert.That(Read(1024 * 1024 - 1).Length, Is.EqualTo(1024 * 1024 - 1));
             Assert.Throws<InvalidDataException>(() => Read(1024 * 1024));
+            Assert.That(ReadRaw(1024 * 1024 - 1).Length, Is.EqualTo(1024 * 1024 - 1));
+            Assert.Throws<InvalidDataException>(() => ReadRaw(1024 * 1024));
         }
 
         [Test]

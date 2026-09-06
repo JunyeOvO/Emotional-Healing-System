@@ -17,7 +17,7 @@ EXPECTED_TESTS = {
         "SRP.U01.Tests.U01EditModeTests.DeliveryFactoryPreservesIdentityAndRejectsInvalidFailureReceipt",
         "SRP.U01.Tests.U01EditModeTests.DisposeDoesNotWaitForABlockedSendLock",
         "SRP.U01.Tests.U01EditModeTests.ExactRetryIsIdempotentButAlteredDuplicateAndOldSequenceAreRejected",
-        "SRP.U01.Tests.U01EditModeTests.FailedConnectionAlwaysDisposesCapturedSocket",
+        "SRP.U01.Tests.U01EditModeTests.FailedOldConnectionIsDisposedWithoutTouchingNewGeneration",
         "SRP.U01.Tests.U01EditModeTests.FormalV21AndWrongHandshakeFailClosed",
         "SRP.U01.Tests.U01EditModeTests.GoldenControlTraceIsMirroredWithoutLocalSequencing",
         "SRP.U01.Tests.U01EditModeTests.IncomingFrameLimitIncludesLineFeed",
