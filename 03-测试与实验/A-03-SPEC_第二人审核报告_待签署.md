@@ -17,7 +17,7 @@
 - 小规模敏感性点：共同通过概率`0.072`，`SYNTHETIC_SENSITIVITY_POINT_NO_GO`
 - 既有规划锚点：共同通过概率`0.646`，`SYNTHETIC_EXISTING_PLANNING_ANCHOR_NO_GO`
 - 均衡完整结果目标：共同通过概率`0.721`，`SYNTHETIC_COMPLETE_TARGET_NO_GO`
-- 首轮独立复审：旧候选`REVISE_REQUIRED`；五类发现已在本候选修复，等待新Agent复审
+- 修复独立复审：`A03_SPEC_REVIEW_PASS_NO_OPEN_P0_P3`，Agent `01a07669-16c2-7152-a9de-2df1fb79a8e9`
 
 ## 必须核对
 
@@ -28,6 +28,7 @@
 - [ ] 两分析集在同一复制上运行，24/85/96三个合成`NO_GO`均完整报告。
 - [ ] 85仅作为既有规划锚点，96仅作为均衡完整结果目标，总招募上限240未被当作完整结果。
 - [ ] A-03-REAL、A-03-CAL、Gate2通过和研究执行均未被提前声明。
+- [ ] 独立Agent复审不替代本报告的真实第二人判断。
 
 ## 签署区
 
