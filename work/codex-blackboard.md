@@ -1413,4 +1413,4 @@ Run separate read-only Agent reviews against the fixed G-02, P-01 and P-02 imple
 - 已实现PANAS配置驱动计分、SCCI操纵检查计分、四层理解、心智努力、阶段错误汇总、FDR及非补偿有序门。
 - 合成Monte Carlo使用Beta、伯努利和有序离散生成，不使用正态锚点；固定种子为`20260906`，同时运行保守与完整案例分析集。
 - 每条件24人的敏感性点联合通过概率为0.287/0.290，结论为`SYNTHETIC_SENSITIVITY_POINT_NO_GO`；既有每组85规划锚点为0.934/0.942，结论为`SYNTHETIC_UPPER_CAP_FEASIBLE`。
-- 上述结果不冻结正式Gate2界限、关键层、缺失规则或样本量；下一硬门是完整回归、候选提交、独立Agent复核和真实第二人签收。
+- 上述结果不冻结正式Gate2界限、关键层、缺失规则或样本量；实现候选为`8c7c4fcc7881d1cc710972b7e9fe29af89be03d9`，A-03-SPEC现转`IN_REVIEW`。下一硬门是独立Agent复核和真实第二人签收。

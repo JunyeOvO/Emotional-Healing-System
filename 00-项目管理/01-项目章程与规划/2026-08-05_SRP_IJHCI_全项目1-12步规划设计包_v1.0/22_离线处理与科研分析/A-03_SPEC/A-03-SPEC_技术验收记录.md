@@ -3,7 +3,8 @@
 ## 候选范围
 
 - 里程碑：`A-03-SPEC`
-- 状态：`IN_PROGRESS`
+- 状态：`IN_REVIEW`
+- 实现候选：`8c7c4fcc7881d1cc710972b7e9fe29af89be03d9`
 - 证据类别：`SYNTHETIC_ONLY`
 - 正式非劣界限：未冻结
 - 正式样本量：未冻结

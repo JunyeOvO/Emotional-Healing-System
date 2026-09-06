@@ -1516,3 +1516,4 @@
 | Full Regression | `py -3.14 -m pytest -q`：`514 passed in 36.36s`。 |
 | Wording And Diff | A-03新增文件未出现项目禁用表述；`git diff --check`通过，仅有Windows换行提示。 |
 | Generated Reports | 小规模点SHA-256 `A678350D5D74A77D66C5F14FE36B4A1EBF3E79E107FBADD772F68D916FEA243D`；规划上限SHA-256 `7C40DB6465D8293BEB8AEC8CE06618D4EE462D49C252F77A1FAC67FD232E865E`。 |
+| Final Review-State Regression | A-03-SPEC转`IN_REVIEW`并重建独立包后，根pytest为`514 passed in 29.06s`；禁用表述与`git diff --check`通过。 |
