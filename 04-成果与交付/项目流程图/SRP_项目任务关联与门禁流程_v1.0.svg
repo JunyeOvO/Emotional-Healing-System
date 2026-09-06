@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="5878" viewBox="0 0 2400 5878" role="img" aria-labelledby="title desc">
   <title id="title">SRP v2.1 任务关联与门禁流程</title>
-  <desc id="desc">59 项任务，按 W0 至 W6 波次与五类职责泳道排列。图中包含 130 条注册表依赖边、1 条条件路线边、当前状态和外部门禁。</desc>
-  <metadata>snapshot=2026-09-06; tasks=59; dependency_edges=130; conditional_edges=1; status_basis=task-registry; transition=a06-stage1-main-stage3-conditional; authority=REJECT_AND_RESUBMIT_DESIGN; evidence=PLANNED_NOT_OBSERVED</metadata>
+  <desc id="desc">59 项任务，按 W0 至 W6 波次与五类职责泳道排列。图中包含 129 条注册表依赖边、1 条条件路线边、当前状态和外部门禁。</desc>
+  <metadata>snapshot=2026-09-06; tasks=59; dependency_edges=129; conditional_edges=1; status_basis=task-registry; transition=a03-milestones-and-a06-stage1-main-stage3-conditional; authority=REJECT_AND_RESUBMIT_DESIGN; evidence=PLANNED_NOT_OBSERVED</metadata>
   <defs>
     <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L9,4.5 L0,9 Z" fill="#74808c"/></marker>
     <marker id="arrow-critical" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 Z" fill="#34495a"/></marker>
@@ -25,21 +25,21 @@
     <text x="52" y="66" class="title">SRP v2.1｜59 项任务关联与门禁流程</text>
     <text x="52" y="101" class="subtitle">顺序规范不代表当前通过状态；附件仅作视觉参考，状态来自项目任务注册表、协议权威与独立分支证据。</text>
     <rect x="52" y="126" width="2296" height="54" rx="10" fill="#edf4fa" stroke="#6d94b8" stroke-width="1.5"/>
-    <text x="76" y="160" class="snapshot">当前工作面：16 项 DONE ｜ G-05 EXT-WAIT ｜ A-06 WAIT ｜ T-02 / U-01 / U-02 READY</text>
+    <text x="76" y="160" class="snapshot">当前工作面：16 项 DONE ｜ G-05 EXT-WAIT ｜ A-06 WAIT ｜ A-03 / T-02 / U-01 / U-02 READY</text>
     <rect x="52" y="196" width="2296" height="54" rx="10" fill="#fff0ee" stroke="#cf4d43" stroke-width="1.5"/>
     <text x="76" y="230" class="snapshot">设计权威：REJECT_AND_RESUBMIT_DESIGN ｜ 证据：PLANNED_NOT_OBSERVED ｜ 工程完成不得扩大为 LIVE_E2E 或外部放行</text>
     <text x="52" y="286" class="subtitle">状态</text>
     <circle cx="116" cy="281" r="7" fill="#2f8a57"/><text x="130" y="286" class="legend-text">DONE 16</text>
     <circle cx="251" cy="281" r="7" fill="#2f75b5"/><text x="265" y="286" class="legend-text">DOING 0</text>
     <circle cx="406" cy="281" r="7" fill="#c47a1b"/><text x="420" y="286" class="legend-text">REVIEW 0</text>
-    <circle cx="541" cy="281" r="7" fill="#7b56b6"/><text x="555" y="286" class="legend-text">READY 3</text>
-    <circle cx="676" cy="281" r="7" fill="#7d8790"/><text x="690" y="286" class="legend-text">WAIT 22</text>
+    <circle cx="541" cy="281" r="7" fill="#7b56b6"/><text x="555" y="286" class="legend-text">READY 4</text>
+    <circle cx="676" cy="281" r="7" fill="#7d8790"/><text x="690" y="286" class="legend-text">WAIT 21</text>
     <circle cx="811" cy="281" r="7" fill="#d9822b"/><text x="825" y="286" class="legend-text">EXT-WAIT 5</text>
     <circle cx="966" cy="281" r="7" fill="#c64d4d"/><text x="980" y="286" class="legend-text">LOCK 13</text>
     <text x="1220" y="286" class="subtitle">线条</text>
     <path d="M1280 281 H1380" class="dependency critical"/><text x="1396" y="286" class="legend-text">主装配链</text>
     <path d="M1530 281 H1630" class="dependency"/><text x="1646" y="286" class="legend-text">其他显式 depends_on</text>
-    <text x="2020" y="286" class="legend-text">130 条依赖 + 1 条条件边</text>
+    <text x="2020" y="286" class="legend-text">129 条依赖 + 1 条条件边</text>
   </g>
   <g id="lane-headers">
     <rect x="236" y="328" width="410" height="112" rx="12" fill="#71966c"/>
@@ -84,7 +84,7 @@
     <text x="121" y="1782" class="wave-code" text-anchor="middle">W2</text>
     <text x="121" y="1814" class="wave-name" text-anchor="middle">灰盒与纵向实现</text>
     <text x="121" y="1846" class="wave-count" text-anchor="middle">16 项</text>
-    <text x="52" y="1880" class="wave-count">DONE 1 · READY 1 · WAIT 12 · EXT-WAIT 2</text>
+    <text x="52" y="1880" class="wave-count">DONE 1 · READY 2 · WAIT 11 · EXT-WAIT 2</text>
     <line x1="655" y1="1748" x2="655" y2="2578" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
     <line x1="1083" y1="1748" x2="1083" y2="2578" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
     <line x1="1511" y1="1748" x2="1511" y2="2578" stroke="#dfe5ea" stroke-width="1" stroke-dasharray="5 7"/>
@@ -189,7 +189,6 @@
     <g data-from="S-02" data-to="A-01"><title>S-02 → A-01</title><path d="M 441 2222 V 2238" class="dependency critical"/></g>
     <g data-from="A-01" data-to="A-02"><title>A-01 → A-02</title><path d="M 441 2330 V 2346" class="dependency critical"/></g>
     <g data-from="F-02" data-to="A-03"><title>F-02 → A-03</title><path d="M 1725 654 V 666 H 441 V 2454" class="dependency"/></g>
-    <g data-from="A-01" data-to="A-03"><title>A-01 → A-03</title><path d="M 441 2330 V 2454" class="dependency"/></g>
     <g data-from="F-02" data-to="W-01"><title>F-02 → W-01</title><path d="M 1725 654 V 666 H 2153 V 1806" class="dependency"/></g>
     <g data-from="R-01" data-to="W-01"><title>R-01 → W-01</title><path d="M 1725 1222 V 1234 H 2153 V 1806" class="dependency"/></g>
     <g data-from="P-01" data-to="I-01"><title>P-01 → I-01</title><path d="M 441 1006 V 1018 H 1297 V 2806" class="dependency"/></g>
@@ -207,9 +206,9 @@
     <g data-from="I-01" data-to="Q-03"><title>I-01 → Q-03</title><path d="M 1494 2852 H 1511 V 3068 H 1528" class="dependency"/></g>
     <g data-from="Q-02" data-to="Q-03"><title>Q-02 → Q-03</title><path d="M 1725 3006 V 3022" class="dependency"/></g>
     <g data-from="A-01" data-to="Q-03"><title>A-01 → Q-03</title><path d="M 441 2330 V 2342 H 1725 V 3022" class="dependency"/></g>
-    <g data-from="A-03" data-to="Q-03"><title>A-03 → Q-03</title><path d="M 441 2546 V 2558 H 1725 V 3022" class="dependency"/></g>
+    <g data-from="A-03-REAL" data-to="Q-03"><title>A-03-REAL → Q-03</title><path d="M 441 2546 V 2558 H 1725 V 3022" class="dependency"/></g>
     <g data-from="P-01" data-to="X-01"><title>P-01 → X-01</title><path d="M 441 1006 V 1018 H 441 V 2806" class="dependency"/></g>
-    <g data-from="A-03" data-to="X-01"><title>A-03 → X-01</title><path d="M 441 2546 V 2558 H 441 V 2806" class="dependency"/></g>
+    <g data-from="A-03-SPEC" data-to="X-01"><title>A-03-SPEC → X-01</title><path d="M 441 2546 V 2558 H 441 V 2806" class="dependency"/></g>
     <g data-from="G-02" data-to="X-01"><title>G-02 → X-01</title><path d="M 1725 1114 V 1126 H 441 V 2806" class="dependency"/></g>
     <g data-from="A-03" data-to="X-02"><title>A-03 → X-02</title><path d="M 441 2546 V 2558 H 441 V 2914" class="dependency"/></g>
     <g data-from="X-01" data-to="X-03"><title>X-01 → X-03</title><path d="M 441 2898 V 3022" class="dependency"/></g>
@@ -236,7 +235,7 @@
     <g data-from="X-01" data-to="G-03"><title>X-01 → G-03</title><path d="M 441 2898 V 2910 H 1725 V 3806" class="dependency"/></g>
     <g data-from="Z-01" data-to="G-03"><title>Z-01 → G-03</title><path d="M 869 2898 V 2910 H 1725 V 3806" class="dependency"/></g>
     <g data-from="A-02" data-to="G-03"><title>A-02 → G-03</title><path d="M 441 2438 V 2450 H 1725 V 3806" class="dependency"/></g>
-    <g data-from="A-03" data-to="G-03"><title>A-03 → G-03</title><path d="M 441 2546 V 2558 H 1725 V 3806" class="dependency"/></g>
+    <g data-from="A-03-CAL" data-to="G-03"><title>A-03-CAL → G-03</title><path d="M 441 2546 V 2558 H 1725 V 3806" class="dependency"/></g>
     <g data-from="G-03" data-to="B-02"><title>G-03 → B-02</title><path d="M 1725 3898 V 3910 H 1725 V 4158" class="dependency critical"/></g>
     <g data-from="G-03" data-to="E-04"><title>G-03 → E-04</title><path d="M 1725 3898 V 3910 H 1725 V 4266" class="dependency"/></g>
     <g data-from="B-02" data-to="E-04"><title>B-02 → E-04</title><path d="M 1725 4250 V 4266" class="dependency critical"/></g>
@@ -514,12 +513,12 @@
       <text x="585" y="2373" class="status-text">WAIT</text>
       <text x="259" y="2402" class="task-title">Gate1双分析集插补与模型</text>
     </g>
-    <g id="task-A-03" data-task-id="A-03" data-wave="W2" data-type="data" data-status="WAIT_DEP" data-depends-on="F-02|A-01">
-      <title>【统计实现】Gate2联合测量估计目标与Monte Carlo样本模拟 | status=WAIT_DEP | depends_on=F-02|A-01</title>
+    <g id="task-A-03" data-task-id="A-03" data-wave="W2" data-type="data" data-status="READY" data-depends-on="F-02">
+      <title>【统计实现】Gate2联合测量估计目标与Monte Carlo样本模拟 | status=READY | depends_on=F-02 | completion=A-03-SPEC|A-03-REAL|A-03-CAL</title>
       <rect x="244" y="2454" width="394" height="92" rx="11" fill="#edf5ec" stroke="#71966c" stroke-width="1.6"/>
       <text x="259" y="2483" class="task-id">A-03</text>
-      <rect x="546" y="2464" width="78" height="25" rx="12.5" fill="#7d8790"/>
-      <text x="585" y="2481" class="status-text">WAIT</text>
+      <rect x="546" y="2464" width="78" height="25" rx="12.5" fill="#7b56b6"/>
+      <text x="585" y="2481" class="status-text">READY</text>
       <text x="259" y="2510" class="task-title">Gate2联合测量估计目标与Monte</text>
       <text x="259" y="2532" class="task-title">Carlo样本模拟</text>
     </g>
@@ -557,16 +556,16 @@
       <text x="1543" y="2970" class="task-title">Level B两条件认知可访问性与</text>
       <text x="1543" y="2992" class="task-title">需求特征预试</text>
     </g>
-    <g id="task-Q-03" data-task-id="Q-03" data-wave="W3" data-type="research" data-status="WAIT_DEP_EXTERNAL" data-depends-on="I-01|Q-02|A-01|A-03">
-      <title>【研究工具】Level C采集标注与阈值冻结工具 | status=WAIT_DEP_EXTERNAL | depends_on=I-01|Q-02|A-01|A-03</title>
+    <g id="task-Q-03" data-task-id="Q-03" data-wave="W3" data-type="research" data-status="WAIT_DEP_EXTERNAL" data-depends-on="I-01|Q-02|A-01|A-03-REAL">
+      <title>【研究工具】Level C采集标注与阈值冻结工具 | status=WAIT_DEP_EXTERNAL | depends_on=I-01|Q-02|A-01|A-03-REAL</title>
       <rect x="1528" y="3022" width="394" height="92" rx="11" fill="#f5f0f8" stroke="#9074a5" stroke-width="1.6"/>
       <text x="1543" y="3051" class="task-id">Q-03</text>
       <rect x="1830" y="3032" width="78" height="25" rx="12.5" fill="#d9822b"/>
       <text x="1869" y="3049" class="status-text">EXT-WAIT</text>
       <text x="1543" y="3078" class="task-title">Level C采集标注与阈值冻结工具</text>
     </g>
-    <g id="task-X-01" data-task-id="X-01" data-wave="W3" data-type="data" data-status="WAIT_DEP" data-depends-on="P-01|A-03|G-02">
-      <title>【随机化】阶段一三清单分层隐藏概率与重复防护 | status=WAIT_DEP | depends_on=P-01|A-03|G-02</title>
+    <g id="task-X-01" data-task-id="X-01" data-wave="W3" data-type="data" data-status="WAIT_DEP" data-depends-on="P-01|A-03-SPEC|G-02">
+      <title>【随机化】阶段一三清单分层隐藏概率与重复防护 | status=WAIT_DEP | depends_on=P-01|A-03-SPEC|G-02</title>
       <rect x="244" y="2806" width="394" height="92" rx="11" fill="#edf5ec" stroke="#71966c" stroke-width="1.6"/>
       <text x="259" y="2835" class="task-id">X-01</text>
       <rect x="546" y="2816" width="78" height="25" rx="12.5" fill="#7d8790"/>
@@ -637,8 +636,8 @@
       <text x="1869" y="3725" class="status-text">LOCK</text>
       <text x="1543" y="3754" class="task-title">Level C汇总门与阈值冻结</text>
     </g>
-    <g id="task-G-03" data-task-id="G-03" data-wave="W4" data-type="research" data-status="BLOCKED_EXTERNAL" data-depends-on="E-03|X-01|Z-01|A-02|A-03|G-05">
-      <title>【预注册与锁定】阶段一估计目标报告清单与构建锁定 | status=BLOCKED_EXTERNAL | depends_on=E-03|X-01|Z-01|A-02|A-03|G-05</title>
+    <g id="task-G-03" data-task-id="G-03" data-wave="W4" data-type="research" data-status="BLOCKED_EXTERNAL" data-depends-on="E-03|X-01|Z-01|A-02|A-03-CAL|G-05">
+      <title>【预注册与锁定】阶段一估计目标报告清单与构建锁定 | status=BLOCKED_EXTERNAL | depends_on=E-03|X-01|Z-01|A-02|A-03-CAL|G-05</title>
       <rect x="1528" y="3806" width="394" height="92" rx="11" fill="#f5f0f8" stroke="#9074a5" stroke-width="1.6"/>
       <text x="1543" y="3835" class="task-id">G-03</text>
       <rect x="1830" y="3816" width="78" height="25" rx="12.5" fill="#c64d4d"/>
@@ -757,7 +756,7 @@
       <rect x="236" y="1592" width="2118" height="94" rx="11" class="gate-current"/>
       <rect x="252" y="1609" width="82" height="28" rx="7" fill="#5d8fb9"/>
       <text x="293" y="1628" class="gate-label">CURRENT</text>
-    <text x="352" y="1628" class="gate-text">当前工作面：16项DONE；G-01/G-02已完成；T-02/U-01/U-02 READY。</text>
+    <text x="352" y="1628" class="gate-text">当前工作面：16项DONE；G-01/G-02已完成；A-03/T-02/U-01/U-02 READY。</text>
     <text x="352" y="1660" class="gate-note">外部配置、机构路径、许可清零与U8实地证据统一由第58项G-05承接。</text>
     </g>
     <g id="gate-W2">
@@ -803,6 +802,6 @@
     <rect x="52" y="5688" width="2296" height="124" rx="12" fill="#eef3f7" stroke="#9aabb8" stroke-width="1.4"/>
     <text x="80" y="5726" class="footer-title">数据来源与可审计性</text>
   <text x="80" y="5758" class="footer-text">治理迁移：G-05承接外部准入｜第59项A-06关闭实际研究范围｜阶段三保持条件式</text>
-  <text x="80" y="5788" class="footer-text">快照：2026-09-06 ｜ tasks=59 ｜ dependency_edges=130 + conditional_edges=1 ｜ 权威：05_可领取任务包.csv</text>
+  <text x="80" y="5788" class="footer-text">快照：2026-09-06 ｜ tasks=59 ｜ dependency_edges=129 + conditional_edges=1 ｜ 权威：05_可领取任务包.csv</text>
   </g>
 </svg>

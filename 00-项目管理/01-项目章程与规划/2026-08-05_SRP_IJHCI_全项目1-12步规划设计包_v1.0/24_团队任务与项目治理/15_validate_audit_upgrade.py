@@ -164,9 +164,53 @@ def main() -> int:
         errors.append("STAGE3_ACTIVITY_SOURCES_INVALID")
 
     milestones = json.loads((UPGRADE / "task_milestones_v1.0.json").read_text(encoding="utf-8"))
-    milestone_ids = {item["id"] for item in milestones.get("milestones", [])}
+    milestone_rows = milestones.get("milestones", [])
+    milestone_ids = {item["id"] for item in milestone_rows}
     if milestone_ids != {"A-03-SPEC", "A-03-REAL", "A-03-CAL"}:
         errors.append("A03_MILESTONES_INVALID")
+    expected_milestone_consumers = {
+        "A-03-SPEC": ["X-01"],
+        "A-03-REAL": ["Q-03"],
+        "A-03-CAL": ["G-03"],
+    }
+    for item in milestone_rows:
+        if item.get("consumers") != expected_milestone_consumers.get(item.get("id")):
+            errors.append(f"{item.get('id')}:MILESTONE_CONSUMERS_INVALID")
+    expected_task_dependencies = {
+        "A-03": "F-02",
+        "X-01": "P-01|A-03-SPEC|G-02",
+        "Q-03": "I-01|Q-02|A-01|A-03-REAL",
+        "G-03": "E-03|X-01|Z-01|A-02|A-03-CAL|G-05",
+    }
+    for task_id, dependencies in expected_task_dependencies.items():
+        if by_id.get(task_id, {}).get("depends_on") != dependencies:
+            errors.append(f"{task_id}:MILESTONE_DEPENDENCY_BINDING_INVALID")
+
+    combined_graph = {
+        task_id: {value for value in row["depends_on"].split("|") if value}
+        for task_id, row in by_id.items()
+    }
+    for item in milestone_rows:
+        combined_graph[item["id"]] = set(item.get("depends_on", []))
+    combined_graph["A-03"].update(milestone_ids)
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit_combined(node: str) -> None:
+        if node in visiting:
+            errors.append(f"{node}:TASK_MILESTONE_DEPENDENCY_CYCLE")
+            return
+        if node in visited:
+            return
+        visiting.add(node)
+        for dependency in combined_graph.get(node, set()):
+            if dependency in combined_graph:
+                visit_combined(dependency)
+        visiting.remove(node)
+        visited.add(node)
+
+    for node in combined_graph:
+        visit_combined(node)
 
     with (UPGRADE / "external_capability_matrix_v1.0.csv").open(
         encoding="utf-8-sig", newline=""

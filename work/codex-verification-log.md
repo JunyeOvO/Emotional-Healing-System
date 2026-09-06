@@ -1481,3 +1481,17 @@
 | PDF | 三份PDF验证通过；仅提交更新后的固定任务概要，9页，SHA-256 `F5A30A74A9CF02543B87675185F127485BEF143C2F78D3FD375CC5D6974B007B`。 |
 | Diagrams | 两张SVG可渲染；PNG为2400×5878和2400×2640，人工检查A-06节点、条件边、59项计数和图文无明显遮挡。 |
 | Independent Review | 独立Agent `01a07285-391c-75d1-b8bb-c244d445e84b`对候选`be5335e8632c33bbe6f35af0d869a0bcddbe6b60`返回`PASS_NO_OPEN_P0_P3`；报告位于`03-测试与实验/IJHCI审计升级批次0-1_独立Agent复审报告_2026-09-06.md`，不替代真实第二人签收。 |
+
+### 2026-09-06 IJHCI审计升级效果复审修复
+
+| Check | Result |
+|---|---|
+| Independent Effect Finding | 独立Agent发现A-03里程碑完成图存在真实循环，并发现W1计数错误；修复前结论为`EFFECT_REVISE_REQUIRED`。 |
+| Registry And Milestones | `PASS`：59项、56固定任务、3模板；`READY=A-03,T-02,U-01,U-02`；任务与三个A-03里程碑的联合完成图无环。 |
+| Cycle Regression | 治理专项`14 passed`，新增旧环路构造用例，确认验证器能够拒绝跨任务与里程碑的完成循环。 |
+| Dispatch Packages | `PASS`：4个独立包、50份冻结输入快照；A-03包包含里程碑合同和统计输入。 |
+| Audit Contracts | `PASS`：A-03的X-01、Q-03、G-03消费者分别固定为SPEC、REAL、CAL；升级证据哈希已重算。 |
+| Protocol And PDF | 协议权威验证通过；三份PDF可打开，更新后的固定任务概要为9页，SHA-256 `54076267B33B6E3D0FDDA9A743A7857AFE8B238ABC7797BFE90860D014DA6F7E`。 |
+| Full Regression | 首次误用PDF构建环境，因缺少NeuroKit2在收集阶段退出；改用项目冻结入口`py -3.14 -m pytest -q`后为`499 passed in 17.95s`，未安装依赖。 |
+| Diagrams | 两张PNG为2400×5878和2400×2640；人工检查59项、`READY=4`、`WAIT_DEP=21`及A-03节点可见，无明显遮挡。 |
+| Wording And Diff | 新增行未出现项目禁用表述；`git diff --check`通过，仅有既有Windows换行提示。 |

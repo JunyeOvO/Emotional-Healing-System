@@ -16,12 +16,14 @@ HANDBOOK = ROOT / "04_可领取树型任务包_v2.0.md"
 PACKAGE_MAP = ROOT / "12_独立任务包文件映射_v1.0.json"
 PACKAGE_OUTPUT = ROOT / "当前解锁独立任务包"
 RELEASE_ROUTES = ROOT / "audit_upgrade" / "release_routes_v1.0.json"
+MILESTONE_CONTRACT = ROOT / "audit_upgrade" / "task_milestones_v1.0.json"
 VALID_STATUSES = {
     "READY", "IN_PROGRESS", "IN_REVIEW", "DONE",
     "WAIT_DEP", "WAIT_DEP_EXTERNAL", "BLOCKED_EXTERNAL",
 }
 PACKAGE_STATUSES = {"READY", "IN_PROGRESS", "IN_REVIEW"}
 VALID_KINDS = {"FIXED", "TEMPLATE"}
+VALID_MILESTONE_STATUSES = {"READY", "WAIT_DEP", "DONE"}
 VALID_PROFILES = {
     "P-DESIGN",
     "P-DEV",
@@ -117,6 +119,19 @@ def dependency_cycle_nodes(graph: dict[str, set[str]]) -> set[str]:
     return cycles
 
 
+def combined_dependency_graph(
+    task_dependencies: dict[str, set[str]],
+    milestones: list[dict[str, object]],
+    completion_task: str,
+) -> dict[str, set[str]]:
+    graph = {node: set(dependencies) for node, dependencies in task_dependencies.items()}
+    milestone_ids = {str(item["id"]) for item in milestones}
+    for item in milestones:
+        graph[str(item["id"])] = {str(value) for value in item.get("depends_on", [])}
+    graph.setdefault(completion_task, set()).update(milestone_ids)
+    return graph
+
+
 def main() -> int:
     errors: list[str] = []
     with REGISTRY.open(encoding="utf-8-sig", newline="") as handle:
@@ -135,6 +150,14 @@ def main() -> int:
     ids = [row["task_id"] for row in rows]
     known = set(ids)
     rows_by_id = {row["task_id"]: row for row in rows}
+    milestone_contract = json.loads(MILESTONE_CONTRACT.read_text(encoding="utf-8"))
+    milestones = milestone_contract.get("milestones", [])
+    milestone_ids = {str(item.get("id", "")) for item in milestones}
+    known_nodes = known | milestone_ids
+    node_status = {task_id: row["status"] for task_id, row in rows_by_id.items()}
+    node_status.update({str(item.get("id", "")): str(item.get("status", "")) for item in milestones})
+    node_wave = {task_id: row["wave"] for task_id, row in rows_by_id.items()}
+    node_wave.update({milestone_id: rows_by_id["A-03"]["wave"] for milestone_id in milestone_ids})
     if len(rows) != 59:
         errors.append(f"expected 59 registry entries, found {len(rows)}")
     if len(ids) != len(known):
@@ -191,15 +214,15 @@ def main() -> int:
         if not row["title"].startswith(expected_prefix):
             errors.append(f"{task_id}: title must start with {expected_prefix}")
 
-        missing_dependencies = unknown_dependencies(dependencies, known)
+        missing_dependencies = unknown_dependencies(dependencies, known_nodes)
         if missing_dependencies:
             errors.append(f"{task_id}: unknown dependencies {sorted(missing_dependencies)}")
         if task_id in dependencies:
             errors.append(f"{task_id}: self dependency")
         incomplete_dependencies = {
             dependency
-            for dependency in dependencies & known
-            if rows_by_id[dependency]["status"] != "DONE"
+            for dependency in dependencies & known_nodes
+            if node_status.get(dependency) != "DONE"
         }
         if row["status"] in PACKAGE_STATUSES and incomplete_dependencies:
             errors.append(
@@ -229,8 +252,8 @@ def main() -> int:
         if row["kind"] == "TEMPLATE" and row["status"] == "READY":
             errors.append(f"{task_id}: repeatable template cannot be READY")
 
-        for dependency in dependencies & known:
-            dependency_wave = next(item["wave"] for item in rows if item["task_id"] == dependency)
+        for dependency in dependencies & known_nodes:
+            dependency_wave = node_wave[dependency]
             if WAVE_ORDER.get(dependency_wave, 99) > WAVE_ORDER.get(row["wave"], -1):
                 errors.append(f"{task_id}: depends on later-wave task {dependency}")
 
@@ -260,6 +283,27 @@ def main() -> int:
     if len(rows) - len(template_ids) != 56:
         errors.append("expected 56 fixed task packages")
 
+    if milestone_ids != {"A-03-SPEC", "A-03-REAL", "A-03-CAL"}:
+        errors.append("A-03 milestone set is invalid")
+    for item in milestones:
+        milestone_id = str(item.get("id", ""))
+        status = str(item.get("status", ""))
+        dependencies = {str(value) for value in item.get("depends_on", [])}
+        missing_dependencies = unknown_dependencies(dependencies, known_nodes)
+        if missing_dependencies:
+            errors.append(f"{milestone_id}: unknown dependencies {sorted(missing_dependencies)}")
+        if status not in VALID_MILESTONE_STATUSES:
+            errors.append(f"{milestone_id}: invalid status {status!r}")
+        incomplete = {dependency for dependency in dependencies if node_status.get(dependency) != "DONE"}
+        if status in {"READY", "DONE"} and incomplete:
+            errors.append(f"{milestone_id}: status {status} has incomplete dependencies {sorted(incomplete)}")
+        if status == "WAIT_DEP" and dependencies and not incomplete:
+            errors.append(f"{milestone_id}: WAIT_DEP is stale because all dependencies are DONE")
+    if rows_by_id["A-03"]["status"] == "DONE" and any(
+        node_status.get(milestone_id) != "DONE" for milestone_id in milestone_ids
+    ):
+        errors.append("A-03 cannot be DONE before all milestones are DONE")
+
     conditional_consumers: dict[str, set[str]] = {task_id: set() for task_id in known}
     if not RELEASE_ROUTES.is_file():
         errors.append("release route contract is missing")
@@ -278,7 +322,8 @@ def main() -> int:
         if rows_by_id.get("W-02", {}).get("depends_on") != "W-01|A-06":
             errors.append("W-02 must consume W-01 and A-06")
 
-    for task_id in sorted(dependency_cycle_nodes(graph)):
+    completion_graph = combined_dependency_graph(graph, milestones, "A-03")
+    for task_id in sorted(dependency_cycle_nodes(completion_graph)):
         errors.append(f"dependency cycle reaches {task_id}")
 
     def reaches_terminal(start: str) -> bool:

@@ -134,6 +134,24 @@ def test_conditional_edges_participate_in_cycle_detection():
     assert validator.dependency_cycle_nodes(graph)
 
 
+def test_task_milestone_completion_cycle_is_detected():
+    validator = load_governance_script("07_validate_task_packages.py")
+    graph = validator.combined_dependency_graph(
+        {
+            "A-03": {"F-02"},
+            "Q-03": {"A-03"},
+            "E-03": {"Q-03"},
+        },
+        [
+            {"id": "A-03-SPEC", "depends_on": ["F-02"]},
+            {"id": "A-03-REAL", "depends_on": ["A-03-SPEC"]},
+            {"id": "A-03-CAL", "depends_on": ["A-03-REAL", "E-03"]},
+        ],
+        "A-03",
+    )
+    assert validator.dependency_cycle_nodes(graph)
+
+
 def test_a06_fake_candidate_and_missing_signed_report_are_rejected():
     validator = load_governance_script("15_validate_audit_upgrade.py")
     errors = validator.validate_a06_receipt(
