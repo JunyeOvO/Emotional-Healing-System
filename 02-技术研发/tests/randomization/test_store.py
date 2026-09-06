@@ -87,7 +87,10 @@ def test_reveal_requires_allocator_role_and_all_three_prechecks(tmp_path) -> Non
                 "WHERE event_type='ASSIGNMENT_REVEALED'"
             ).fetchone()[0]
         )
-    assert refs == {item.gate: item.evidence_id for item in evidence}
+    assert {gate: refs[gate] for gate in ("eligibility", "device_readiness", "dedup_reservation")} == {
+        item.gate: item.evidence_id for item in evidence
+    }
+    assert refs["allocation_binding"].startswith("BIND-")
 
 
 def test_same_request_is_idempotent_but_reservation_cannot_receive_twice(tmp_path) -> None:
@@ -199,3 +202,19 @@ def test_allocation_uses_assigned_rows_not_completion_outcomes(tmp_path) -> None
     )
     with pytest.raises(RandomizationError, match="LIST_EXHAUSTED"):
         store.allocate_and_reveal(request, evidence, actor_role="allocator")
+
+
+def test_formal_capability_requires_strict_true_from_both_parties(tmp_path) -> None:
+    verifier = CurrentGateEvidenceVerifier(
+        {
+            gate: (lambda _request, _evidence: True)
+            for gate in ("eligibility", "device_readiness", "dedup_reservation")
+        },
+        formal_capable="false",  # type: ignore[arg-type]
+    )
+    store = RandomizationStore(
+        tmp_path / "x01.sqlite",
+        evidence_verifier=verifier,
+        formal_capable="false",  # type: ignore[arg-type]
+    )
+    assert store.formal_capable is False

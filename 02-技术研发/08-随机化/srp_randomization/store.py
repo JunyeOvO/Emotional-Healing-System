@@ -54,8 +54,9 @@ class RandomizationStore:
     ) -> None:
         self.database_path = Path(database_path)
         self.evidence_verifier = evidence_verifier
-        self.formal_capable = bool(
-            formal_capable and getattr(evidence_verifier, "formal_capable", False)
+        self.formal_capable = (
+            formal_capable is True
+            and getattr(evidence_verifier, "formal_capable", False) is True
         )
         self.timeout_seconds = timeout_seconds
 
@@ -233,7 +234,11 @@ class RandomizationStore:
                     raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
                 continue
             permit = _opaque(
-                "PERMIT", row["list_hash"], row["allocation_index"], row["request_id"]
+                "PERMIT",
+                row["list_hash"],
+                row["allocation_index"],
+                row["request_id"],
+                row["reservation_id"],
             )
             if row["permit_id"] != permit or len(reveals.get(permit, ())) != 1:
                 raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
@@ -242,8 +247,19 @@ class RandomizationStore:
                 refs = json.loads(reveal["evidence_refs_json"])
             except (json.JSONDecodeError, TypeError) as error:
                 raise RandomizationError("ALLOCATION_AUDIT_MISMATCH") from error
-            if set(refs) != set(_REQUIRED_GATES) or not all(
-                isinstance(value, str) and value for value in refs.values()
+            expected_refs = {*_REQUIRED_GATES, "allocation_binding"}
+            expected_binding = _opaque(
+                "BIND",
+                row["list_hash"],
+                row["allocation_index"],
+                row["request_id"],
+                row["reservation_id"],
+                row["assigned_at_utc"],
+            )
+            if (
+                set(refs) != expected_refs
+                or refs.get("allocation_binding") != expected_binding
+                or not all(isinstance(value, str) and value for value in refs.values())
             ):
                 raise RandomizationError("ALLOCATION_AUDIT_MISMATCH")
             expected_permits.add(permit)
@@ -494,8 +510,13 @@ class RandomizationStore:
                 ).fetchone()
                 if row is None:
                     raise RandomizationError("LIST_EXHAUSTED")
+                assigned_at_utc = _utc_now()
                 permit_id = _opaque(
-                    "PERMIT", row["list_hash"], row["allocation_index"], request.request_id
+                    "PERMIT",
+                    row["list_hash"],
+                    row["allocation_index"],
+                    request.request_id,
+                    request.reservation_id,
                 )
                 connection.execute(
                     """
@@ -507,7 +528,7 @@ class RandomizationStore:
                         request.request_id,
                         request.reservation_id,
                         permit_id,
-                        _utc_now(),
+                        assigned_at_utc,
                         row["list_hash"],
                         row["allocation_index"],
                     ),
@@ -518,7 +539,17 @@ class RandomizationStore:
                     permit_id,
                     "PASS",
                     "ALL_GATES_PASS",
-                    {item.gate: item.evidence_id for item in evidence_tuple},
+                    {
+                        **{item.gate: item.evidence_id for item in evidence_tuple},
+                        "allocation_binding": _opaque(
+                            "BIND",
+                            row["list_hash"],
+                            row["allocation_index"],
+                            request.request_id,
+                            request.reservation_id,
+                            assigned_at_utc,
+                        ),
+                    },
                 )
                 assigned = connection.execute(
                     """
@@ -592,6 +623,7 @@ class RandomizationStore:
     ) -> BalanceAudit:
         self._authorize(actor_role, "auditor")
         with closing(self._connect()) as connection:
+            self._verify_runtime_integrity(connection)
             list_row = connection.execute(
                 "SELECT list_hash FROM randomization_lists WHERE stage = ?",
                 (stage,),

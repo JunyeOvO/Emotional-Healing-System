@@ -163,6 +163,13 @@ def verify_plan(plan: RandomizationPlan) -> None:
             raise RandomizationError("ARM_PROBABILITY_INVALID")
         grouped.setdefault((record.stratum, record.block), []).append(record)
     expected_sequences = set(permutations(WEATHERS))
+    for stratum in dict.fromkeys(record.stratum for record in plan.records):
+        ordered = [record for record in plan.records if record.stratum == stratum]
+        blocks = sorted({record.block for record in ordered})
+        if blocks != list(range(1, len(blocks) + 1)) or [
+            record.block for record in ordered
+        ] != [block for block in blocks for _ in range(BLOCK_SIZE)]:
+            raise RandomizationError("BLOCK_SEQUENCE_INVALID")
     for records in grouped.values():
         if len(records) != BLOCK_SIZE:
             raise RandomizationError("INCOMPLETE_BLOCK")

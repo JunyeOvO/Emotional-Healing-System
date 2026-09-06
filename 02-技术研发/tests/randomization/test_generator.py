@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import replace
+import hashlib
 from itertools import permutations
+import json
 
-from srp_randomization import generate_list, policy_decisions
+from srp_randomization import generate_list, policy_decisions, verify_plan
 from srp_randomization.errors import RandomizationError
 import pytest
 
@@ -97,3 +100,25 @@ def test_stage_3_frozen_policy_assignment_waits_for_x03_sequence() -> None:
     )
     with pytest.raises(RuntimeError, match="FROZEN_POLICY_SEQUENCE_REQUIRES_X03"):
         receipt.to_assignment_bundle("S-X03", 0)
+
+
+def test_complete_blocks_must_be_contiguous_in_allocation_order() -> None:
+    plan = generate_list("stage_1", ("all",), 2, b"block-order-seed-01")
+    reordered = tuple(
+        replace(record, allocation_index=index)
+        for index, record in enumerate(
+            sorted(plan.records, key=lambda item: (item.arm, item.block)), start=1
+        )
+    )
+    candidate = replace(plan, records=reordered)
+    encoded = json.dumps(
+        candidate.unsigned_dict(),
+        ensure_ascii=True,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    candidate = replace(
+        candidate, list_hash=f"sha256:{hashlib.sha256(encoded).hexdigest()}"
+    )
+    with pytest.raises(RandomizationError, match="BLOCK_SEQUENCE_INVALID"):
+        verify_plan(candidate)

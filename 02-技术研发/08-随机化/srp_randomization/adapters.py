@@ -29,7 +29,7 @@ class CurrentGateEvidenceVerifier:
         formal_capable: bool = False,
     ) -> None:
         self._validators = dict(validators)
-        self.formal_capable = formal_capable
+        self.formal_capable = formal_capable is True
 
     def verify_current(
         self, request: AllocationRequest, evidence: tuple[GateEvidence, ...]

@@ -105,6 +105,12 @@ def test_stored_list_tamper_blocks_reveal(tmp_path) -> None:
         connection.execute(
             "UPDATE allocation_records SET arm = 'tampered' WHERE allocation_index = 1"
         )
+    with pytest.raises(RandomizationError, match="LIST_HASH_MISMATCH"):
+        store.allocate_and_reveal(
+            AllocationRequest("REQ-T", "stage_1", "all", "RES-T", "1.0"),
+            _evidence("RES-T"),
+            actor_role="allocator",
+        )
 
 
 def test_idempotent_replay_rechecks_the_stored_list(tmp_path) -> None:
@@ -120,12 +126,6 @@ def test_idempotent_replay_rechecks_the_stored_list(tmp_path) -> None:
         )
     with pytest.raises(RandomizationError, match="LIST_HASH_MISMATCH"):
         store.allocate_and_reveal(request, _evidence("RES-T"), actor_role="allocator")
-    with pytest.raises(RandomizationError, match="LIST_HASH_MISMATCH"):
-        store.allocate_and_reveal(
-            AllocationRequest("REQ-T", "stage_1", "all", "RES-T", "1.0"),
-            _evidence("RES-T"),
-            actor_role="allocator",
-        )
 
 
 def test_unknown_fields_are_rejected_before_plan_reconstruction(tmp_path) -> None:
@@ -179,6 +179,45 @@ def test_assignment_state_tamper_and_internal_audit_tamper_block_reveal(tmp_path
             _evidence("RES-3"),
             actor_role="allocator",
         )
+def test_reservation_tamper_is_bound_to_the_reveal_audit(tmp_path) -> None:
+    database = tmp_path / "reservation-audit.sqlite"
+    store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
+    store.import_list(
+        generate_list("stage_1", ("all",), 1, b"reservation-audit-seed-01"),
+        actor_role="custodian",
+    )
+    store.allocate_and_reveal(
+        AllocationRequest("REQ-1", "stage_1", "all", "RES-1", "1.0"),
+        _evidence("RES-1"),
+        actor_role="allocator",
+    )
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "UPDATE allocation_records SET reservation_id='RES-CHANGED' "
+            "WHERE request_id='REQ-1'"
+        )
+    assert store.verify_audit_chain(actor_role="auditor").reason_code == (
+        "ALLOCATION_AUDIT_MISMATCH"
+    )
+
+
+def test_balance_audit_rejects_unlogged_assignment_state(tmp_path) -> None:
+    database = tmp_path / "balance-audit.sqlite"
+    store = RandomizationStore(database, evidence_verifier=SnapshotGateEvidenceVerifier())
+    store.import_list(
+        generate_list("stage_1", ("all",), 1, b"balance-audit-seed-01"),
+        actor_role="custodian",
+    )
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "UPDATE allocation_records SET request_id='REQ-FAKE', "
+            "reservation_id='RES-FAKE', permit_id='PERMIT-FAKE', "
+            "assigned_at_utc='2026-09-06T00:00:00Z' WHERE allocation_index=1"
+        )
+    with pytest.raises(RandomizationError, match="ALLOCATION_AUDIT_MISMATCH"):
+        store.audit_balance("stage_1", "all", actor_role="auditor")
+
+
 def test_g02_adapter_exports_only_opaque_receipt_fields() -> None:
     evidence = gate_evidence_from_dedup(
         SimpleNamespace(
