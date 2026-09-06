@@ -1443,3 +1443,14 @@ Run separate read-only Agent reviews against the fixed G-02, P-01 and P-02 imple
 - 傅钧烨以团队总监、独立第二人复核人身份审阅精确实现提交`f59c1824a934813797560fdd31e4b981cfd19f96`、已有机器证据和独立Agent复审结论并签收`PASS`；未表述为本人重新运行测试。
 - 签收记录提交为`cad3e90c166f97037e12f44a4015aed37891c8b2`。X-01由`IN_REVIEW`转为`DONE`，固定任务`DONE`增至17项；当前可领取集合保持`T-02/U-01/U-02`，没有任务因X-01单独完成而新解锁。
 - 正式分层与切点、正式随机化清单、专机ACL、G-05外部活动准入、真实会话、Unity真实链路、X-03冻结策略和研究执行继续开放。
+## 2026-09-06 U-01领取
+
+- 依据当前依赖和Unity装配顺序，Codex领取U-01可靠控制技术探针与渲染回执，分支为`codex/u-01-unity-control`。
+- U-01由`READY`转为`IN_PROGRESS`；当前未领取集合为`T-02/U-02`。目标是先闭合Python权威控制到Unity的可靠消费链，再由U-02接入四层SceneAdapter。
+
+## 2026-09-07 U-01候选进入复核
+
+- 最终候选`6c09f71d14bcb0288a4b83f87b177975c49bfe3d`完成可靠控制、只读镜像、UDP遥测门、ACK与渲染回执技术闭环。
+- Unity EditMode `14/14`、PlayMode `3/3`、U-01证据校验通过，根目录Python回归`565 passed`。
+- 独立Agent任务`01a077dd-38a5-7e91-aa07-e417d0aa5565`最终返回`PASS_NO_OPEN_P0_P3`；U-01由`IN_PROGRESS`迁移为`IN_REVIEW`。
+- 当前可领取集合仍为`T-02/U-02`。真实第二人签收前U-01不得转为`DONE`，也不扩大为正式Unity构建、最终画面或真实设备链完成。

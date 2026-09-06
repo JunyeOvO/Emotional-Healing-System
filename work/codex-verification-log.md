@@ -1577,3 +1577,18 @@
 | X-01 Regression | 权威校验器`X01_VERIFY_PASS`；专项`33 passed`；根Python回归`564 passed in 46.50s`。 |
 | Audit Protocol Privacy | 审计升级、协议权威与仓库隐私扫描均通过；隐私扫描`violations=0`。 |
 | PDF And Diagrams | 固定任务概要9页，SHA-256 `64D1893866714E9F9D082AAD318C6640E3437801630A52795BAC05A76EC78CC7`；3张SVG结构通过，两张交付PNG尺寸为2400×5878和2400×2640并经人工查看无明显遮挡。 |
+
+### 2026-09-07 U-01候选实施与独立复核
+
+| 检查 | 结果 |
+|---|---|
+| Candidate | 最终候选`6c09f71d14bcb0288a4b83f87b177975c49bfe3d`。 |
+| Unity EditMode | `14/14 passed`；覆盖可靠控制、代际隔离、严格UTF-8、含LF帧上限、镜像和回执身份。 |
+| Unity PlayMode | `3/3 passed`；覆盖显式画面确认、Unity帧不推进会话与组件重启镜像保持。 |
+| U-01 Evidence | `U01_EVIDENCE_VERIFIED editmode=14 playmode=3 controls=19 acks=19 receipts=12 network=3`。 |
+| Python Regression | `565 passed in 43.43s`；包含同实例回执幂等与跨实例独立确认。 |
+| Independent Review | Agent `01a077dd-38a5-7e91-aa07-e417d0aa5565`多轮只读复审后对最终候选返回`PASS_NO_OPEN_P0_P3`。 |
+| Registry And Packages | 注册表59项通过：`READY=T-02,U-02`、`IN_REVIEW=U-01`；独立分发包4个、冻结快照50份通过。 |
+| Protocol Audit Privacy | 协议权威、审计升级和仓库隐私扫描通过；隐私扫描`violations=0`。 |
+| PDF And Diagrams | 固定任务概要9页，SHA-256 `674B00C6D1C21BB5B026340F4725BF397DC34BD2B95CD26A1E88AEDBC466D491`；两张交付PNG为2400×5878与2400×2640，SVG结构及人工查看通过。 |
+| State Boundary | U-01迁移为`IN_REVIEW`；独立Agent不替代真实第二人签收，不表示正式Unity构建、最终画面或真实设备链完成。 |

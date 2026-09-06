@@ -2,12 +2,12 @@
   "package_schema_version": "1.0",
   "hash_policy": "sha256_lf_no_trailing_ws_text_v1",
   "task_id": "U-01",
-  "status": "READY",
-  "registry_sha256": "DE273C82402EC68367A496D17C76F770FFFC14796FA5BEF06A0E41FED667072F",
+  "status": "IN_REVIEW",
+  "registry_sha256": "AA63DACCB924B73FFF2CFEB69750E86537A767B73E4DA2B330C137864AC39485",
   "input_snapshot_id": "00A00CE9D3A4DB7022EAE4A2A90B5F9B080BE97BD93F6784CAC4D7F34069C29B",
   "previous_input_snapshot_id": "00A00CE9D3A4DB7022EAE4A2A90B5F9B080BE97BD93F6784CAC4D7F34069C29B",
   "input_changed": false,
-  "candidate_identity": null,
+  "candidate_identity": "6c09f71d14bcb0288a4b83f87b177975c49bfe3d",
   "source_files": [
     {
       "source_path": "00-项目管理/01-项目章程与规划/2026-08-05_SRP_IJHCI_全项目1-12步规划设计包_v1.0/00_总控/protocol_authority_v1.1.json",
