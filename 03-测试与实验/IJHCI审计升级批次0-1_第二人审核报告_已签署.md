@@ -9,7 +9,7 @@
 - 独立效果复审：`EFFECT_PASS_NO_OPEN_P0_P3`
 - 独立Agent：`Chandrasekhar`（`01a07285-391c-75d1-b8bb-c244d445e84b`）
 - 签收授权：当前项目对话中的明确指令“独立agent复核效果后签收”。
-- 签收记录提交：`PENDING_WRITEBACK`
+- 签收记录提交：`a55dffd2c8613685f0446f5999987bd492d62c4a`
 
 ## 复核方式
 
