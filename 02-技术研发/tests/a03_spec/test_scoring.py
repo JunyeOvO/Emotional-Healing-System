@@ -66,22 +66,41 @@ def test_panas_requires_frozen_item_mapping_and_keeps_dimensions_separate():
         ItemResponse("N1", ResponseStatus.RESPONDED, 2),
         ItemResponse("N2", ResponseStatus.RESPONDED, 1),
     ]
-    with pytest.raises(ValueError, match="PANAS_CONFIG_NOT_FROZEN"):
+    with pytest.raises(ValueError, match="PANAS_FORMAL_SCORING_REQUIRES_A03_CAL"):
         score_panas(
             rows,
             positive_item_ids=["P1", "P2"],
             negative_item_ids=["N1", "N2"],
-            frozen_config_receipt=None,
         )
     result = score_panas(
         rows,
         positive_item_ids=["P1", "P2"],
         negative_item_ids=["N1", "N2"],
-        frozen_config_receipt="fixture-receipt",
+        evaluation_mode="synthetic_fixture",
+        fixture_receipt={
+            "evidence_class": "SYNTHETIC_ONLY",
+            "status": "FIXTURE",
+            "config_sha256": "A" * 64,
+        },
     )
     assert result["dimensions"]["positive"]["sum"] == 7
     assert result["dimensions"]["negative"]["sum"] == 3
     assert result["combined_total"] is None
+
+
+def test_panas_rejects_string_or_malformed_fixture_receipts():
+    rows = [
+        ItemResponse("P1", ResponseStatus.RESPONDED, 4),
+        ItemResponse("N1", ResponseStatus.RESPONDED, 2),
+    ]
+    with pytest.raises(ValueError, match="SYNTHETIC_FIXTURE_RECEIPT_INVALID"):
+        score_panas(
+            rows,
+            positive_item_ids=["P1"],
+            negative_item_ids=["N1"],
+            evaluation_mode="synthetic_fixture",
+            fixture_receipt={"evidence_class": "SYNTHETIC_ONLY"},
+        )
 
 
 def test_benjamini_hochberg_controls_item_family():

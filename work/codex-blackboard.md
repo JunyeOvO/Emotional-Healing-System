@@ -1414,3 +1414,12 @@ Run separate read-only Agent reviews against the fixed G-02, P-01 and P-02 imple
 - 合成Monte Carlo使用Beta、伯努利和有序离散生成，不使用正态锚点；固定种子为`20260906`，同时运行保守与完整案例分析集。
 - 每条件24人的敏感性点联合通过概率为0.287/0.290，结论为`SYNTHETIC_SENSITIVITY_POINT_NO_GO`；既有每组85规划锚点为0.934/0.942，结论为`SYNTHETIC_UPPER_CAP_FEASIBLE`。
 - 上述结果不冻结正式Gate2界限、关键层、缺失规则或样本量；实现候选为`8c7c4fcc7881d1cc710972b7e9fe29af89be03d9`，A-03-SPEC现转`IN_REVIEW`。下一硬门是独立Agent复核和真实第二人签收。
+
+### 2026-09-06 A-03-SPEC首轮复审修复
+
+- 独立Agent `01a0764a-f68c-7a12-82fc-09916525705d`对候选`8c7c4fcc7881d1cc710972b7e9fe29af89be03d9`返回`A03_SPEC_REVIEW_REVISE_REQUIRED`，发现形式门可由任意字符串绕过、两个分析集未共享同一复制、缺失范围不完整、估计目标CSV未提交、Schema过宽及85被误称为上限。
+- 形式Gate2与PANAS计分现固定在A-03-CAL前失败关闭；合成路径要求结构化fixture回执，不能形成形式运行证据。
+- Monte Carlo现对每次复制只生成一份数据，分别计算两分析集并记录共同通过；SCCI、理解、努力和阶段错误均独立产生`SKIPPED/TIMEOUT/TECH_UNPRESENTED`，差异性缺失具有条件差异。
+- 已增加严格JSON Schema、Gate1至3机器可读估计目标表及畸形输入负测；`estimands_v1.0.csv`须以显式路径强制纳入提交。
+- 1000次固定种子重算后，目标场景共同通过概率为24/组`0.072`、85/组`0.646`、96/组`0.721`，三点均为合成`NO_GO`；旧候选的`SYNTHETIC_UPPER_CAP_FEASIBLE`已撤销。
+- A-03-SPEC继续保持`IN_REVIEW`。下一硬门是修复候选完整回归及新的独立Agent复审；真实第二人签收仍未发生。

@@ -1,9 +1,9 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "evidence_class": "SYNTHETIC_ONLY",
   "seed": 20260906,
   "replications": 1000,
-  "decision_scope": "upper_cap",
+  "decision_scope": "existing_planning_anchor",
   "participants_per_condition": 85,
   "total_participants_per_replication": 170,
   "planning_anchor_source": "CONTROL_BASELINE_GATE1_85_COMPLETE_FOUR_MODULE_RESULTS_PER_GROUP",
@@ -21,34 +21,38 @@
       "PRIMARY_CONSERVATIVE": {
         "pass_probability": {
           "scci": 1.0,
-          "comprehension": 0.94,
+          "comprehension": 0.938,
           "critical_layers": 1.0,
-          "effort": 0.994,
-          "stage_error": 1.0,
-          "joint": 0.934
+          "effort": 0.937,
+          "stage_error": 0.747,
+          "joint": 0.659
         },
-        "joint_mc_standard_error": 0.007851369307324675
+        "joint_mc_standard_error": 0.014990630407024249
       },
       "OBSERVED_CASE": {
         "pass_probability": {
           "scci": 1.0,
-          "comprehension": 0.951,
+          "comprehension": 0.945,
           "critical_layers": 1.0,
-          "effort": 0.991,
+          "effort": 0.992,
           "stage_error": 1.0,
-          "joint": 0.942
+          "joint": 0.937
         },
-        "joint_mc_standard_error": 0.007391616873188169
+        "joint_mc_standard_error": 0.007683163410991592
+      },
+      "BOTH_ANALYSIS_SETS": {
+        "joint_pass_probability": 0.646,
+        "joint_mc_standard_error": 0.015122301412152848
       }
     },
     "null_manipulation": {
       "PRIMARY_CONSERVATIVE": {
         "pass_probability": {
           "scci": 0.0,
-          "comprehension": 0.934,
+          "comprehension": 0.922,
           "critical_layers": 1.0,
-          "effort": 0.991,
-          "stage_error": 1.0,
+          "effort": 0.946,
+          "stage_error": 0.748,
           "joint": 0.0
         },
         "joint_mc_standard_error": 0.0
@@ -56,71 +60,83 @@
       "OBSERVED_CASE": {
         "pass_probability": {
           "scci": 0.0,
-          "comprehension": 0.944,
+          "comprehension": 0.939,
           "critical_layers": 1.0,
-          "effort": 0.992,
+          "effort": 0.984,
           "stage_error": 1.0,
           "joint": 0.0
         },
+        "joint_mc_standard_error": 0.0
+      },
+      "BOTH_ANALYSIS_SETS": {
+        "joint_pass_probability": 0.0,
         "joint_mc_standard_error": 0.0
       }
     },
     "ceiling": {
       "PRIMARY_CONSERVATIVE": {
         "pass_probability": {
-          "scci": 1.0,
-          "comprehension": 0.999,
+          "scci": 0.989,
+          "comprehension": 1.0,
           "critical_layers": 1.0,
-          "effort": 1.0,
-          "stage_error": 1.0,
-          "joint": 0.999
+          "effort": 0.966,
+          "stage_error": 0.844,
+          "joint": 0.807
         },
-        "joint_mc_standard_error": 0.0009994998749374613
+        "joint_mc_standard_error": 0.012480024038438387
       },
       "OBSERVED_CASE": {
         "pass_probability": {
-          "scci": 0.999,
+          "scci": 0.997,
           "comprehension": 1.0,
           "critical_layers": 1.0,
-          "effort": 0.999,
+          "effort": 1.0,
           "stage_error": 1.0,
-          "joint": 0.998
+          "joint": 0.997
         },
-        "joint_mc_standard_error": 0.0014127986409959495
+        "joint_mc_standard_error": 0.0017294507798720387
+      },
+      "BOTH_ANALYSIS_SETS": {
+        "joint_pass_probability": 0.807,
+        "joint_mc_standard_error": 0.012480024038438387
       }
     },
     "differential_missing": {
       "PRIMARY_CONSERVATIVE": {
         "pass_probability": {
-          "scci": 1.0,
-          "comprehension": 0.641,
+          "scci": 0.022,
+          "comprehension": 0.007,
           "critical_layers": 1.0,
-          "effort": 0.767,
-          "stage_error": 0.999,
-          "joint": 0.481
+          "effort": 0.089,
+          "stage_error": 0.009,
+          "joint": 0.0
         },
-        "joint_mc_standard_error": 0.01579996835439869
+        "joint_mc_standard_error": 0.0
       },
       "OBSERVED_CASE": {
         "pass_probability": {
           "scci": 1.0,
-          "comprehension": 0.636,
+          "comprehension": 0.555,
           "critical_layers": 1.0,
-          "effort": 0.764,
-          "stage_error": 0.997,
-          "joint": 0.484
+          "effort": 0.613,
+          "stage_error": 0.976,
+          "joint": 0.334
         },
-        "joint_mc_standard_error": 0.015803290796539814
+        "joint_mc_standard_error": 0.014914556647785411
+      },
+      "BOTH_ANALYSIS_SETS": {
+        "joint_pass_probability": 0.0,
+        "joint_mc_standard_error": 0.0
       }
     },
     "item_shift": {
       "PRIMARY_CONSERVATIVE": {
         "pass_probability": {
           "scci": 0.0,
-          "comprehension": 0.935,
+          "comprehension": 0.924,
           "critical_layers": 1.0,
-          "effort": 0.988,
-          "stage_error": 1.0,
+          "effort": 0.949,
+          "stage_error": 0.766,
           "joint": 0.0
         },
         "joint_mc_standard_error": 0.0
@@ -128,20 +144,25 @@
       "OBSERVED_CASE": {
         "pass_probability": {
           "scci": 0.0,
-          "comprehension": 0.94,
+          "comprehension": 0.939,
           "critical_layers": 1.0,
-          "effort": 0.994,
+          "effort": 0.989,
           "stage_error": 1.0,
           "joint": 0.0
         },
         "joint_mc_standard_error": 0.0
+      },
+      "BOTH_ANALYSIS_SETS": {
+        "joint_pass_probability": 0.0,
+        "joint_mc_standard_error": 0.0
       }
     }
   },
-  "decision": "SYNTHETIC_UPPER_CAP_FEASIBLE",
+  "decision": "SYNTHETIC_EXISTING_PLANNING_ANCHOR_NO_GO",
   "limitations": [
     "SYNTHETIC_PARAMETERS_ARE_NOT_REAL_CALIBRATION",
     "LEVEL_A_B_AND_C_EVIDENCE_NOT_PRESENT",
-    "FORMAL_MARGINS_AND_SAMPLE_SIZE_NOT_FROZEN"
+    "FORMAL_MARGINS_AND_SAMPLE_SIZE_NOT_FROZEN",
+    "RECRUITMENT_CAP_240_NOT_MODELED_AS_COMPLETE_OUTCOMES"
   ]
 }

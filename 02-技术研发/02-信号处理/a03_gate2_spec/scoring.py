@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Iterable, Mapping, Sequence
 
+from .gate import validate_synthetic_fixture_receipt
+
 
 class ResponseStatus(str, Enum):
     RESPONDED = "RESPONDED"
@@ -61,12 +63,17 @@ def score_panas(
     *,
     positive_item_ids: Sequence[str],
     negative_item_ids: Sequence[str],
-    frozen_config_receipt: str | None,
+    evaluation_mode: str = "formal",
+    fixture_receipt: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
-    """Score configured PANAS dimensions separately after a real freeze receipt."""
+    """Score configured dimensions for fixtures; formal scoring waits for A-03-CAL."""
     _require_unique_ids(items)
-    if not frozen_config_receipt:
-        raise ValueError("PANAS_CONFIG_NOT_FROZEN")
+    if evaluation_mode == "formal":
+        raise ValueError("PANAS_FORMAL_SCORING_REQUIRES_A03_CAL")
+    if evaluation_mode != "synthetic_fixture":
+        raise ValueError("INVALID_EVALUATION_MODE")
+    if not validate_synthetic_fixture_receipt(fixture_receipt):
+        raise ValueError("SYNTHETIC_FIXTURE_RECEIPT_INVALID")
     positive = set(positive_item_ids)
     negative = set(negative_item_ids)
     if not positive or not negative or positive & negative:
@@ -93,7 +100,8 @@ def score_panas(
     return {
         "dimensions": dimensions,
         "combined_total": None,
-        "frozen_config_receipt": frozen_config_receipt,
+        "evidence_class": "SYNTHETIC_ONLY",
+        "fixture_config_sha256": fixture_receipt["config_sha256"],
     }
 
 

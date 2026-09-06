@@ -1517,3 +1517,19 @@
 | Wording And Diff | A-03新增文件未出现项目禁用表述；`git diff --check`通过，仅有Windows换行提示。 |
 | Generated Reports | 小规模点SHA-256 `A678350D5D74A77D66C5F14FE36B4A1EBF3E79E107FBADD772F68D916FEA243D`；规划上限SHA-256 `7C40DB6465D8293BEB8AEC8CE06618D4EE462D49C252F77A1FAC67FD232E865E`。 |
 | Final Review-State Regression | A-03-SPEC转`IN_REVIEW`并重建独立包后，根pytest为`514 passed in 29.06s`；禁用表述与`git diff --check`通过。 |
+
+### 2026-09-06 A-03-SPEC首轮复审修复候选
+
+| Check | Result |
+|---|---|
+| Independent Review | Agent `01a0764a-f68c-7a12-82fc-09916525705d`对`8c7c4fcc7881d1cc710972b7e9fe29af89be03d9`返回`A03_SPEC_REVIEW_REVISE_REQUIRED`，共2项P1、3项P2。 |
+| Formal Gate Boundary | 形式Gate2固定返回`A03_CAL_NOT_DONE`；形式PANAS计分固定拒绝；合成执行要求精确字段和64位配置哈希的fixture回执。 |
+| Shared Replication | 每次复制只生成一份数据供两个分析集消费，新增调用计数回归；共同通过概率单独记录。 |
+| Missingness | SCCI、理解、努力与阶段错误均覆盖四类作答状态；各结果独立筛选，差异性缺失具有条件差异。 |
+| Schema And Estimands | Gate2 Schema关闭未知字段并约束全部核心结构；新增Gate1至3 JSON估计目标表及畸形输入负测，CSV待显式强制暂存。 |
+| Focused Tests | `py -3.14 -m pytest 02-技术研发/tests/a03_spec -q`：`31 passed in 25.81s`。 |
+| Synthetic Recalculation | 1000次固定种子；24/组共同通过`0.072`，85/组`0.646`，96/组`0.721`，三点均为合成`NO_GO`；操纵为空场景均为`0.000`。 |
+| Evidence Boundary | 85为既有规划锚点，96为均衡完整结果目标；总招募上限240未模拟为完整结果，正式界限与正式样本量仍为空。 |
+| Deterministic Replay | 三份报告以相同参数重跑后SHA-256不变：24/组`4C5E3E1D4E3AF8F36CD25ABA6E2C3CE55B1686AAC94EFB907194BB3948C15AF1`；85/组`49238F78BA948EE0AB378E42BD0BFA721F841A59BBBF2EE96659E4DDFEA50988`；96/组`A7F7ED723B945D087D9BB4C800649E4A29D41C99755B6DA1F00139A422A308F9`。 |
+| Full Regression | `py -3.14 -m pytest -q`：`531 passed in 43.10s`。 |
+| Governance And Protocol | 任务注册表、4个独立包、审计升级合同与协议权威均为`PASS`；仓库隐私扫描为`G02_REPOSITORY_PRIVACY_PASS violations=0`。 |

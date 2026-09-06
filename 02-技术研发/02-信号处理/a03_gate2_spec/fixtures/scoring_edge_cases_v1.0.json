@@ -12,16 +12,16 @@
     "expected_rejected": ["S1", "S2"]
   },
   "freeze_cases": [
-    {"id": "missing", "freeze_reasons": {}, "expected": "FORMAL_PARAMETERS_NOT_FROZEN"},
+    {"id": "formal_locked", "evaluation_mode": "formal", "expected": "A03_CAL_NOT_DONE"},
     {
-      "id": "complete_fixture",
-      "freeze_reasons": {
-        "noninferiority_margins": "SYNTHETIC_FIXTURE_ONLY",
-        "critical_layers": "SYNTHETIC_FIXTURE_ONLY",
-        "missing_data_rule": "SYNTHETIC_FIXTURE_ONLY",
-        "sample_size": "SYNTHETIC_FIXTURE_ONLY"
+      "id": "valid_synthetic_fixture",
+      "evaluation_mode": "synthetic_fixture",
+      "fixture_receipt": {
+        "evidence_class": "SYNTHETIC_ONLY",
+        "status": "FIXTURE",
+        "config_sha256": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       },
-      "expected": "ALL_ORDERED_COMPONENTS_PASS"
+      "expected": "SYNTHETIC_ALL_ORDERED_COMPONENTS_PASS"
     }
   ]
 }
