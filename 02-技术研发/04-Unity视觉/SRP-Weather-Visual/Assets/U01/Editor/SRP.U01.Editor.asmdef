@@ -1,0 +1,6 @@
+{
+  "name": "SRP.U01.Editor",
+  "rootNamespace": "SRP.U01.Editor",
+  "references": ["SRP.U01.Runtime"],
+  "includePlatforms": ["Editor"]
+}
