@@ -3,19 +3,21 @@
 ## 审核对象
 
 - 里程碑：`A-03-SPEC`
-- 精确候选：`8c7c4fcc7881d1cc710972b7e9fe29af89be03d9`
+- 精确候选：`4071c84bc03ab9d80f7ce5997034fe27737e5d51`
 - 分支：`codex/a-03-spec`
 - 候选范围：Gate1至3估计目标、PANAS与Gate2计分边界、阶段错误汇总、有序联合门、合成Monte Carlo及报告模板
 
 ## 已有机器证据
 
-- A-03专项：`14 passed`
-- 全项目：`514 passed`
+- A-03专项：`31 passed`
+- 全项目：`531 passed`
 - 任务注册表、独立任务包、审计升级合同与协议权威：`PASS`
 - 仓库隐私：`G02_REPOSITORY_PRIVACY_PASS violations=0`
 - 固定种子双跑：输出SHA-256一致
-- 小规模敏感性点：`SYNTHETIC_SENSITIVITY_POINT_NO_GO`
-- 既有规划上限：`SYNTHETIC_UPPER_CAP_FEASIBLE`
+- 小规模敏感性点：共同通过概率`0.072`，`SYNTHETIC_SENSITIVITY_POINT_NO_GO`
+- 既有规划锚点：共同通过概率`0.646`，`SYNTHETIC_EXISTING_PLANNING_ANCHOR_NO_GO`
+- 均衡完整结果目标：共同通过概率`0.721`，`SYNTHETIC_COMPLETE_TARGET_NO_GO`
+- 首轮独立复审：旧候选`REVISE_REQUIRED`；五类发现已在本候选修复，等待新Agent复审
 
 ## 必须核对
 
@@ -23,7 +25,8 @@
 - [ ] 四层理解、心智努力和阶段错误独立建模且有序、不补偿。
 - [ ] `TECH_UNPRESENTED`未被计为答错。
 - [ ] 合成阈值未被写成正式非劣界限，85未被写成正式样本量。
-- [ ] 两分析集、小规模`NO_GO`和规划上限`FEASIBLE`均完整报告。
+- [ ] 两分析集在同一复制上运行，24/85/96三个合成`NO_GO`均完整报告。
+- [ ] 85仅作为既有规划锚点，96仅作为均衡完整结果目标，总招募上限240未被当作完整结果。
 - [ ] A-03-REAL、A-03-CAL、Gate2通过和研究执行均未被提前声明。
 
 ## 签署区
