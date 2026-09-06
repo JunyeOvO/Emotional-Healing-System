@@ -1,6 +1,6 @@
 # SRP实验系统与论文证据系统
 
-> SRP · 4人团队 · 当前状态：17项已签收固定任务保持DONE；A-03为IN_PROGRESS，U-01为IN_REVIEW，A-03-SPEC里程碑已签收为DONE；T-02、U-02为READY；第59项A-06已建立，G-05和研究外部门继续开放；新颖性仍为REVISE_REQUIRED。
+> SRP · 4人团队 · 当前状态：18项已签收固定任务保持DONE；A-03为IN_PROGRESS，当前无IN_REVIEW固定任务，A-03-SPEC里程碑已签收为DONE；T-02、U-02为READY；第59项A-06已建立，G-05和研究外部门继续开放；新颖性仍为REVISE_REQUIRED。
 
 ## 项目与论文主线
 

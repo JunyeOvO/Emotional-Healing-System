@@ -1454,3 +1454,10 @@ Run separate read-only Agent reviews against the fixed G-02, P-01 and P-02 imple
 - Unity EditMode `14/14`、PlayMode `3/3`、U-01证据校验通过，根目录Python回归`565 passed`。
 - 独立Agent任务`01a077dd-38a5-7e91-aa07-e417d0aa5565`最终返回`PASS_NO_OPEN_P0_P3`；U-01由`IN_PROGRESS`迁移为`IN_REVIEW`。
 - 当前可领取集合仍为`T-02/U-02`。真实第二人签收前U-01不得转为`DONE`，也不扩大为正式Unity构建、最终画面或真实设备链完成。
+
+## 2026-09-07 U-01团队总监签收
+
+- 傅钧烨以团队总监、独立第二人复核人身份审阅最终候选`6c09f71d14bcb0288a4b83f87b177975c49bfe3d`、已有机器证据和独立Agent复核结果并签收`PASS`；未表述为本人重新运行测试。
+- 首次签署提交为`aab416cbbcea542f6d43a3c6e0e03e48fb258445`。U-01由`IN_REVIEW`迁移为`DONE`，固定任务`DONE`增至18项，当前无`IN_REVIEW`固定任务。
+- 当前可领取集合保持`T-02/U-02`，独立分发集合为`A-03/T-02/U-02`。U-03仍等待U-02和V-05，X-03仍等待X-02，没有任务因U-01单独完成而提前解锁。
+- 本次关闭只覆盖U-01可靠控制技术探针与证据范围，不扩大为U-02、正式Unity构建、最终画面、TouchDesigner联调、真实设备链、`LIVE_E2E`或研究结论完成。

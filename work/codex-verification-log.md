@@ -1592,3 +1592,17 @@
 | Protocol Audit Privacy | 协议权威、审计升级和仓库隐私扫描通过；隐私扫描`violations=0`。 |
 | PDF And Diagrams | 固定任务概要9页，SHA-256 `674B00C6D1C21BB5B026340F4725BF397DC34BD2B95CD26A1E88AEDBC466D491`；两张交付PNG为2400×5878与2400×2640，SVG结构及人工查看通过。 |
 | State Boundary | U-01迁移为`IN_REVIEW`；独立Agent不替代真实第二人签收，不表示正式Unity构建、最终画面或真实设备链完成。 |
+
+### 2026-09-07 U-01团队总监签收与状态关闭
+
+| 检查 | 结果 |
+|---|---|
+| Human Signoff | 傅钧烨以团队总监、独立第二人复核人身份对最终候选`6c09f71d14bcb0288a4b83f87b177975c49bfe3d`签收`PASS`；首次签署提交`aab416cbbcea542f6d43a3c6e0e03e48fb258445`。 |
+| Scope Boundary | 只关闭U-01技术探针与证据范围；U-02、正式Unity构建、最终画面、TouchDesigner联调、真实设备链、`LIVE_E2E`和研究结论仍开放。 |
+| Governance | `PASS`：59项、56固定任务、3模板；`DONE=18`、`IN_PROGRESS=A-03`、`IN_REVIEW=0`、`READY=T-02/U-02`。 |
+| Packages | `PASS`：独立分发包3个，冻结输入快照32份，任务为`A-03/T-02/U-02`。 |
+| U-01 Evidence | `U01_EVIDENCE_VERIFIED editmode=14 playmode=3 controls=19 acks=19 receipts=12 network=3`。 |
+| Python Regression | `565 passed in 48.98s`。 |
+| Protocol Audit Privacy | 协议权威、审计升级与仓库隐私扫描通过；隐私扫描`violations=0`。 |
+| PDF | 固定任务概要9页，SHA-256 `A83B057CB2D0FF6FAE5986E396E4D1756E45DA88E64D3A067DAB3E128B8D0C12`。 |
+| Diagrams | 三张SVG通过XML结构检查；两张交付PNG重渲染为2400×5878与2400×2640，并经人工查看无明显遮挡或状态冲突。 |

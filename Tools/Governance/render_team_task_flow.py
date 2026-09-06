@@ -110,10 +110,11 @@ def main() -> None:
         ])
         x += box_w + 14
 
+    ready_tasks = " / ".join(row["task_id"] for row in rows if row["status"] == "READY")
     gates = [
         ("治理设计门", "G-01 / G-02 DONE → 候选实现可继续", "#dcfce7", "#166534"),
         ("外部准入门", "G-05 EXT-WAIT → 正式研究链保持阻断", "#fee2e2", "#991b1b"),
-        ("当前可领取", "X-01 / T-02 / U-01 / U-02 READY", "#dbeafe", "#1d4ed8"),
+        ("当前可领取", f"{ready_tasks} READY", "#dbeafe", "#1d4ed8"),
         ("设备外部门", "D-01 / D-02 仍等待真实设备", "#fee2e2", "#991b1b"),
     ]
     gate_y, gate_w = 196, (width - 140 - 3 * 18) / 4
